@@ -751,28 +751,40 @@ El modelo podrá refinarse durante el diseño de base de datos siempre que no al
 
 Durante el primer avance se implementará **únicamente el primer módulo funcional completo: Películas**.
 
+## Entregables mínimos solicitados por el docente
+
+Para el APF1 se consideran como entregables mínimos:
+
+- Informe académico desarrollado hasta el punto **2.4 Test Driven Development** de la estructura oficial del proyecto.
+- Archivo de presentación preparado para aproximadamente **8 minutos**.
+- API REST funcionando.
+- CRUD básico del recurso Películas.
+- Pruebas unitarias.
+
+Aunque el mínimo solicitado permite un CRUD básico sin base de datos, el equipo utilizará **H2 persistente con JPA/Hibernate** como mejora técnica permitida para adelantar la persistencia del proyecto y facilitar la integración posterior.
+
 ## Backend
 
 Debe estar implementado:
 
 - Proyecto Spring Boot.
 - Arquitectura por capas.
-- Entidad Pelicula.
-- Repository.
-- Service.
-- Controller.
+- Entidad `Pelicula`.
+- `PeliculaRepository`.
+- `PeliculaService`.
+- `PeliculaController`.
 - API REST.
-- CRUD completo.
-- H2.
+- CRUD completo de Películas.
+- H2 persistente.
 - JPA/Hibernate.
 - Validaciones básicas.
 - Manejo básico de errores.
 - Pruebas unitarias.
-- Pruebas mediante Postman.
+- Pruebas manuales mediante Postman.
 
 ## Frontend temporal
 
-Debe estar implementado:
+Como avance adicional de integración del proyecto se desarrollará:
 
 - Interfaz pública.
 - Cartelera.
@@ -785,19 +797,36 @@ Debe estar implementado:
 
 ## Documentación
 
-Debe completarse:
+El informe académico deberá completarse hasta el punto **2.4** de la estructura oficial proporcionada por el docente:
 
-- 1.1 Contexto y Empresa.
-- 1.2 Problema y Objetivos.
-- 1.3 Alcance y Requerimientos.
-- 2.1 Base de Datos.
-- 2.2 Diseño de la API RESTful.
-- 2.3 Documentación de la API.
-- 2.4 Requerimientos y Diagramas.
+- Resumen.
+- 1.1 Realidad problemática.
+- 1.2 Formulación del problema.
+- 1.3 Objetivos.
+- 1.4 Justificación.
+- 1.5 Alcance del proyecto.
+- 1.6 Limitaciones.
+- 2.1 Desarrollo Web.
+  - 2.1.1 Arquitectura Cliente-Servidor.
+  - 2.1.2 Aplicaciones Web Modernas.
+- 2.2 Framework Spring Boot.
+  - 2.2.1 Conceptos básicos.
+  - 2.2.2 Arquitectura Spring Boot.
+  - 2.2.3 Dependency Injection.
+  - 2.2.4 Controladores REST.
+- 2.3 API REST.
+  - 2.3.1 RESTful Services.
+  - 2.3.2 Métodos HTTP.
+  - 2.3.3 Pruebas de APIs.
+- 2.4 Test Driven Development.
+  - 2.4.1 Fundamentos TDD.
+  - 2.4.2 Pruebas Unitarias con JUnit.
+
+La persistencia mediante JPA/Hibernate y H2 ya se encuentra implementada como adelanto técnico del proyecto. Su desarrollo teórico detallado corresponde al punto 2.5 de la estructura general y no es obligatorio desarrollarlo todavía en el informe APF1.
 
 ## Presentación
 
-Debe existir una presentación preparada para aproximadamente 8 minutos.
+Debe existir una presentación preparada para aproximadamente **8 minutos**, con una breve demostración del CRUD REST y las pruebas unitarias.
 
 ---
 
@@ -836,13 +865,13 @@ Estos elementos deberán aparecer en el análisis y planificación cuando corres
 
 # 22. Responsabilidades del equipo para el APF1
 
-La prioridad es terminar rápido sin que dos personas modifiquen los mismos archivos. Cada integrante tendrá una zona de trabajo principal.
+La prioridad es terminar el APF1 sin duplicar trabajo. Cada integrante tendrá una zona principal de programación y una parte concreta del informe en el Google Docs compartido.
 
 ## Samuel — Backend 1
 
-Responsable de **base técnica, datos y persistencia**.
+Responsable de **base técnica, datos, persistencia e integración**.
 
-### Tareas APF1
+### Tareas de programación APF1
 
 - Crear y comprobar el proyecto Spring Boot dentro de `backend/`.
 - Configurar Maven y las dependencias oficiales.
@@ -851,57 +880,82 @@ Responsable de **base técnica, datos y persistencia**.
 - Crear la entidad `Pelicula`.
 - Crear `PeliculaRepository`.
 - Mantener `application.properties` y la configuración general del backend.
-- Verificar que Spring Boot inicie y que H2 almacene datos correctamente.
-- Google Docs compartido: completar directamente la sección 2.1 Base de Datos.
+- Verificar que Spring Boot inicie correctamente.
+- Verificar que H2 almacene datos y conserve la información después de reiniciar la aplicación.
 - Realizar la integración final del proyecto y resolver conflictos técnicos.
+
+### Documentación de Samuel
+
+En el Google Docs compartido:
+
+- **Resumen**.
+- **2.2 Framework Spring Boot**.
+  - 2.2.1 Conceptos básicos.
+  - 2.2.2 Arquitectura Spring Boot.
+  - 2.2.3 Dependency Injection.
+  - 2.2.4 Controladores REST.
+- Revisión técnica general del informe junto con See.
+
+Samuel puede mencionar H2, JPA/Hibernate y la persistencia como parte de la implementación técnica, pero no deberá crear un punto `2.1 Base de Datos`, ya que esa numeración no corresponde a la estructura oficial del docente.
 
 ### Archivos o áreas que Samuel administra principalmente
 
 - `backend/pom.xml`
-- configuración del backend
-- `entity/`
-- `repository/`
+- `backend/src/main/resources/application.properties`
+- `backend/src/main/java/com/cineverse/backend/entity/`
+- `backend/src/main/java/com/cineverse/backend/repository/`
+- configuración general del backend
 - `README.md`
 
-Samuel deberá **subir primero la base funcional del backend**. See empezará a integrar su trabajo sobre la última versión subida por Samuel.
+Samuel deberá **subir primero la base funcional del backend**. See integrará su trabajo sobre la última versión subida por Samuel.
 
 ---
 
 ## See — Backend 2
 
-Responsable de **API REST, lógica y pruebas**.
+Responsable de **API REST, lógica, pruebas y documentación técnica de servicios**.
 
-### Tareas APF1
+### Tareas de programación APF1
 
 - Crear `PeliculaService`.
 - Crear `PeliculaController`.
 - Implementar GET, GET por ID, POST, PUT y DELETE.
+- Integrar Service y Controller con `PeliculaRepository` y H2.
 - Manejar respuestas HTTP y película inexistente.
-- Crear pruebas unitarias.
+- Crear pruebas unitarias con JUnit y Mockito cuando corresponda.
 - Probar los endpoints en Postman.
 - Guardar la colección de Postman en `docs/postman/`.
-- Google Docs compartido: completar directamente las secciones:
-  - 2.2 Diseño de la API RESTful.
-  - 2.3 Documentación de la API.
-- Ayudar a Frank y Crhistian cuando necesiten conocer el contrato de la API.
+
+### Documentación de See
+
+En el Google Docs compartido:
+
+- **2.3 API REST**.
+  - 2.3.1 RESTful Services.
+  - 2.3.2 Métodos HTTP.
+  - 2.3.3 Pruebas de APIs.
+- **2.4 Test Driven Development**.
+  - 2.4.1 Fundamentos TDD.
+  - 2.4.2 Pruebas Unitarias con JUnit.
+- Revisión técnica general junto con Samuel.
 
 ### Archivos o áreas que See administra principalmente
 
-- `service/`
-- `controller/`
+- `backend/src/main/java/com/cineverse/backend/service/`
+- `backend/src/main/java/com/cineverse/backend/controller/`
 - manejo básico de errores del API
 - pruebas del backend
 - `docs/postman/`
 
-See no deberá cambiar los campos de `Pelicula` sin comunicarlo primero a Samuel y a los dos integrantes de frontend.
+See no deberá cambiar los campos de `Pelicula`, la configuración de H2 ni el contrato REST sin comunicarlo primero a Samuel y a los integrantes de frontend.
 
 ---
 
 ## Frank — Frontend 1
 
-Responsable del **frontend público** y de los requerimientos.
+Responsable del **frontend público** y de parte del planteamiento y marco teórico web.
 
-### Tareas APF1
+### Tareas de programación APF1
 
 - Crear la página de inicio.
 - Crear la cartelera.
@@ -910,10 +964,17 @@ Responsable del **frontend público** y de los requerimientos.
 - Aplicar Bootstrap y diseño responsive básico.
 - Usar datos temporales mientras el backend todavía no esté listo.
 - Cuando la API esté disponible, conectar `GET /api/peliculas` y `GET /api/peliculas/{id}`.
-- Google Docs compartido: completar directamente las secciones:
-  - 1.1 Contexto y Empresa.
-  - 1.3 Alcance y Requerimientos.
-  - Apoyo en 2.4 Requerimientos y casos de uso.
+
+### Documentación de Frank
+
+En el Google Docs compartido:
+
+- **1.1 Realidad problemática**.
+- **1.5 Alcance del proyecto**.
+- **1.6 Limitaciones**.
+- **2.1 Desarrollo Web**.
+  - 2.1.1 Arquitectura Cliente-Servidor.
+  - 2.1.2 Aplicaciones Web Modernas.
 
 ### Archivos exclusivos de Frank en el frontend temporal
 
@@ -921,15 +982,15 @@ Responsable del **frontend público** y de los requerimientos.
 - `frontend-temp/css/public.css`
 - `frontend-temp/js/public.js`
 
-Frank deberá basar los requerimientos únicamente en el alcance, procesos y reglas de negocio ya definidos en este README. No deberá inventar funcionalidades nuevas.
+Frank deberá basar el contenido únicamente en el alcance, procesos y reglas de negocio ya definidos en este README. No deberá inventar funcionalidades nuevas.
 
 ---
 
 ## Crhistian — Frontend 2
 
-Responsable del **frontend administrativo temporal**, diagramas y evidencias.
+Responsable del **frontend administrativo temporal**, parte del planteamiento del proyecto y apoyo en evidencias/presentación.
 
-### Tareas APF1
+### Tareas de programación APF1
 
 - Crear la interfaz de administración de películas.
 - Crear listado, formulario de registro y formulario de edición.
@@ -937,10 +998,16 @@ Responsable del **frontend administrativo temporal**, diagramas y evidencias.
 - Aplicar Bootstrap y validaciones visuales básicas.
 - Usar datos temporales mientras el backend todavía no esté listo.
 - Cuando la API esté disponible, conectar GET, POST, PUT y DELETE.
-- Google Docs compartido: completar directamente las secciones:
-  - 1.2 Problema y Objetivos.
-  - Apoyo en 2.4 Diagramas.
-- Ayudar a organizar la presentación del equipo y reunir las evidencias necesarias.
+- Reunir capturas y evidencias necesarias para la presentación.
+
+### Documentación de Crhistian
+
+En el Google Docs compartido:
+
+- **1.2 Formulación del problema**.
+- **1.3 Objetivos**.
+- **1.4 Justificación**.
+- Apoyo en la organización de la presentación de 8 minutos.
 
 ### Archivos exclusivos de Crhistian en el frontend temporal
 
@@ -948,38 +1015,54 @@ Responsable del **frontend administrativo temporal**, diagramas y evidencias.
 - `frontend-temp/css/admin.css`
 - `frontend-temp/js/admin.js`
 
-Crhistian no será responsable de escribir todo el informe. Cada integrante entregará su propia sección.
+Crhistian no será responsable de escribir todo el informe. Cada integrante deberá completar directamente la sección que tiene asignada.
 
 ---
 
-
 # 23. Distribución de documentación
 
-El informe académico será elaborado directamente en el **Google Docs compartido del equipo**. No se crearán archivos Markdown individuales del informe dentro del repositorio.
+El informe académico será elaborado directamente en el **Google Docs compartido del equipo**, siguiendo la estructura oficial proporcionada por el docente. No se crearán archivos Markdown individuales del informe dentro del repositorio.
 
-| Sección | Responsable principal |
+| Sección oficial | Responsable principal |
 |---|---|
-| 1.1 Contexto y Empresa | Frank |
-| 1.2 Problema y Objetivos | Crhistian |
-| 1.3 Alcance y Requerimientos | Frank |
-| 2.1 Base de Datos | Samuel |
-| 2.2 Diseño API RESTful | See |
-| 2.3 Documentación API | See |
-| 2.4 Requerimientos y casos de uso | Frank + Crhistian |
-| 2.4 Diagramas | Frank + Crhistian |
-| Integración y revisión técnica | Samuel + See |
-| Revisión completa del informe | Todos |
+| Resumen | Samuel |
+| 1.1 Realidad problemática | Frank |
+| 1.2 Formulación del problema | Crhistian |
+| 1.3 Objetivos | Crhistian |
+| 1.4 Justificación | Crhistian |
+| 1.5 Alcance del proyecto | Frank |
+| 1.6 Limitaciones | Frank |
+| 2.1 Desarrollo Web | Frank |
+| 2.1.1 Arquitectura Cliente-Servidor | Frank |
+| 2.1.2 Aplicaciones Web Modernas | Frank |
+| 2.2 Framework Spring Boot | Samuel |
+| 2.2.1 Conceptos básicos | Samuel |
+| 2.2.2 Arquitectura Spring Boot | Samuel |
+| 2.2.3 Dependency Injection | Samuel |
+| 2.2.4 Controladores REST | Samuel |
+| 2.3 API REST | See |
+| 2.3.1 RESTful Services | See |
+| 2.3.2 Métodos HTTP | See |
+| 2.3.3 Pruebas de APIs | See |
+| 2.4 Test Driven Development | See |
+| 2.4.1 Fundamentos TDD | See |
+| 2.4.2 Pruebas Unitarias con JUnit | See |
+| Revisión técnica | Samuel + See |
+| Revisión final del informe | Todos |
 
-Los archivos dentro de `docs/` se utilizarán únicamente para materiales complementarios del proyecto:
+El **informe requerido para el APF1 finaliza en el punto 2.4**.
+
+La persistencia con JPA/Hibernate y H2 se mantiene implementada como adelanto técnico, pero su explicación teórica detallada corresponde al punto 2.5 de la estructura general del proyecto.
+
+Los archivos dentro de `docs/` se utilizarán únicamente para materiales complementarios:
 
 - `docs/postman/`: colección y evidencias de pruebas de la API.
-- `docs/diagramas/`: diagramas exportados utilizados en el informe.
-- `docs/evidencias/`: capturas de funcionamiento, pruebas e integración.
+- `docs/diagramas/`: diagramas exportados utilizados en el informe o presentación.
+- `docs/evidencias/`: capturas de funcionamiento, pruebas, persistencia e integración.
 
 Cada integrante deberá escribir directamente su sección en el Google Docs compartido y avisar al grupo cuando haya terminado.
 
 ---
-
 
 # 24. Estrategia Git simplificada para cerrar el APF1
 
@@ -1043,8 +1126,8 @@ Ejemplos válidos:
 - `backend: agregar CRUD REST de peliculas`
 - `frontend: agregar cartelera publica`
 - `frontend: agregar administracion de peliculas`
-- `docs: agregar base de datos`
-- `docs: agregar requerimientos y diagramas`
+- `docs: agregar marco teorico Spring Boot`
+- `docs: agregar API REST y pruebas unitarias`
 
 Lo importante es que cada integrante realice sus propios commits para dejar evidencia de participación.
 
@@ -1179,16 +1262,19 @@ No se exige Pull Request para considerar una tarea terminada durante este APF1.
 
 ## Documentación
 
--  Punto 1.1 terminado.
--  Punto 1.2 terminado.
--  Punto 1.3 terminado.
--  Punto 2.1 terminado.
--  Punto 2.2 terminado.
--  Punto 2.3 terminado.
--  Punto 2.4 terminado.
--  Diagramas terminados.
--  Capturas y evidencias.
--  Documento revisado por los cuatro.
+- Resumen terminado.
+- 1.1 Realidad problemática terminada.
+- 1.2 Formulación del problema terminada.
+- 1.3 Objetivos terminados.
+- 1.4 Justificación terminada.
+- 1.5 Alcance del proyecto terminado.
+- 1.6 Limitaciones terminadas.
+- 2.1 Desarrollo Web terminado.
+- 2.2 Framework Spring Boot terminado.
+- 2.3 API REST terminado.
+- 2.4 Test Driven Development terminado.
+- Capturas y evidencias necesarias preparadas.
+- Documento revisado por los cuatro integrantes.
 
 ## Presentación
 
@@ -1295,10 +1381,10 @@ La presentación será el **miércoles 9 de septiembre de 2026**. El equipo debe
 
 Objetivo: dejar creadas las cuatro partes técnicas principales.
 
-- Samuel: Spring Boot + H2 persistente + JPA/Hibernate + `Pelicula` + `PeliculaRepository`.
-- See: preparar su entorno y, después de que Samuel suba la base, integrar `Service`, `Controller` y CRUD REST.
-- Frank: avanzar la página pública y cartelera con datos temporales.
-- Crhistian: avanzar la administración de películas con datos temporales.
+- Samuel: Spring Boot + H2 persistente + JPA/Hibernate + `Pelicula` + `PeliculaRepository`; iniciar Resumen y 2.2.
+- See: después de que Samuel suba la base, integrar `Service`, `Controller`, CRUD REST y comenzar 2.3/2.4.
+- Frank: avanzar la página pública y comenzar 1.1, 1.5, 1.6 y 2.1.
+- Crhistian: avanzar la administración de películas y comenzar 1.2, 1.3 y 1.4.
 
 Samuel deberá subir primero la base funcional del backend para que See trabaje sobre la misma estructura.
 
@@ -1314,7 +1400,7 @@ También deben quedar listas o muy avanzadas las pruebas unitarias y la colecci�
 
 ## Lunes 7
 
-Objetivo: cerrar código y documentación hasta el punto 2.4, diagramas, evidencias y presentación.
+Objetivo: cerrar código, completar el informe oficial hasta el punto 2.4, reunir evidencias y terminar la presentación.
 
 No se agregan módulos nuevos.
 
