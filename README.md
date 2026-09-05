@@ -470,15 +470,15 @@ El sistema nunca solicitará ni procesará información financiera real.
 | Tecnología | Versión acordada |
 |---|---|
 | Java                           | 21 LTS                                    |
-| Spring Boot                    | 3.5.16                                    |
-| Maven                          | Maven Wrapper del proyecto / Maven 3.6.3+ |
-| Spring Web                     | Administrado por Spring Boot 3.5.16       |
-| Spring Data JPA                | Administrado por Spring Boot 3.5.16       |
-| Hibernate                      | Administrado por Spring Boot 3.5.16       |
-| H2 Database                    | 2.3.232                                   |
-| Bean Validation                | Administrado por Spring Boot              |
-| JUnit Jupiter                  | 5.12.2                                    |
-| Mockito                        | 5.17.0                                    |
+| Spring Boot                    | 4.1.1                                     |
+| Maven                          | Maven Wrapper del proyecto (Apache Maven 3.9.16) |
+| Spring Web                     | Administrado por Spring Boot 4.1.1        |
+| Spring Data JPA                | Administrado por Spring Boot 4.1.1        |
+| Hibernate ORM                  | Administrado por Spring Boot 4.1.1        |
+| H2 Database                    | 2.4.240                                   |
+| Bean Validation                | Administrado por Spring Boot 4.1.1        |
+| JUnit                          | Administrado por Spring Boot Starter Test |
+| Mockito                        | Administrado por Spring Boot Starter Test |
 
 Las versiones de las dependencias administradas por Spring Boot **no deberán declararse manualmente**.
 
@@ -538,6 +538,16 @@ Starter Test proporciona las herramientas principales para JUnit y Mockito.
 
 Spring Security y JWT serán agregados posteriormente cuando corresponda al avance del curso.
 
+## Configuración local de H2 durante APF1
+
+La base de datos H2 se utilizará en modo persistente mediante archivo local. La configuración oficial del backend deberá usar una URL del tipo:
+
+```properties
+spring.datasource.url=jdbc:h2:file:./data/cineverse
+```
+
+Los archivos físicos generados por H2 dentro de `backend/data/` son locales y **no deberán subirse a GitHub**. El repositorio solo conservará el código y la configuración necesaria para recrear la base de datos.
+
 ---
 
 # 12. Arquitectura actual
@@ -565,7 +575,7 @@ Angular reemplazará únicamente al frontend temporal.
 Para el APF1 se utilizará la siguiente estructura. Los archivos del frontend se separan por responsable para evitar que Frank y Crhistian editen los mismos archivos al mismo tiempo.
 
 ```text
-cineverse/
+Proyecto-DWI/
 │
 ├── backend/
 │   └── Spring Boot
@@ -646,6 +656,15 @@ Para evitar incompatibilidades entre frontend y backend, la estructura oficial d
 - +12
 - +14
 - +18
+
+## Estado de la película en APF1
+
+El campo `estado` será booleano durante el APF1:
+
+- `true` = Activa.
+- `false` = Inactiva.
+
+Durante este avance no se agregarán estados adicionales como `EN_CARTELERA`, `PROXIMAMENTE` o `FINALIZADA`. Si en una etapa posterior se necesita un flujo de estados más detallado, deberá actualizarse primero el contrato de datos y comunicarse al equipo.
 
 Estos nombres constituyen el **contrato de datos del APF1**.
 
@@ -833,7 +852,7 @@ Responsable de **base técnica, datos y persistencia**.
 - Crear `PeliculaRepository`.
 - Mantener `application.properties` y la configuración general del backend.
 - Verificar que Spring Boot inicie y que H2 almacene datos correctamente.
-- Elaborar `docs/informe/2.1-base-datos.md`.
+- Google Docs compartido: completar directamente la sección 2.1 Base de Datos.
 - Realizar la integración final del proyecto y resolver conflictos técnicos.
 
 ### Archivos o áreas que Samuel administra principalmente
@@ -842,7 +861,6 @@ Responsable de **base técnica, datos y persistencia**.
 - configuración del backend
 - `entity/`
 - `repository/`
-- `docs/informe/2.1-base-datos.md`
 - `README.md`
 
 Samuel deberá **subir primero la base funcional del backend**. See empezará a integrar su trabajo sobre la última versión subida por Samuel.
@@ -862,8 +880,9 @@ Responsable de **API REST, lógica y pruebas**.
 - Crear pruebas unitarias.
 - Probar los endpoints en Postman.
 - Guardar la colección de Postman en `docs/postman/`.
-- Elaborar `docs/informe/2.2-diseno-api-rest.md`.
-- Elaborar `docs/informe/2.3-documentacion-api.md`.
+- Google Docs compartido: completar directamente las secciones:
+  - 2.2 Diseño de la API RESTful.
+  - 2.3 Documentación de la API.
 - Ayudar a Frank y Crhistian cuando necesiten conocer el contrato de la API.
 
 ### Archivos o áreas que See administra principalmente
@@ -873,8 +892,6 @@ Responsable de **API REST, lógica y pruebas**.
 - manejo básico de errores del API
 - pruebas del backend
 - `docs/postman/`
-- `docs/informe/2.2-diseno-api-rest.md`
-- `docs/informe/2.3-documentacion-api.md`
 
 See no deberá cambiar los campos de `Pelicula` sin comunicarlo primero a Samuel y a los dos integrantes de frontend.
 
@@ -893,9 +910,10 @@ Responsable del **frontend público** y de los requerimientos.
 - Aplicar Bootstrap y diseño responsive básico.
 - Usar datos temporales mientras el backend todavía no esté listo.
 - Cuando la API esté disponible, conectar `GET /api/peliculas` y `GET /api/peliculas/{id}`.
-- Elaborar `docs/informe/1.1-contexto-empresa.md`.
-- Elaborar `docs/informe/1.3-alcance-requerimientos.md`.
-- Elaborar `docs/informe/2.4a-requerimientos-casos-uso.md`.
+- Google Docs compartido: completar directamente las secciones:
+  - 1.1 Contexto y Empresa.
+  - 1.3 Alcance y Requerimientos.
+  - Apoyo en 2.4 Requerimientos y casos de uso.
 
 ### Archivos exclusivos de Frank en el frontend temporal
 
@@ -919,10 +937,10 @@ Responsable del **frontend administrativo temporal**, diagramas y evidencias.
 - Aplicar Bootstrap y validaciones visuales básicas.
 - Usar datos temporales mientras el backend todavía no esté listo.
 - Cuando la API esté disponible, conectar GET, POST, PUT y DELETE.
-- Elaborar `docs/informe/1.2-problema-objetivos.md`.
-- Elaborar `docs/informe/2.4b-diagramas.md`.
-- Guardar capturas en `docs/evidencias/`.
-- Ayudar a organizar la presentación en `docs/presentacion/`.
+- Google Docs compartido: completar directamente las secciones:
+  - 1.2 Problema y Objetivos.
+  - Apoyo en 2.4 Diagramas.
+- Ayudar a organizar la presentación del equipo y reunir las evidencias necesarias.
 
 ### Archivos exclusivos de Crhistian en el frontend temporal
 
@@ -937,20 +955,28 @@ Crhistian no será responsable de escribir todo el informe. Cada integrante entr
 
 # 23. Distribución de documentación
 
-| Sección | Responsable principal | Archivo de trabajo |
-|---|---|---|
-| 1.1 Contexto y Empresa | Frank | `docs/informe/1.1-contexto-empresa.md` |
-| 1.2 Problema y Objetivos | Crhistian | `docs/informe/1.2-problema-objetivos.md` |
-| 1.3 Alcance y Requerimientos | Frank | `docs/informe/1.3-alcance-requerimientos.md` |
-| 2.1 Base de Datos | Samuel | `docs/informe/2.1-base-datos.md` |
-| 2.2 Diseño API RESTful | See | `docs/informe/2.2-diseno-api-rest.md` |
-| 2.3 Documentación API | See | `docs/informe/2.3-documentacion-api.md` |
-| 2.4 Requerimientos y casos de uso | Frank | `docs/informe/2.4a-requerimientos-casos-uso.md` |
-| 2.4 Diagramas | Crhistian | `docs/informe/2.4b-diagramas.md` |
-| Integración y revisión técnica | Samuel + See | revisión final |
-| Revisión completa | Todos | informe final |
+El informe académico será elaborado directamente en el **Google Docs compartido del equipo**. No se crearán archivos Markdown individuales del informe dentro del repositorio.
 
-La separación en archivos distintos permite trabajar en paralelo y reduce los conflictos al subir cambios.
+| Sección | Responsable principal |
+|---|---|
+| 1.1 Contexto y Empresa | Frank |
+| 1.2 Problema y Objetivos | Crhistian |
+| 1.3 Alcance y Requerimientos | Frank |
+| 2.1 Base de Datos | Samuel |
+| 2.2 Diseño API RESTful | See |
+| 2.3 Documentación API | See |
+| 2.4 Requerimientos y casos de uso | Frank + Crhistian |
+| 2.4 Diagramas | Frank + Crhistian |
+| Integración y revisión técnica | Samuel + See |
+| Revisión completa del informe | Todos |
+
+Los archivos dentro de `docs/` se utilizarán únicamente para materiales complementarios del proyecto:
+
+- `docs/postman/`: colección y evidencias de pruebas de la API.
+- `docs/diagramas/`: diagramas exportados utilizados en el informe.
+- `docs/evidencias/`: capturas de funcionamiento, pruebas e integración.
+
+Cada integrante deberá escribir directamente su sección en el Google Docs compartido y avisar al grupo cuando haya terminado.
 
 ---
 
@@ -1263,25 +1289,20 @@ La prioridad siempre será terminar correctamente el alcance obligatorio antes d
 
 # 35. Plan de cierre urgente del APF1
 
-La presentación será el **miércoles 9 de septiembre de 2026**. Por seguridad, el equipo deberá considerar el **lunes 7** como fecha objetivo para tener código y documentación prácticamente terminados. El martes se reserva para pruebas, correcciones, evidencias y ensayo.
+La presentación será el **miércoles 9 de septiembre de 2026**. El equipo deberá considerar el **lunes 7** como fecha objetivo para tener el código y la documentación prácticamente terminados. El martes 8 se reserva exclusivamente para pruebas, correcciones, evidencias y ensayo.
 
-## Viernes / inicio inmediato
+## Sábado 5 — inicio inmediato
 
-- Samuel: subir la base Spring Boot lo antes posible.
-- See: preparar su entorno y esperar únicamente la base de Samuel para integrar Service/Controller.
-- Frank: comenzar inmediatamente el frontend público con datos temporales.
-- Crhistian: comenzar inmediatamente el frontend administrativo con datos temporales.
+Objetivo: dejar creadas las cuatro partes técnicas principales.
 
-## Sábado
+- Samuel: Spring Boot + H2 persistente + JPA/Hibernate + `Pelicula` + `PeliculaRepository`.
+- See: preparar su entorno y, después de que Samuel suba la base, integrar `Service`, `Controller` y CRUD REST.
+- Frank: avanzar la página pública y cartelera con datos temporales.
+- Crhistian: avanzar la administración de películas con datos temporales.
 
-Objetivo: tener las cuatro partes técnicas creadas.
+Samuel deberá subir primero la base funcional del backend para que See trabaje sobre la misma estructura.
 
-- Samuel: Spring Boot + H2 + JPA + `Pelicula` + Repository.
-- See: Service + Controller + CRUD REST.
-- Frank: inicio + cartelera pública.
-- Crhistian: administración de películas.
-
-## Domingo
+## Domingo 6
 
 Objetivo: **integración completa**.
 
@@ -1289,19 +1310,23 @@ Debe funcionar el recorrido:
 
 `Frontend administrativo → API REST → Spring Boot → JPA/Hibernate → H2 → Frontend público`
 
-También deben quedar iniciadas las pruebas y la colección Postman.
+También deben quedar listas o muy avanzadas las pruebas unitarias y la colección Postman.
 
-## Lunes
+## Lunes 7
 
-Objetivo: terminar documentación hasta el punto 2.4, diagramas, evidencias y presentación.
+Objetivo: cerrar código y documentación hasta el punto 2.4, diagramas, evidencias y presentación.
 
 No se agregan módulos nuevos.
 
-## Martes
+## Martes 8
 
 Objetivo: solo corregir, probar y ensayar.
 
 Se debe probar como mínimo registrar, listar, buscar, editar y eliminar películas; reiniciar Spring Boot y comprobar persistencia; ejecutar las pruebas unitarias; probar Postman; comprobar el frontend y ensayar la presentación de aproximadamente 8 minutos.
+
+## Miércoles 9
+
+Objetivo: presentación y demo. No se realizan cambios de alcance antes de exponer.
 
 ## Regla de emergencia
 
@@ -1310,6 +1335,7 @@ Hasta después del APF1 quedan congelados: salas, funciones, asientos, dulcería
 El único módulo que debe quedar completo ahora es **Películas**.
 
 ---
+
 
 # 36. Estado actual
 
