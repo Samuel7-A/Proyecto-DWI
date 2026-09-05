@@ -32,20 +32,20 @@ Desarrollar un sistema web integrado para la gestión de una plataforma de cine 
 
 # 3. Objetivos específicos
 
-* Diseñar e implementar una API REST utilizando Spring Boot.
-* Implementar operaciones CRUD para los recursos principales del sistema.
-* Utilizar JPA/Hibernate como capa de persistencia.
-* Utilizar H2 como base de datos durante el desarrollo académico.
-* Aplicar una arquitectura organizada en capas.
-* Implementar pruebas unitarias sobre la lógica del backend.
-* Documentar y probar los servicios REST.
-* Construir un frontend temporal utilizando HTML, CSS, JavaScript y Bootstrap.
-* Integrar el frontend temporal con la API REST.
-* Implementar posteriormente autenticación, autorización y roles.
-* Reemplazar posteriormente el frontend temporal por Angular.
-* Integrar el proceso completo de compra simulada de entradas y productos.
-* Generar tickets digitales después de una compra simulada exitosa.
-* Desplegar la aplicación en una etapa posterior del curso.
+- Diseñar e implementar una API REST utilizando Spring Boot.
+- Implementar operaciones CRUD para los recursos principales del sistema.
+- Utilizar JPA/Hibernate como capa de persistencia.
+- Utilizar H2 como base de datos durante el desarrollo académico.
+- Aplicar una arquitectura organizada en capas.
+- Implementar pruebas unitarias sobre la lógica del backend.
+- Documentar y probar los servicios REST.
+- Construir un frontend temporal utilizando HTML, CSS, JavaScript y Bootstrap.
+- Integrar el frontend temporal con la API REST.
+- Implementar posteriormente autenticación, autorización y roles.
+- Reemplazar posteriormente el frontend temporal por Angular.
+- Integrar el proceso completo de compra simulada de entradas y productos.
+- Generar tickets digitales después de una compra simulada exitosa.
+- Desplegar la aplicación en una etapa posterior del curso.
 
 ---
 
@@ -59,29 +59,29 @@ Estas funcionalidades constituyen el **núcleo oficial de CineVerse**.
 
 El cliente podrá:
 
-* Consultar la cartelera.
-* Consultar información de una película.
-* Consultar las funciones disponibles para una película.
-* Seleccionar una función.
-* Consultar los asientos correspondientes a una sala.
-* Seleccionar uno o varios asientos disponibles.
-* Agregar opcionalmente productos de dulcería a su compra.
-* Consultar el resumen de la orden.
-* Realizar una simulación de pago.
-* Obtener un ticket digital cuando el pago simulado sea aprobado.
-* Consultar sus compras o tickets cuando el módulo de usuarios esté implementado.
+- Consultar la cartelera.
+- Consultar información de una película.
+- Consultar las funciones disponibles para una película.
+- Seleccionar una función.
+- Consultar los asientos correspondientes a una sala.
+- Seleccionar uno o varios asientos disponibles.
+- Agregar opcionalmente productos de dulcería a su compra.
+- Consultar el resumen de la orden.
+- Realizar una simulación de pago.
+- Obtener un ticket digital cuando el pago simulado sea aprobado.
+- Consultar sus compras o tickets cuando el módulo de usuarios esté implementado.
 
 ## Administrador
 
 El administrador podrá:
 
-* Gestionar películas.
-* Gestionar salas.
-* Gestionar funciones.
-* Gestionar productos de dulcería.
-* Consultar órdenes.
-* Consultar pagos simulados.
-* Gestionar la información necesaria para la cartelera.
+- Gestionar películas.
+- Gestionar salas.
+- Gestionar funciones.
+- Gestionar productos de dulcería.
+- Consultar órdenes.
+- Consultar pagos simulados.
+- Gestionar la información necesaria para la cartelera.
 
 ---
 
@@ -89,21 +89,21 @@ El administrador podrá:
 
 Las siguientes funcionalidades **NO forman parte del alcance oficial**:
 
-* Pagos bancarios reales.
-* Integración real con Yape.
-* Integración real con Plin.
-* Integración con tarjetas bancarias reales.
-* Billetera virtual.
-* CineWallet.
-* CineSeat Delivery.
-* Delivery de alimentos.
-* Facturación electrónica real.
-* Contabilidad.
-* Recursos humanos.
-* Gestión de empleados.
-* Sistema de puntos o fidelización.
-* Integración con Cineplanet.
-* Integración con otras cadenas de cine.
+- Pagos bancarios reales.
+- Integración real con Yape.
+- Integración real con Plin.
+- Integración con tarjetas bancarias reales.
+- Billetera virtual.
+- CineWallet.
+- CineSeat Delivery.
+- Delivery de alimentos.
+- Facturación electrónica real.
+- Contabilidad.
+- Recursos humanos.
+- Gestión de empleados.
+- Sistema de puntos o fidelización.
+- Integración con Cineplanet.
+- Integración con otras cadenas de cine.
 
 Si alguna funcionalidad nueva se propone, deberá considerarse opcional y no podrá desplazar las funcionalidades obligatorias.
 
@@ -143,10 +143,10 @@ El usuario selecciona uno o varios asientos disponibles.
 
 El usuario puede agregar opcionalmente:
 
-* Canchita / palomitas.
-* Bebidas.
-* Dulces.
-* Combos.
+- Canchita / palomitas.
+- Bebidas.
+- Dulces.
+- Combos.
 
 No es obligatorio agregar productos para comprar entradas.
 
@@ -156,14 +156,14 @@ No es obligatorio agregar productos para comprar entradas.
 
 El sistema presenta:
 
-* Película.
-* Función.
-* Sala.
-* Asientos seleccionados.
-* Precio de entradas.
-* Productos seleccionados.
-* Precio de productos.
-* Total de la orden.
+- Película.
+- Función.
+- Sala.
+- Asientos seleccionados.
+- Precio de entradas.
+- Productos seleccionados.
+- Precio de productos.
+- Total de la orden.
 
 ↓
 
@@ -173,9 +173,9 @@ El usuario selecciona un método de pago ficticio.
 
 Los métodos podrán representar visualmente opciones como:
 
-* Tarjeta.
-* Yape.
-* Plin.
+- Tarjeta.
+- Yape.
+- Plin.
 
 Ninguna opción realizará operaciones financieras reales.
 
@@ -185,10 +185,10 @@ Ninguna opción realizará operaciones financieras reales.
 
 Si la simulación del pago es aprobada:
 
-* La orden cambia a estado confirmada.
-* Los asientos seleccionados quedan ocupados para esa función.
-* Se registra el pago simulado.
-* Se genera el ticket digital.
+- La orden cambia a estado confirmada.
+- Los asientos seleccionados quedan ocupados para esa función.
+- Se registra el pago simulado.
+- Se genera el ticket digital.
 
 ↓
 
@@ -264,8 +264,8 @@ Durante el primer avance no será obligatorio implementar autenticación.
 
 Cuando se implemente seguridad existirán, como mínimo, los roles:
 
-* CLIENTE
-* ADMIN
+- CLIENTE
+- ADMIN
 
 ## RN16
 
@@ -403,13 +403,13 @@ El sistema diferenciará las operaciones permitidas para CLIENTE y ADMIN.
 
 El backend utilizará una arquitectura organizada por responsabilidades:
 
-* Controller.
-* Service.
-* Repository.
-* Entity.
-* DTO.
-* Exception.
-* Config.
+- Controller.
+- Service.
+- Repository.
+- Entity.
+- DTO.
+- Exception.
+- Config.
 
 ## RNF02 — API REST
 
@@ -431,9 +431,9 @@ El backend deberá validar la información recibida antes de almacenarla.
 
 La API deberá responder apropiadamente ante:
 
-* Datos inválidos.
-* Recursos inexistentes.
-* Operaciones incorrectas.
+- Datos inválidos.
+- Recursos inexistentes.
+- Operaciones incorrectas.
 
 ## RNF07 — Pruebas
 
@@ -467,30 +467,30 @@ El sistema nunca solicitará ni procesará información financiera real.
 
 ## Backend
 
-| Tecnología      | Versión acordada                          |
-| --------------- | ----------------------------------------- |
-| Java            | 21 LTS                                    |
-| Spring Boot     | 3.5.16                                    |
-| Maven           | Maven Wrapper del proyecto / Maven 3.6.3+ |
-| Spring Web      | Administrado por Spring Boot 3.5.16       |
-| Spring Data JPA | Administrado por Spring Boot 3.5.16       |
-| Hibernate       | Administrado por Spring Boot 3.5.16       |
-| H2 Database     | 2.3.232                                   |
-| Bean Validation | Administrado por Spring Boot              |
-| JUnit Jupiter   | 5.12.2                                    |
-| Mockito         | 5.17.0                                    |
+| Tecnología | Versión acordada |
+|---|---|
+| Java                           | 21 LTS                                    |
+| Spring Boot                    | 3.5.16                                    |
+| Maven                          | Maven Wrapper del proyecto / Maven 3.6.3+ |
+| Spring Web                     | Administrado por Spring Boot 3.5.16       |
+| Spring Data JPA                | Administrado por Spring Boot 3.5.16       |
+| Hibernate                      | Administrado por Spring Boot 3.5.16       |
+| H2 Database                    | 2.3.232                                   |
+| Bean Validation                | Administrado por Spring Boot              |
+| JUnit Jupiter                  | 5.12.2                                    |
+| Mockito                        | 5.17.0                                    |
 
 Las versiones de las dependencias administradas por Spring Boot **no deberán declararse manualmente**.
 
 ## Frontend temporal
 
-| Tecnología     | Versión                |
-| -------------- | ---------------------- |
-| HTML           | HTML5                  |
-| CSS            | CSS3                   |
-| JavaScript     | JavaScript moderno     |
-| Bootstrap      | 5.3.8                  |
-| Servidor local | Live Server de VS Code |
+| Tecnología | Versión |
+|---|---|
+| HTML                  | HTML5                  |
+| CSS                   | CSS3                   |
+| JavaScript            | JavaScript moderno     |
+| Bootstrap             | 5.3.8                  |
+| Servidor local        | Live Server de VS Code |
 
 El frontend temporal no requiere Node.js ni npm.
 
@@ -502,13 +502,13 @@ La versión exacta de Angular será congelada cuando comience dicha etapa, consi
 
 ## Herramientas
 
-* Visual Studio Code.
-* Git.
-* GitHub.
-* Postman.
-* H2 Console.
-* Spring Initializr.
-* Maven Wrapper.
+- Visual Studio Code.
+- Git.
+- GitHub.
+- Postman.
+- H2 Console.
+- Spring Initializr.
+- Maven Wrapper.
 
 ---
 
@@ -527,14 +527,14 @@ Starter Test proporciona las herramientas principales para JUnit y Mockito.
 
 ## Dependencias que NO se utilizarán todavía
 
-* Spring Security.
-* JWT.
-* MySQL Driver.
-* PostgreSQL Driver.
-* Thymeleaf.
-* WebFlux.
-* OAuth2.
-* Lombok.
+- Spring Security.
+- JWT.
+- MySQL Driver.
+- PostgreSQL Driver.
+- Thymeleaf.
+- WebFlux.
+- OAuth2.
+- Lombok.
 
 Spring Security y JWT serán agregados posteriormente cuando corresponda al avance del curso.
 
@@ -544,24 +544,7 @@ Spring Security y JWT serán agregados posteriormente cuando corresponda al avan
 
 Durante el APF1:
 
-Usuario
-↓
-Frontend temporal
-HTML + CSS + JavaScript + Bootstrap
-↓
-API REST
-↓
-Spring Boot
-↓
-Controller
-↓
-Service
-↓
-Repository
-↓
-JPA / Hibernate
-↓
-H2
+Usuario ↓ Frontend temporal HTML + CSS + JavaScript + Bootstrap ↓ API REST ↓ Spring Boot ↓ Controller ↓ Service ↓ Repository ↓ JPA / Hibernate ↓ H2
 
 ---
 
@@ -569,21 +552,7 @@ H2
 
 Cuando se introduzca Angular:
 
-Usuario
-↓
-Angular
-↓
-HTTP / JSON
-↓
-Spring Boot REST API
-↓
-Service
-↓
-Repository
-↓
-JPA / Hibernate
-↓
-Base de datos
+Usuario ↓ Angular ↓ HTTP / JSON ↓ Spring Boot REST API ↓ Service ↓ Repository ↓ JPA / Hibernate ↓ Base de datos
 
 El backend construido durante los primeros avances **no será reemplazado por Angular**.
 
@@ -593,10 +562,13 @@ Angular reemplazará únicamente al frontend temporal.
 
 # 14. Estructura oficial del repositorio
 
+Para el APF1 se utilizará la siguiente estructura. Los archivos del frontend se separan por responsable para evitar que Frank y Crhistian editen los mismos archivos al mismo tiempo.
+
+```text
 cineverse/
 │
 ├── backend/
-│   └── Proyecto Spring Boot
+│   └── Spring Boot
 │
 ├── frontend-temp/
 │   ├── html/
@@ -604,27 +576,20 @@ cineverse/
 │   └── js/
 │
 ├── docs/
-│   ├── informe/
-│   ├── diagramas/
 │   ├── postman/
-│   ├── evidencias/
-│   └── presentacion/
+│   ├── diagramas/
+│   └── evidencias/
 │
 └── README.md
+```
 
-Cuando se implemente Angular:
+El informe académico del proyecto será elaborado colaborativamente en un documento compartido de Google Docs.
+Cada integrante deberá completar directamente en dicho documento la sección que le corresponde.
 
-cineverse/
-│
-├── backend/
-├── frontend/
-├── frontend-temp/
-├── docs/
-└── README.md
-
-`frontend-temp` quedará únicamente como evidencia histórica del primer desarrollo y Angular se convertirá en el frontend oficial.
+Cuando se implemente Angular se agregará `frontend/`. `frontend-temp/` se conservará únicamente como evidencia histórica del primer desarrollo.
 
 ---
+
 
 # 15. Frontend temporal
 
@@ -632,28 +597,28 @@ El frontend temporal estará separado del backend.
 
 Durante el desarrollo:
 
-* Backend Spring Boot: puerto 8080.
-* Frontend temporal: servidor Live Server.
-* La comunicación será realizada mediante la API REST.
-* El backend deberá permitir el origen local del frontend durante el desarrollo.
+- Backend Spring Boot: puerto 8080.
+- Frontend temporal: servidor Live Server.
+- La comunicación será realizada mediante la API REST.
+- El backend deberá permitir el origen local del frontend durante el desarrollo.
 
 ## Parte pública
 
 La interfaz pública deberá contener como mínimo:
 
-* Página de inicio.
-* Cartelera.
-* Visualización de películas.
-* Información básica de una película.
+- Página de inicio.
+- Cartelera.
+- Visualización de películas.
+- Información básica de una película.
 
 ## Parte administrativa
 
 La interfaz administrativa temporal deberá permitir:
 
-* Listar películas.
-* Registrar películas.
-* Editar películas.
-* Eliminar películas.
+- Listar películas.
+- Registrar películas.
+- Editar películas.
+- Eliminar películas.
 
 No será obligatorio implementar autenticación en el frontend temporal.
 
@@ -663,24 +628,24 @@ No será obligatorio implementar autenticación en el frontend temporal.
 
 Para evitar incompatibilidades entre frontend y backend, la estructura oficial de una película durante el APF1 será:
 
-| Campo           | Tipo conceptual        | Obligatorio |
-| --------------- | ---------------------- | ----------- |
-| id              | Identificador numérico | Generado    |
-| titulo          | Texto                  | Sí          |
-| sinopsis        | Texto                  | No          |
-| genero          | Texto                  | Sí          |
-| duracionMinutos | Número entero          | Sí          |
-| clasificacion   | Texto controlado       | Sí          |
-| fechaEstreno    | Fecha                  | Sí          |
-| imagenUrl       | Texto/URL              | No          |
-| estado          | Booleano               | Sí          |
+| Campo | Tipo conceptual | Obligatorio |
+|---|---|---|
+| id                                  | Identificador numérico | Generado |
+| titulo                              | Texto                  | Sí       |
+| sinopsis                            | Texto                  | No       |
+| genero                              | Texto                  | Sí       |
+| duracionMinutos                     | Número entero          | Sí       |
+| clasificacion                       | Texto controlado       | Sí       |
+| fechaEstreno                        | Fecha                  | Sí       |
+| imagenUrl                           | Texto/URL              | No       |
+| estado                              | Booleano               | Sí       |
 
 ## Clasificaciones aceptadas inicialmente
 
-* APT
-* +12
-* +14
-* +18
+- APT
+- +12
+- +14
+- +18
 
 Estos nombres constituyen el **contrato de datos del APF1**.
 
@@ -696,22 +661,22 @@ El recurso principal será:
 
 `/api/peliculas`
 
-| Método | Ruta                | Función             |
-| ------ | ------------------- | ------------------- |
-| GET    | /api/peliculas      | Listar películas    |
-| GET    | /api/peliculas/{id} | Consultar película  |
-| POST   | /api/peliculas      | Registrar película  |
-| PUT    | /api/peliculas/{id} | Actualizar película |
-| DELETE | /api/peliculas/{id} | Eliminar película   |
+| Método | Ruta | Función |
+|---|---|---|
+| GET                   | /api/peliculas      | Listar películas    |
+| GET                   | /api/peliculas/{id} | Consultar película  |
+| POST                  | /api/peliculas      | Registrar película  |
+| PUT                   | /api/peliculas/{id} | Actualizar película |
+| DELETE                | /api/peliculas/{id} | Eliminar película   |
 
 ## Respuestas HTTP esperadas
 
-* 200 — operación correcta.
-* 201 — recurso creado.
-* 204 — eliminación correcta sin contenido.
-* 400 — datos inválidos.
-* 404 — recurso no encontrado.
-* 500 — error interno no controlado.
+- 200 — operación correcta.
+- 201 — recurso creado.
+- 204 — eliminación correcta sin contenido.
+- 400 — datos inválidos.
+- 404 — recurso no encontrado.
+- 500 — error interno no controlado.
 
 Este contrato deberá definirse antes de conectar el frontend.
 
@@ -723,63 +688,41 @@ Una modificación del contrato deberá ser comunicada a los cuatro integrantes.
 
 El diseño futuro contempla las siguientes entidades:
 
-* Usuario.
-* Pelicula.
-* Sala.
-* Asiento.
-* Funcion.
-* Producto.
-* Orden.
-* Entrada.
-* DetalleProducto.
-* Pago.
-* Ticket.
+- Usuario.
+- Pelicula.
+- Sala.
+- Asiento.
+- Funcion.
+- Producto.
+- Orden.
+- Entrada.
+- DetalleProducto.
+- Pago.
+- Ticket.
 
 ## Relaciones principales
 
-Pelicula
-1 → N
-Funcion
+Pelicula 1 → N Funcion
 
-Sala
-1 → N
-Funcion
+Sala 1 → N Funcion
 
-Sala
-1 → N
-Asiento
+Sala 1 → N Asiento
 
-Usuario
-1 → N
-Orden
+Usuario 1 → N Orden
 
-Orden
-1 → N
-Entrada
+Orden 1 → N Entrada
 
-Entrada
-N → 1
-Funcion
+Entrada N → 1 Funcion
 
-Entrada
-N → 1
-Asiento
+Entrada N → 1 Asiento
 
-Orden
-1 → N
-DetalleProducto
+Orden 1 → N DetalleProducto
 
-DetalleProducto
-N → 1
-Producto
+DetalleProducto N → 1 Producto
 
-Orden
-1 → 1
-Pago
+Orden 1 → 1 Pago
 
-Orden
-1 → 1
-Ticket
+Orden 1 → 1 Ticket
 
 El modelo podrá refinarse durante el diseño de base de datos siempre que no altere los procesos principales definidos anteriormente.
 
@@ -793,45 +736,45 @@ Durante el primer avance se implementará **únicamente el primer módulo funcio
 
 Debe estar implementado:
 
-* Proyecto Spring Boot.
-* Arquitectura por capas.
-* Entidad Pelicula.
-* Repository.
-* Service.
-* Controller.
-* API REST.
-* CRUD completo.
-* H2.
-* JPA/Hibernate.
-* Validaciones básicas.
-* Manejo básico de errores.
-* Pruebas unitarias.
-* Pruebas mediante Postman.
+- Proyecto Spring Boot.
+- Arquitectura por capas.
+- Entidad Pelicula.
+- Repository.
+- Service.
+- Controller.
+- API REST.
+- CRUD completo.
+- H2.
+- JPA/Hibernate.
+- Validaciones básicas.
+- Manejo básico de errores.
+- Pruebas unitarias.
+- Pruebas mediante Postman.
 
 ## Frontend temporal
 
 Debe estar implementado:
 
-* Interfaz pública.
-* Cartelera.
-* Consulta de películas.
-* Interfaz administrativa temporal.
-* Registrar película.
-* Editar película.
-* Eliminar película.
-* Integración con la API REST.
+- Interfaz pública.
+- Cartelera.
+- Consulta de películas.
+- Interfaz administrativa temporal.
+- Registrar película.
+- Editar película.
+- Eliminar película.
+- Integración con la API REST.
 
 ## Documentación
 
 Debe completarse:
 
-* 1.1 Contexto y Empresa.
-* 1.2 Problema y Objetivos.
-* 1.3 Alcance y Requerimientos.
-* 2.1 Base de Datos.
-* 2.2 Diseño de la API RESTful.
-* 2.3 Documentación de la API.
-* 2.4 Requerimientos y Diagramas.
+- 1.1 Contexto y Empresa.
+- 1.2 Problema y Objetivos.
+- 1.3 Alcance y Requerimientos.
+- 2.1 Base de Datos.
+- 2.2 Diseño de la API RESTful.
+- 2.3 Documentación de la API.
+- 2.4 Requerimientos y Diagramas.
 
 ## Presentación
 
@@ -843,19 +786,19 @@ Debe existir una presentación preparada para aproximadamente 8 minutos.
 
 Todavía no es necesario implementar:
 
-* Salas.
-* Funciones.
-* Asientos.
-* Productos.
-* Dulcería.
-* Orden.
-* Pago.
-* Ticket.
-* Usuarios.
-* Login.
-* JWT.
-* Spring Security.
-* Angular.
+- Salas.
+- Funciones.
+- Asientos.
+- Productos.
+- Dulcería.
+- Orden.
+- Pago.
+- Ticket.
+- Usuarios.
+- Login.
+- JWT.
+- Spring Security.
+- Angular.
 
 Estos elementos deberán aparecer en el análisis y planificación cuando corresponda, pero no deberán retrasar la entrega funcional del CRUD de películas.
 
@@ -863,228 +806,249 @@ Estos elementos deberán aparecer en el análisis y planificación cuando corres
 
 # 21. Equipo
 
-| Integrante | Rol principal                                  |
-| ---------- | ---------------------------------------------- |
-| Samuel     | Backend 1 — Datos, JPA y H2                    |
-| See        | Backend 2 — API REST y pruebas                 |
-| Frank      | Frontend 1 — Interfaz pública y requerimientos |
-| Crhistian  | Frontend 2 — Administración y documentación    |
+| Integrante | Rol principal |
+|---|---|
+| Samuel                      | Backend 1 — Datos, JPA y H2                    |
+| See                         | Backend 2 — API REST y pruebas                 |
+| Frank                       | Frontend 1 — Interfaz pública y requerimientos |
+| Crhistian                   | Frontend 2 — Administración y documentación    |
 
 ---
 
-# 22. Responsabilidades del equipo
+# 22. Responsabilidades del equipo para el APF1
+
+La prioridad es terminar rápido sin que dos personas modifiquen los mismos archivos. Cada integrante tendrá una zona de trabajo principal.
 
 ## Samuel — Backend 1
 
-Responsable de:
+Responsable de **base técnica, datos y persistencia**.
 
-* Crear la base del proyecto Spring Boot.
-* Configurar Maven.
-* Configurar H2.
-* Configurar JPA/Hibernate.
-* Crear y mantener las entidades.
-* Crear repositories.
-* Definir la persistencia.
-* Verificar que los datos sean almacenados correctamente.
-* Mantener la estructura interna del backend.
-* Coordinar la integración general del backend.
-* Apoyar la resolución de conflictos técnicos.
+### Tareas APF1
 
-### APF1
+- Crear y comprobar el proyecto Spring Boot dentro de `backend/`.
+- Configurar Maven y las dependencias oficiales.
+- Configurar H2 persistente.
+- Configurar JPA/Hibernate.
+- Crear la entidad `Pelicula`.
+- Crear `PeliculaRepository`.
+- Mantener `application.properties` y la configuración general del backend.
+- Verificar que Spring Boot inicie y que H2 almacene datos correctamente.
+- Elaborar `docs/informe/2.1-base-datos.md`.
+- Realizar la integración final del proyecto y resolver conflictos técnicos.
 
-* Configuración Spring Boot.
-* Configuración H2.
-* Entidad Pelicula.
-* PeliculaRepository.
-* Persistencia.
-* Diseño técnico de base de datos.
-* Apoyo a integración final.
+### Archivos o áreas que Samuel administra principalmente
+
+- `backend/pom.xml`
+- configuración del backend
+- `entity/`
+- `repository/`
+- `docs/informe/2.1-base-datos.md`
+- `README.md`
+
+Samuel deberá **subir primero la base funcional del backend**. See empezará a integrar su trabajo sobre la última versión subida por Samuel.
 
 ---
 
 ## See — Backend 2
 
-Responsable de:
+Responsable de **API REST, lógica y pruebas**.
 
-* Implementar Services.
-* Implementar Controllers.
-* Diseñar y mantener los endpoints REST.
-* Implementar las operaciones CRUD.
-* Manejar respuestas HTTP.
-* Implementar manejo básico de errores.
-* Crear pruebas unitarias.
-* Mantener la colección Postman.
-* Documentar la API.
+### Tareas APF1
 
-### APF1
+- Crear `PeliculaService`.
+- Crear `PeliculaController`.
+- Implementar GET, GET por ID, POST, PUT y DELETE.
+- Manejar respuestas HTTP y película inexistente.
+- Crear pruebas unitarias.
+- Probar los endpoints en Postman.
+- Guardar la colección de Postman en `docs/postman/`.
+- Elaborar `docs/informe/2.2-diseno-api-rest.md`.
+- Elaborar `docs/informe/2.3-documentacion-api.md`.
+- Ayudar a Frank y Crhistian cuando necesiten conocer el contrato de la API.
 
-* PeliculaService.
-* PeliculaController.
-* CRUD REST.
-* Pruebas unitarias.
-* Pruebas Postman.
-* Documentación de endpoints.
-* Apoyo a integración con frontend.
+### Archivos o áreas que See administra principalmente
+
+- `service/`
+- `controller/`
+- manejo básico de errores del API
+- pruebas del backend
+- `docs/postman/`
+- `docs/informe/2.2-diseno-api-rest.md`
+- `docs/informe/2.3-documentacion-api.md`
+
+See no deberá cambiar los campos de `Pelicula` sin comunicarlo primero a Samuel y a los dos integrantes de frontend.
 
 ---
 
 ## Frank — Frontend 1
 
-Responsable del frontend público.
+Responsable del **frontend público** y de los requerimientos.
 
-### APF1
+### Tareas APF1
 
-* Página de inicio.
-* Cartelera.
-* Tarjetas de películas.
-* Vista de información de una película.
-* Consumo del GET de películas.
-* Diseño responsive.
-* Bootstrap.
-* Requerimientos funcionales.
-* Requerimientos no funcionales.
-* Casos de uso.
-* Apoyo en diagramas.
+- Crear la página de inicio.
+- Crear la cartelera.
+- Crear las tarjetas de películas.
+- Crear la vista básica de información de una película.
+- Aplicar Bootstrap y diseño responsive básico.
+- Usar datos temporales mientras el backend todavía no esté listo.
+- Cuando la API esté disponible, conectar `GET /api/peliculas` y `GET /api/peliculas/{id}`.
+- Elaborar `docs/informe/1.1-contexto-empresa.md`.
+- Elaborar `docs/informe/1.3-alcance-requerimientos.md`.
+- Elaborar `docs/informe/2.4a-requerimientos-casos-uso.md`.
 
-Frank deberá basar los requerimientos **únicamente en los procesos, reglas de negocio y alcance definidos en este README**.
+### Archivos exclusivos de Frank en el frontend temporal
 
-No deberá inventar nuevas funciones para completar el informe.
+- `frontend-temp/html/index.html`
+- `frontend-temp/css/public.css`
+- `frontend-temp/js/public.js`
+
+Frank deberá basar los requerimientos únicamente en el alcance, procesos y reglas de negocio ya definidos en este README. No deberá inventar funcionalidades nuevas.
 
 ---
 
 ## Crhistian — Frontend 2
 
-Responsable del frontend administrativo temporal.
+Responsable del **frontend administrativo temporal**, diagramas y evidencias.
 
-### APF1
+### Tareas APF1
 
-* Interfaz administrativa.
-* Listado de películas.
-* Formulario de registro.
-* Formulario de edición.
-* Eliminación.
-* Integración con POST, PUT y DELETE.
-* Validaciones visuales básicas.
-* Apoyo a diagramas.
-* Organización del informe.
-* Organización de evidencias.
-* Organización de la presentación.
+- Crear la interfaz de administración de películas.
+- Crear listado, formulario de registro y formulario de edición.
+- Preparar la acción visual de eliminación.
+- Aplicar Bootstrap y validaciones visuales básicas.
+- Usar datos temporales mientras el backend todavía no esté listo.
+- Cuando la API esté disponible, conectar GET, POST, PUT y DELETE.
+- Elaborar `docs/informe/1.2-problema-objetivos.md`.
+- Elaborar `docs/informe/2.4b-diagramas.md`.
+- Guardar capturas en `docs/evidencias/`.
+- Ayudar a organizar la presentación en `docs/presentacion/`.
 
-Crhistian no será el único responsable del informe.
+### Archivos exclusivos de Crhistian en el frontend temporal
 
-Cada integrante deberá entregar la documentación correspondiente a su área.
+- `frontend-temp/html/admin.html`
+- `frontend-temp/css/admin.css`
+- `frontend-temp/js/admin.js`
+
+Crhistian no será responsable de escribir todo el informe. Cada integrante entregará su propia sección.
 
 ---
+
 
 # 23. Distribución de documentación
 
-| Sección                        | Responsable principal |
-| ------------------------------ | --------------------- |
-| 1.1 Contexto y Empresa         | Frank                 |
-| 1.2 Problema y Objetivos       | Crhistian             |
-| 1.3 Alcance y Requerimientos   | Frank                 |
-| 2.1 Base de Datos              | Samuel                |
-| 2.2 Diseño API RESTful         | See                   |
-| 2.3 Documentación API          | See                   |
-| 2.4 Requerimientos y Diagramas | Frank + Crhistian     |
-| Revisión técnica               | Samuel + See          |
-| Revisión final                 | Todos                 |
+| Sección | Responsable principal | Archivo de trabajo |
+|---|---|---|
+| 1.1 Contexto y Empresa | Frank | `docs/informe/1.1-contexto-empresa.md` |
+| 1.2 Problema y Objetivos | Crhistian | `docs/informe/1.2-problema-objetivos.md` |
+| 1.3 Alcance y Requerimientos | Frank | `docs/informe/1.3-alcance-requerimientos.md` |
+| 2.1 Base de Datos | Samuel | `docs/informe/2.1-base-datos.md` |
+| 2.2 Diseño API RESTful | See | `docs/informe/2.2-diseno-api-rest.md` |
+| 2.3 Documentación API | See | `docs/informe/2.3-documentacion-api.md` |
+| 2.4 Requerimientos y casos de uso | Frank | `docs/informe/2.4a-requerimientos-casos-uso.md` |
+| 2.4 Diagramas | Crhistian | `docs/informe/2.4b-diagramas.md` |
+| Integración y revisión técnica | Samuel + See | revisión final |
+| Revisión completa | Todos | informe final |
+
+La separación en archivos distintos permite trabajar en paralelo y reduce los conflictos al subir cambios.
 
 ---
 
-# 24. Estrategia Git
 
-El proyecto utilizará dos ramas permanentes:
+# 24. Estrategia Git simplificada para cerrar el APF1
 
-* `main`
-* `develop`
+Para este avance **no se utilizarán Pull Requests, ramas `feature`, `develop`, GitFlow ni Issues obligatorios**. El objetivo inmediato es terminar e integrar el proyecto con el menor número posible de pasos.
 
-## main
+Se trabajará únicamente sobre la rama:
 
-Contendrá únicamente versiones estables y verificadas.
+- `main`
 
-No se desarrollará directamente sobre `main`.
+Cada integrante deberá modificar solamente los archivos o áreas que tiene asignados en la sección 22. Así se reducen los conflictos aunque todos utilicen la misma rama.
 
-## develop
+## Regla principal
 
-Será la rama de integración.
+**Antes de empezar a trabajar y justo antes de subir cambios, cada integrante debe actualizar su copia del repositorio.**
 
-Las funcionalidades terminadas serán integradas primero en `develop`.
+Nunca se utilizará `force push`.
 
-## Ramas de trabajo APF1
-
-* `feature/backend-data-h2`
-* `feature/backend-api-tests`
-* `feature/frontend-public`
-* `feature/frontend-admin`
-
-Cada integrante trabajará principalmente en su rama.
+Si Git rechaza un `push`, el integrante deberá detenerse y avisar a Samuel en lugar de intentar forzar la subida.
 
 ---
 
-# 25. Flujo Git
+# 25. Flujo Git mínimo
 
-1. Actualizar `develop`.
-2. Trabajar en la rama correspondiente.
-3. Realizar commits pequeños y comprensibles.
-4. Subir la rama a GitHub.
-5. Crear Pull Request hacia `develop`.
-6. Otro integrante revisa.
-7. Corregir problemas encontrados.
-8. Integrar a `develop`.
-9. Ejecutar pruebas generales.
-10. Cuando el avance esté estable, integrar `develop` en `main`.
+La primera vez, cada integrante clona el repositorio.
 
-Ningún integrante deberá realizar cambios importantes directamente en `main`.
+Para cada entrega de trabajo:
+
+```bash
+git pull origin main
+```
+
+Después modifica únicamente sus archivos asignados y, al terminar:
+
+```bash
+git add .
+git commit -m "descripcion corta del trabajo"
+git pull origin main
+git push origin main
+```
+
+No habrá revisión formal por Pull Request durante este APF1. La revisión se realizará directamente sobre el código ya subido y durante la integración final.
+
+### Orden especial del backend
+
+1. Samuel sube primero la base de Spring Boot + H2 + JPA + `Pelicula` + Repository.
+2. See hace `git pull origin main` después de ese cambio.
+3. See agrega Service, Controller, pruebas y Postman.
+4. Samuel vuelve a actualizar su copia y verifica la integración completa.
+
+Frank y Crhistian pueden trabajar desde el inicio porque tienen archivos frontend separados.
+
+---
+
+# 26. Convención mínima de commits
+
+No se exige una convención compleja. Los mensajes solo deben indicar claramente qué se hizo.
+
+Ejemplos válidos:
+
+- `backend: configurar H2 y entidad Pelicula`
+- `backend: agregar CRUD REST de peliculas`
+- `frontend: agregar cartelera publica`
+- `frontend: agregar administracion de peliculas`
+- `docs: agregar base de datos`
+- `docs: agregar requerimientos y diagramas`
+
+Lo importante es que cada integrante realice sus propios commits para dejar evidencia de participación.
 
 ---
 
-# 26. Convención de commits
+# 27. Gestión de tareas simplificada
 
-Se utilizarán prefijos sencillos:
+Durante el APF1 no es obligatorio utilizar Issues ni un tablero de GitHub.
 
-* `feat:` nueva funcionalidad.
-* `fix:` corrección.
-* `test:` pruebas.
-* `docs:` documentación.
-* `refactor:` reorganización sin cambiar funcionalidad.
-* `chore:` configuración o mantenimiento.
+La fuente de verdad para saber qué debe hacer cada integrante será:
 
-Los mensajes deberán describir claramente el cambio realizado.
+1. La sección **22. Responsabilidades del equipo para el APF1** de este README.
+2. La sección **23. Distribución de documentación**.
+3. El grupo de WhatsApp para confirmar que una tarea fue terminada o informar un bloqueo.
 
----
-
-# 27. Gestión de tareas
-
-Se recomienda utilizar Issues o un tablero de GitHub con las siguientes columnas:
-
-* Backlog.
-* Por hacer.
-* En progreso.
-* En revisión.
-* Terminado.
-
-Cada tarea deberá tener:
-
-* Responsable.
-* Descripción.
-* Criterios de aceptación.
-* Rama correspondiente.
-
-Una persona no deberá comenzar una tarea que dependa de otra sin conocer previamente el contrato necesario.
+Cada integrante deberá avisar al grupo cuando termine su parte y la haya subido al repositorio.
 
 ---
+
 
 # 28. Contrato entre backend y frontend
 
 Antes de conectar una pantalla, ambos equipos deberán conocer:
 
-* Endpoint.
-* Método HTTP.
-* Campos enviados.
-* Campos recibidos.
-* Respuestas esperadas.
-* Posibles errores.
+- Endpoint.
+- Método HTTP.
+- Campos enviados.
+- Campos recibidos.
+- Respuestas esperadas.
+- Posibles errores.
 
 Para el APF1 el contrato de `Pelicula` definido en este README se considera congelado.
 
@@ -1106,35 +1070,19 @@ La integración deberá probar el siguiente recorrido completo:
 
 ### Caso 1 — Registrar
 
-Frontend administrativo
-→ API POST
-→ Spring Boot
-→ JPA
-→ H2
+Frontend administrativo → API POST → Spring Boot → JPA → H2
 
 ### Caso 2 — Listar
 
-H2
-→ Spring Boot
-→ API GET
-→ Frontend público
-→ Cartelera
+H2 → Spring Boot → API GET → Frontend público → Cartelera
 
 ### Caso 3 — Actualizar
 
-Frontend administrativo
-→ API PUT
-→ Spring Boot
-→ H2
-→ Frontend actualizado
+Frontend administrativo → API PUT → Spring Boot → H2 → Frontend actualizado
 
 ### Caso 4 — Eliminar
 
-Frontend administrativo
-→ API DELETE
-→ Spring Boot
-→ H2
-→ Frontend actualizado
+Frontend administrativo → API DELETE → Spring Boot → H2 → Frontend actualizado
 
 ---
 
@@ -1142,12 +1090,12 @@ Frontend administrativo
 
 El backend deberá demostrar como mínimo:
 
-* Crear película.
-* Listar películas.
-* Buscar película por ID.
-* Actualizar película.
-* Eliminar película.
-* Comportamiento ante película inexistente.
+- Crear película.
+- Listar películas.
+- Buscar película por ID.
+- Actualizar película.
+- Eliminar película.
+- Comportamiento ante película inexistente.
 
 Además deberán probar manualmente los endpoints utilizando Postman.
 
@@ -1155,74 +1103,76 @@ Además deberán probar manualmente los endpoints utilizando Postman.
 
 # 31. Definition of Done
 
-Una funcionalidad solo podrá marcarse como terminada cuando:
+Una funcionalidad se considera terminada cuando:
 
-* Compila correctamente.
-* No produce errores inesperados.
-* Cumple el requerimiento asignado.
-* La API responde correctamente.
-* Los datos se almacenan correctamente cuando corresponde.
-* Tiene pruebas cuando corresponde.
-* Fue probada por otro integrante.
-* Está documentada.
-* Tiene Pull Request.
-* Fue integrada en `develop`.
-* No rompe funcionalidades existentes.
+- Compila o carga correctamente.
+- No produce errores inesperados en el flujo probado.
+- Cumple la tarea asignada en este README.
+- Está conectada con la API cuando corresponda.
+- Los datos se almacenan correctamente cuando corresponda.
+- Tiene pruebas cuando corresponda.
+- Fue subida al repositorio mediante un commit del integrante responsable.
+- Otro integrante pudo probarla durante la integración.
+- La documentación correspondiente fue entregada.
+- No rompe el trabajo ya integrado.
+
+No se exige Pull Request para considerar una tarea terminada durante este APF1.
 
 ---
+
 
 # 32. Criterios para considerar terminado el APF1
 
 ## Backend
 
-* [ ] Spring Boot inicia correctamente.
-* [ ] H2 funciona correctamente.
-* [ ] JPA/Hibernate funciona.
-* [ ] CRUD de películas completo.
-* [ ] GET funciona.
-* [ ] GET por ID funciona.
-* [ ] POST funciona.
-* [ ] PUT funciona.
-* [ ] DELETE funciona.
-* [ ] Validaciones básicas implementadas.
-* [ ] Manejo de recurso inexistente.
-* [ ] Pruebas unitarias aprobadas.
-* [ ] Colección Postman preparada.
+-  Spring Boot inicia correctamente.
+-  H2 funciona correctamente.
+-  JPA/Hibernate funciona.
+-  CRUD de películas completo.
+-  GET funciona.
+-  GET por ID funciona.
+-  POST funciona.
+-  PUT funciona.
+-  DELETE funciona.
+-  Validaciones básicas implementadas.
+-  Manejo de recurso inexistente.
+-  Pruebas unitarias aprobadas.
+-  Colección Postman preparada.
 
 ## Frontend
 
-* [ ] Página pública funcional.
-* [ ] Cartelera consume la API.
-* [ ] Administración lista películas.
-* [ ] Administración registra películas.
-* [ ] Administración modifica películas.
-* [ ] Administración elimina películas.
-* [ ] Diseño responsive básico.
-* [ ] Bootstrap aplicado.
-* [ ] Integración frontend/backend funcional.
+-  Página pública funcional.
+-  Cartelera consume la API.
+-  Administración lista películas.
+-  Administración registra películas.
+-  Administración modifica películas.
+-  Administración elimina películas.
+-  Diseño responsive básico.
+-  Bootstrap aplicado.
+-  Integración frontend/backend funcional.
 
 ## Documentación
 
-* [ ] Punto 1.1 terminado.
-* [ ] Punto 1.2 terminado.
-* [ ] Punto 1.3 terminado.
-* [ ] Punto 2.1 terminado.
-* [ ] Punto 2.2 terminado.
-* [ ] Punto 2.3 terminado.
-* [ ] Punto 2.4 terminado.
-* [ ] Diagramas terminados.
-* [ ] Capturas y evidencias.
-* [ ] Documento revisado por los cuatro.
+-  Punto 1.1 terminado.
+-  Punto 1.2 terminado.
+-  Punto 1.3 terminado.
+-  Punto 2.1 terminado.
+-  Punto 2.2 terminado.
+-  Punto 2.3 terminado.
+-  Punto 2.4 terminado.
+-  Diagramas terminados.
+-  Capturas y evidencias.
+-  Documento revisado por los cuatro.
 
 ## Presentación
 
-* [ ] Presentación terminada.
-* [ ] Demo preparada.
-* [ ] Todos conocen el funcionamiento del sistema.
-* [ ] Todos conocen la arquitectura.
-* [ ] Todos pueden explicar la API.
-* [ ] Todos conocen el alcance futuro.
-* [ ] Tiempo total cercano a 8 minutos.
+-  Presentación terminada.
+-  Demo preparada.
+-  Todos conocen el funcionamiento del sistema.
+-  Todos conocen la arquitectura.
+-  Todos pueden explicar la API.
+-  Todos conocen el alcance futuro.
+-  Tiempo total cercano a 8 minutos.
 
 ---
 
@@ -1244,17 +1194,17 @@ Evolución del backend.
 
 Incorporar progresivamente:
 
-* Salas.
-* Asientos.
-* Funciones.
-* Productos.
-* Usuarios.
-* Relaciones JPA.
-* JPQL cuando sea necesario.
-* Transacciones.
-* Spring Security.
-* Roles.
-* JWT.
+- Salas.
+- Asientos.
+- Funciones.
+- Productos.
+- Usuarios.
+- Relaciones JPA.
+- JPQL cuando sea necesario.
+- Transacciones.
+- Spring Security.
+- Roles.
+- JWT.
 
 ---
 
@@ -1262,15 +1212,15 @@ Incorporar progresivamente:
 
 Frontend definitivo.
 
-* Angular.
-* Componentes.
-* Routing.
-* Formularios.
-* Validaciones.
-* Consumo de API REST.
-* Autenticación.
-* Autorización.
-* Integración con backend.
+- Angular.
+- Componentes.
+- Routing.
+- Formularios.
+- Validaciones.
+- Consumo de API REST.
+- Autenticación.
+- Autorización.
+- Integración con backend.
 
 ---
 
@@ -1278,22 +1228,16 @@ Frontend definitivo.
 
 Completar el flujo:
 
-Película
-→ Función
-→ Asientos
-→ Dulcería
-→ Orden
-→ Pago simulado
-→ Ticket digital
+Película → Función → Asientos → Dulcería → Orden → Pago simulado → Ticket digital
 
 Además:
 
-* Integración completa.
-* Pruebas.
-* Correcciones.
-* Seguridad.
-* Despliegue.
-* Documentación final.
+- Integración completa.
+- Pruebas.
+- Correcciones.
+- Seguridad.
+- Despliegue.
+- Documentación final.
 
 ---
 
@@ -1317,30 +1261,78 @@ La prioridad siempre será terminar correctamente el alcance obligatorio antes d
 
 ---
 
-# 35. Estado actual
+# 35. Plan de cierre urgente del APF1
+
+La presentación será el **miércoles 9 de septiembre de 2026**. Por seguridad, el equipo deberá considerar el **lunes 7** como fecha objetivo para tener código y documentación prácticamente terminados. El martes se reserva para pruebas, correcciones, evidencias y ensayo.
+
+## Viernes / inicio inmediato
+
+- Samuel: subir la base Spring Boot lo antes posible.
+- See: preparar su entorno y esperar únicamente la base de Samuel para integrar Service/Controller.
+- Frank: comenzar inmediatamente el frontend público con datos temporales.
+- Crhistian: comenzar inmediatamente el frontend administrativo con datos temporales.
+
+## Sábado
+
+Objetivo: tener las cuatro partes técnicas creadas.
+
+- Samuel: Spring Boot + H2 + JPA + `Pelicula` + Repository.
+- See: Service + Controller + CRUD REST.
+- Frank: inicio + cartelera pública.
+- Crhistian: administración de películas.
+
+## Domingo
+
+Objetivo: **integración completa**.
+
+Debe funcionar el recorrido:
+
+`Frontend administrativo → API REST → Spring Boot → JPA/Hibernate → H2 → Frontend público`
+
+También deben quedar iniciadas las pruebas y la colección Postman.
+
+## Lunes
+
+Objetivo: terminar documentación hasta el punto 2.4, diagramas, evidencias y presentación.
+
+No se agregan módulos nuevos.
+
+## Martes
+
+Objetivo: solo corregir, probar y ensayar.
+
+Se debe probar como mínimo registrar, listar, buscar, editar y eliminar películas; reiniciar Spring Boot y comprobar persistencia; ejecutar las pruebas unitarias; probar Postman; comprobar el frontend y ensayar la presentación de aproximadamente 8 minutos.
+
+## Regla de emergencia
+
+Hasta después del APF1 quedan congelados: salas, funciones, asientos, dulcería, orden, pago, ticket, usuarios, login, Spring Security, JWT y Angular.
+
+El único módulo que debe quedar completo ahora es **Películas**.
+
+---
+
+# 36. Estado actual
 
 **Fase actual:** APF1.
 
 **Objetivo inmediato:** conseguir una integración vertical completamente funcional:
 
-Frontend temporal
-→ API REST
-→ Spring Boot
-→ JPA/Hibernate
-→ H2
+Frontend temporal → API REST → Spring Boot → JPA/Hibernate → H2
 
 utilizando el módulo **Películas**.
 
+**Modo de trabajo APF1:** una sola rama `main`, sin Pull Requests, con archivos separados por integrante y Samuel como integrador técnico final.
+
 ---
 
-# 36. Autores
+# 37. Autores
 
 Proyecto realizado por:
 
-* Samuel
-* See
-* Frank
-* Crhistian
+- Samuel
+- See
+- Frank
+- Crhistian
 
 Curso: **Desarrollo Web Integrado**
 
