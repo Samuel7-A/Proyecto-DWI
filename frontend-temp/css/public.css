@@ -1,0 +1,635 @@
+/* ==========================================================================
+   CineVerse — Estilos públicos
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap");
+
+:root {
+  --cv-bg: #0b0b0f;
+  --cv-bg-soft: #121218;
+  --cv-surface: #17171f;
+  --cv-surface-border: #26262f;
+  --cv-red: #e63950;
+  --cv-red-dark: #c72c42;
+  --cv-text: #f5f5f7;
+  --cv-text-muted: #9a9aa6;
+  --cv-radius: 14px;
+  --cv-radius-sm: 8px;
+  --cv-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--cv-bg);
+  color: var(--cv-text);
+  font-family: "Poppins", "Segoe UI", sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+::selection {
+  background: var(--cv-red);
+  color: #fff;
+}
+
+/* Focus visible accesible */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--cv-red);
+  outline-offset: 2px;
+}
+
+/* ----------------------------- Utilidades -------------------------------- */
+
+.text-cv-red {
+  color: var(--cv-red) !important;
+}
+
+.text-muted-cv {
+  color: var(--cv-text-muted) !important;
+}
+
+.eyebrow {
+  letter-spacing: 0.14em;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--cv-red);
+}
+
+.btn-cv-primary {
+  background-color: var(--cv-red);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.75rem 1.6rem;
+  border-radius: 999px;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-cv-primary:hover,
+.btn-cv-primary:focus-visible {
+  background-color: var(--cv-red-dark);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.btn-cv-outline {
+  background-color: transparent;
+  border: 1.5px solid var(--cv-red);
+  color: var(--cv-red);
+  font-weight: 600;
+  font-size: 0.9rem;
+  line-height: 1.2;
+  padding: 0.4rem 1.1rem;
+  border-radius: 999px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-cv-outline:hover,
+.btn-cv-outline:focus-visible {
+  background-color: var(--cv-red);
+  color: #fff;
+}
+
+.link-cv-arrow {
+  color: var(--cv-red);
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: gap 0.2s ease;
+}
+
+.link-cv-arrow:hover {
+  gap: 0.55rem;
+  color: var(--cv-red-dark);
+}
+
+/* ------------------------------- Navbar ---------------------------------- */
+
+.cv-navbar {
+  background-color: rgba(11, 11, 15, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--cv-surface-border);
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+
+  /* =======================================================================
+     COLORES DEL NAVBAR — edita SOLO estas variables.
+     Son variables propias de Bootstrap (--bs-navbar-*). Al redefinirlas
+     aquí, en el mismo elemento .navbar, sobreescriben el valor que
+     Bootstrap les da por defecto sin necesidad de aumentar especificidad
+     ni usar !important en ninguna regla de abajo.
+     ======================================================================= */
+  --bs-navbar-brand-color: var(--cv-text);        /* Texto "CineVerse" */
+  --bs-navbar-brand-hover-color: var(--cv-text);  /* "CineVerse" en hover */
+  --bs-navbar-color: var(--cv-text-muted);        /* Links: Inicio/Cartelera/Próximamente */
+  --bs-navbar-hover-color: var(--cv-text);        /* Link al pasar el mouse */
+  --bs-navbar-active-color: var(--cv-text);       /* Link de la página activa */
+}
+
+.cv-brand-mark {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: var(--cv-red);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cv-brand-mark i {
+  color: #fff;
+  font-size: 1.15rem;
+}
+
+.cv-brand-text {
+  line-height: 1.05;
+}
+
+.cv-brand-text .cv-brand-name {
+  font-weight: 800;
+  font-size: 1.35rem;
+  letter-spacing: -0.01em;
+}
+
+.cv-brand-text .cv-brand-tagline {
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  color: var(--cv-text-muted);
+  font-weight: 600;
+}
+
+.cv-nav-link {
+  /* El color (normal / hover / activo) ya lo resuelven las variables
+     --bs-navbar-color / --bs-navbar-hover-color / --bs-navbar-active-color
+     definidas en .cv-navbar. Aquí solo se agrega el detalle visual
+     propio del sitio: el subrayado rojo de la página activa. */
+  font-weight: 500;
+  padding: 0.5rem 0;
+  margin: 0 0.9rem;
+  position: relative;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.cv-nav-link.active {
+  border-bottom-color: var(--cv-red);
+}
+
+.cv-nav-icon-btn {
+  color: var(--cv-text);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.cv-nav-icon-btn:hover {
+  background-color: var(--cv-surface);
+}
+
+/* -------------------------------- Hero ------------------------------------ */
+
+.cv-hero {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(
+      ellipse 60% 80% at 78% 30%,
+      rgba(230, 57, 80, 0.16),
+      transparent 65%
+    ),
+    linear-gradient(180deg, #0f0f14 0%, #0b0b0f 60%);
+  border-bottom: 1px solid var(--cv-surface-border);
+}
+
+.cv-hero::before,
+.cv-hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  pointer-events: none;
+}
+
+.cv-hero::before {
+  width: 420px;
+  height: 420px;
+  background: rgba(230, 57, 80, 0.18);
+  top: -140px;
+  right: -80px;
+}
+
+.cv-hero::after {
+  width: 300px;
+  height: 300px;
+  background: rgba(230, 57, 80, 0.08);
+  bottom: -120px;
+  right: 20%;
+}
+
+.cv-hero-inner {
+  position: relative;
+  z-index: 1;
+  padding: 4.5rem 0 4rem;
+}
+
+.cv-hero h1 {
+  font-weight: 800;
+  font-size: clamp(2.1rem, 4.2vw, 3.4rem);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+}
+
+.cv-hero p.lead {
+  color: var(--cv-text-muted);
+  max-width: 46ch;
+  font-size: 1.05rem;
+}
+
+.cv-hero-screen {
+  position: relative;
+  border-radius: var(--cv-radius);
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  background: linear-gradient(160deg, #1b1b24 0%, #0c0c11 100%);
+  border: 1px solid var(--cv-surface-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--cv-shadow);
+}
+
+.cv-hero-screen .cv-hero-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 55% 35%,
+    rgba(255, 255, 255, 0.1),
+    transparent 55%
+  );
+}
+
+.cv-hero-screen i {
+  font-size: 3.2rem;
+  color: rgba(255, 255, 255, 0.35);
+  position: relative;
+  z-index: 1;
+}
+
+.cv-hero-screen .cv-hero-caption {
+  position: absolute;
+  bottom: 14px;
+  left: 18px;
+  font-family: "Georgia", "Times New Roman", serif;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 1rem;
+}
+
+.cv-hero-badge {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  text-align: right;
+  color: rgba(230, 57, 80, 0.55);
+  font-weight: 700;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-right: 2px solid rgba(230, 57, 80, 0.55);
+  padding-right: 10px;
+}
+
+/* --------------------------- Secciones / listas ---------------------------- */
+
+.cv-section {
+  padding: 3.5rem 0;
+}
+
+.cv-section-title {
+  font-weight: 800;
+  font-size: 1.9rem;
+  letter-spacing: -0.01em;
+}
+
+/* --------------------------------- Cards ----------------------------------- */
+
+.cv-card {
+  background-color: var(--cv-surface);
+  border: 1px solid var(--cv-surface-border);
+  border-radius: var(--cv-radius);
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.cv-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(230, 57, 80, 0.4);
+}
+
+.cv-poster {
+  position: relative;
+  aspect-ratio: 2 / 3;
+  display: flex;
+  align-items: flex-end;
+  padding: 0.9rem;
+  color: #fff;
+}
+
+.cv-poster::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 40%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+}
+
+.cv-poster-icon {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2.4rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.cv-poster-title {
+  position: relative;
+  z-index: 1;
+  font-weight: 700;
+  font-size: 1.05rem;
+  line-height: 1.2;
+}
+
+.cv-badge-clasif {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  background: rgba(11, 11, 15, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+}
+
+.cv-card-body {
+  padding: 1rem 1.1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  flex: 1;
+}
+
+.cv-card-title {
+  font-weight: 700;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.cv-card-meta {
+  font-size: 0.82rem;
+  color: var(--cv-text-muted);
+}
+
+.cv-card-body .btn-cv-outline {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+/* ------------------------------- Filtros ----------------------------------- */
+
+.cv-filters {
+  background-color: var(--cv-surface);
+  border: 1px solid var(--cv-surface-border);
+  border-radius: var(--cv-radius);
+  padding: 1.1rem 1.25rem;
+}
+
+.cv-filters .form-control,
+.cv-filters .form-select {
+  background-color: var(--cv-bg-soft);
+  border: 1px solid var(--cv-surface-border);
+  color: var(--cv-text);
+}
+
+.cv-filters .form-control:focus,
+.cv-filters .form-select:focus {
+  background-color: var(--cv-bg-soft);
+  color: var(--cv-text);
+  border-color: var(--cv-red);
+  box-shadow: 0 0 0 0.2rem rgba(230, 57, 80, 0.2);
+}
+
+.cv-filters .form-control::placeholder {
+  color: var(--cv-text-muted);
+}
+
+/* ------------------------------- Detalle ------------------------------------ */
+
+.cv-detail-poster {
+  border-radius: var(--cv-radius);
+  overflow: hidden;
+  border: 1px solid var(--cv-surface-border);
+  position: relative;
+  aspect-ratio: 2 / 3;
+  display: flex;
+  align-items: flex-end;
+  padding: 1.25rem;
+  color: #fff;
+  box-shadow: var(--cv-shadow);
+}
+
+.cv-detail-poster::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 35%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+}
+
+.cv-detail-poster i {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3.5rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.cv-detail-poster span {
+  position: relative;
+  z-index: 1;
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.cv-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background-color: var(--cv-surface);
+  border: 1px solid var(--cv-surface-border);
+  color: var(--cv-text-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+}
+
+.cv-chip i {
+  color: var(--cv-red);
+}
+
+.cv-synopsis {
+  color: var(--cv-text-muted);
+  line-height: 1.7;
+  max-width: 68ch;
+}
+
+/* -------------------------------- Estados ------------------------------------ */
+
+.cv-empty-state {
+  border: 1px dashed var(--cv-surface-border);
+  border-radius: var(--cv-radius);
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: var(--cv-text-muted);
+}
+
+.cv-skeleton {
+  background: linear-gradient(
+    100deg,
+    var(--cv-surface) 40%,
+    #1e1e27 50%,
+    var(--cv-surface) 60%
+  );
+  background-size: 200% 100%;
+  animation: cv-shimmer 1.3s ease-in-out infinite;
+  border-radius: var(--cv-radius);
+}
+
+@keyframes cv-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* --------------------------------- Footer -------------------------------------- */
+
+.cv-footer {
+  background-color: var(--cv-bg-soft);
+  border-top: 1px solid var(--cv-surface-border);
+  padding: 2.25rem 0;
+  margin-top: auto;
+}
+
+.cv-footer .cv-brand-mark {
+  width: 34px;
+  height: 34px;
+}
+
+.cv-footer .cv-brand-mark i {
+  font-size: 0.95rem;
+}
+
+.cv-footer .cv-brand-text .cv-brand-name {
+  font-size: 1.1rem;
+}
+
+.cv-footer-tagline {
+  letter-spacing: 0.08em;
+  font-size: 0.8rem;
+  color: var(--cv-text-muted);
+  font-weight: 500;
+}
+
+.cv-social-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--cv-surface-border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cv-text-muted);
+  transition: all 0.2s ease;
+}
+
+.cv-social-icon:hover {
+  color: #fff;
+  border-color: var(--cv-red);
+  background-color: var(--cv-red);
+}
+
+.cv-footer small {
+  color: var(--cv-text-muted);
+}
+
+/* --------------------------------- Responsive ------------------------------------ */
+
+@media (max-width: 991.98px) {
+  .cv-hero-screen {
+    aspect-ratio: 16 / 9;
+    margin-top: 2rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .cv-section {
+    padding: 2.25rem 0;
+  }
+
+  .cv-hero-inner {
+    padding: 2.75rem 0 2rem;
+    text-align: left;
+  }
+}
