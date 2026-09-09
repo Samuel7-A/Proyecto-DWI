@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineVerse · Administración</title>
+    <meta name="description" content="Panel de administración de películas de CineVerse.">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-lg cv-navbar py-3">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+                    <span class="cv-brand-mark">
+                        <i class="bi bi-camera-reels-fill"></i>
+                    </span>
+
+                    <span class="cv-brand-text">
+                        <span class="d-block cv-brand-name">CineVerse</span>
+                        <span class="d-block cv-brand-tagline">MÁS QUE PELÍCULAS</span>
+                    </span>
+                </a>
+
+                <button
+                    class="navbar-toggler border-0 text-light"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#cvNavContent"
+                    aria-controls="cvNavContent"
+                    aria-expanded="false"
+                    aria-label="Abrir menú">
+                    <i class="bi bi-list fs-2"></i>
+                </button>
+
+                <div class="collapse navbar-collapse justify-content-end" id="cvNavContent">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link cv-nav-link" href="index.html">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link cv-nav-link" href="cartelera.html">Cartelera</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="admin-section">
+            <div class="container">
+
+                <div class="mb-4">
+                    <span class="eyebrow">PANEL ADMINISTRATIVO</span>
+                    <h1 class="admin-title mt-2">Gestión de películas</h1>
+                    <p class="admin-description">
+                        Registra, consulta, modifica y elimina las películas de CineVerse.
+                    </p>
+                </div>
+
+                <div class="admin-card mb-5">
+                    <div class="admin-card-header">
+                        <div>
+                            <h2 id="form-title">Registrar película</h2>
+                            <p>Completa la información de la película.</p>
+                        </div>
+
+                        <i class="bi bi-film admin-header-icon"></i>
+                    </div>
+
+                    <form id="pelicula-form">
+
+                        <input type="hidden" id="pelicula-id">
+
+                        <div class="row g-4">
+
+                            <div class="col-md-6">
+                                <label for="titulo" class="form-label">Título *</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="titulo"
+                                    placeholder="Ej. Avengers: Endgame"
+                                    required>
+                                <div class="invalid-feedback">
+                                    Ingresa el título de la película.
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="genero" class="form-label">Género *</label>
+                                <select class="form-select" id="genero" required>
+                                    <option value="">Selecciona un género</option>
+                                    <option value="Acción">Acción</option>
+                                    <option value="Comedia">Comedia</option>
+                                    <option value="Terror">Terror</option>
+                                    <option value="Fantasía">Fantasía</option>
+                                    <option value="Suspenso">Suspenso</option>
+                                    <option value="Romántica">Romántica</option>
+                                    <option value="Drama">Drama</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Selecciona un género.
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="duracionMinutos" class="form-label">
+                                    Duración (minutos) *
+                                </label>
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    id="duracionMinutos"
+                                    min="1"
+                                    placeholder="120"
+                                    required>
+                                <div class="invalid-feedback">
+                                    Ingresa una duración válida.
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="clasificacion" class="form-label">
+                                    Clasificación *
+                                </label>
+                                <select class="form-select" id="clasificacion" required>
+                                    <option value="">Selecciona</option>
+                                    <option value="APT">APT</option>
+                                    <option value="+12">+12</option>
+                                    <option value="+14">+14</option>
+                                    <option value="+18">+18</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Selecciona una clasificación.
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="fechaEstreno" class="form-label">
+                                    Fecha de estreno *
+                                </label>
+                                <input
+                                    type="date"
+                                    class="form-control"
+                                    id="fechaEstreno"
+                                    required>
+                                <div class="invalid-feedback">
+                                    Ingresa la fecha de estreno.
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="imagenUrl" class="form-label">
+                                    URL de imagen
+                                </label>
+                                <input
+                                    type="url"
+                                    class="form-control"
+                                    id="imagenUrl"
+                                    placeholder="https://ejemplo.com/imagen.jpg">
+                                <div class="form-text">Campo opcional.</div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="sinopsis" class="form-label">Sinopsis</label>
+                                <textarea
+                                    class="form-control"
+                                    id="sinopsis"
+                                    rows="4"
+                                    placeholder="Escribe una breve descripción de la película..."></textarea>
+                                <div class="form-text">Campo opcional.</div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-check form-switch">
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        id="estado"
+                                        checked>
+                                    <label class="form-check-label" for="estado">
+                                        Película activa
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="admin-form-actions mt-4">
+                            <button
+                                type="submit"
+                                class="btn-cv-primary"
+                                id="btn-guardar">
+                                <i class="bi bi-plus-circle"></i>
+                                Registrar película
+                            </button>
+
+                            <button
+                                type="button"
+                                class="btn-cv-secondary d-none"
+                                id="btn-cancelar">
+                                <i class="bi bi-x-circle"></i>
+                                Cancelar edición
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+
+                <div class="admin-card">
+
+                    <div class="admin-card-header">
+                        <div>
+                            <h2>Películas registradas</h2>
+                            <p>Administra las películas disponibles en CineVerse.</p>
+                        </div>
+
+                        <i class="bi bi-collection-play admin-header-icon"></i>
+                    </div>
+
+                    <div id="mensaje" class="alert d-none" role="alert"></div>
+
+                    <div class="table-responsive">
+                        <table class="table admin-table align-middle">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Película</th>
+                                    <th>Género</th>
+                                    <th>Duración</th>
+                                    <th>Clasificación</th>
+                                    <th>Estreno</th>
+                                    <th>Estado</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="peliculas-table-body"></tbody>
+                        </table>
+                    </div>
+
+                    <div id="sin-peliculas" class="empty-state">
+                        <i class="bi bi-film"></i>
+                        <h3>No hay películas registradas</h3>
+                        <p>
+                            Utiliza el formulario para registrar la primera película.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="cv-footer">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+                <div>
+                    <span class="cv-brand-name">CineVerse</span>
+                    <small class="d-block text-muted-cv">MÁS QUE PELÍCULAS</small>
+                </div>
+
+                <div class="text-end">
+                    <a href="index.html" class="text-muted-cv small">
+                        Volver al inicio
+                    </a>
+
+                    <div>
+                        <small>CineVerse © 2026</small>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/admin.js"></script>
+
+</body>
+</html>
