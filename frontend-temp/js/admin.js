@@ -1,46 +1,6 @@
-const peliculasIniciales = [
-    {
-        id: 1,
-        titulo: "Avengers: Endgame",
-        sinopsis: "Los Vengadores se enfrentan a una última batalla para intentar restaurar el equilibrio del universo.",
-        genero: "Acción",
-        duracionMinutos: 181,
-        clasificacion: "+12",
-        fechaEstreno: "2019-04-26",
-        imagenUrl: "",
-        estado: true
-    },
-    {
-        id: 2,
-        titulo: "El Conjuro",
-        sinopsis: "Una familia se muda a una antigua casa donde comienzan a ocurrir fenómenos paranormales.",
-        genero: "Terror",
-        duracionMinutos: 112,
-        clasificacion: "+14",
-        fechaEstreno: "2013-09-13",
-        imagenUrl: "",
-        estado: true
-    },
-    {
-        id: 3,
-        titulo: "Toy Story",
-        sinopsis: "Un grupo de juguetes cobra vida cuando los humanos no están presentes.",
-        genero: "Fantasía",
-        duracionMinutos: 81,
-        clasificacion: "APT",
-        fechaEstreno: "1995-11-22",
-        imagenUrl: "",
-        estado: true
-    }
-];
+const API_URL = "http://localhost:8080/api/peliculas";
 
-let peliculas = JSON.parse(localStorage.getItem("cineverse_peliculas"));
-
-if (!peliculas) {
-    peliculas = peliculasIniciales;
-    guardarPeliculas();
-}
-
+let peliculas = [];
 let peliculaEditando = null;
 
 const formulario = document.getElementById("pelicula-form");
@@ -61,8 +21,20 @@ const inputFecha = document.getElementById("fechaEstreno");
 const inputImagen = document.getElementById("imagenUrl");
 const inputEstado = document.getElementById("estado");
 
-function guardarPeliculas() {
-    localStorage.setItem("cineverse_peliculas", JSON.stringify(peliculas));
+async function cargarPeliculas() {
+    try {
+        const respuesta = await fetch(API_URL);
+
+        if (!respuesta.ok) {
+            throw new Error("No se pudieron obtener las películas.");
+        }
+
+        peliculas = await respuesta.json();
+        mostrarPeliculas();
+    } catch (error) {
+        mostrarMensaje("No se pudo conectar con el backend.", "danger");
+        console.error(error);
+    }
 }
 
 function mostrarPeliculas() {
@@ -150,8 +122,8 @@ function validarFormulario() {
         return false;
     }
 
-    if (inputDuracion.value <= 0) {
-        inputDuracion.setCustomValidity("Duración inválida");
+    if (Number(inputDuracion.value) <= 0) {
+        inputDuracion.setCustomValidity("La duración debe ser mayor a 0.");
         return false;
     }
 
@@ -160,7 +132,7 @@ function validarFormulario() {
     return true;
 }
 
-formulario.addEventListener("submit", function (event) {
+formulario.addEventListener("submit", async function (event) {
     event.preventDefault();
 
     if (!validarFormulario()) {
@@ -169,35 +141,44 @@ formulario.addEventListener("submit", function (event) {
 
     const datos = obtenerDatosFormulario();
 
-    if (peliculaEditando === null) {
-        const nuevoId = peliculas.length > 0
-            ? Math.max(...peliculas.map((pelicula) => pelicula.id)) + 1
-            : 1;
+    try {
+        let respuesta;
 
-        peliculas.push({
-            id: nuevoId,
-            ...datos
-        });
+        if (peliculaEditando === null) {
+            respuesta = await fetch(API_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(datos)
+            });
+        } else {
+            respuesta = await fetch(`${API_URL}/${peliculaEditando}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(datos)
+            });
+        }
 
-        mostrarMensaje("Película registrada correctamente.", "success");
-    } else {
-        const indice = peliculas.findIndex(
-            (pelicula) => pelicula.id === peliculaEditando
-        );
+        if (!respuesta.ok) {
+            const errorTexto = await respuesta.text();
+            throw new Error(errorTexto || "Error al guardar la película.");
+        }
 
-        if (indice !== -1) {
-            peliculas[indice] = {
-                id: peliculaEditando,
-                ...datos
-            };
-
+        if (peliculaEditando === null) {
+            mostrarMensaje("Película registrada correctamente.", "success");
+        } else {
             mostrarMensaje("Película actualizada correctamente.", "success");
         }
-    }
 
-    guardarPeliculas();
-    mostrarPeliculas();
-    limpiarFormulario();
+        limpiarFormulario();
+        await cargarPeliculas();
+    } catch (error) {
+        mostrarMensaje("No se pudo guardar la película.", "danger");
+        console.error(error);
+    }
 });
 
 function editarPelicula(id) {
@@ -236,7 +217,7 @@ function editarPelicula(id) {
     });
 }
 
-function eliminarPelicula(id) {
+async function eliminarPelicula(id) {
     const pelicula = peliculas.find((pelicula) => pelicula.id === id);
 
     if (!pelicula) {
@@ -251,16 +232,26 @@ function eliminarPelicula(id) {
         return;
     }
 
-    peliculas = peliculas.filter((pelicula) => pelicula.id !== id);
+    try {
+        const respuesta = await fetch(`${API_URL}/${id}`, {
+            method: "DELETE"
+        });
 
-    guardarPeliculas();
-    mostrarPeliculas();
+        if (!respuesta.ok) {
+            throw new Error("Error al eliminar la película.");
+        }
 
-    if (peliculaEditando === id) {
-        limpiarFormulario();
+        mostrarMensaje("Película eliminada correctamente.", "success");
+
+        if (peliculaEditando === id) {
+            limpiarFormulario();
+        }
+
+        await cargarPeliculas();
+    } catch (error) {
+        mostrarMensaje("No se pudo eliminar la película.", "danger");
+        console.error(error);
     }
-
-    mostrarMensaje("Película eliminada correctamente.", "success");
 }
 
 function limpiarFormulario() {
@@ -297,11 +288,11 @@ function mostrarMensaje(texto, tipo) {
 }
 
 inputDuracion.addEventListener("input", function () {
-    if (this.value <= 0) {
+    if (Number(this.value) <= 0) {
         this.setCustomValidity("La duración debe ser mayor a 0.");
     } else {
         this.setCustomValidity("");
     }
 });
 
-mostrarPeliculas();
+cargarPeliculas();
