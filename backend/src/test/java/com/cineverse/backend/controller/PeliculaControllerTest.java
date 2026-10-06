@@ -1,5 +1,7 @@
 package com.cineverse.backend.controller;
 
+import org.springframework.security.test.context.support.WithMockUser;
+
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -24,6 +26,7 @@ class PeliculaControllerTest {
     private PeliculaService peliculaService;
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void postCreaPeliculaYDevuelve201() throws Exception {
         when(peliculaService.crear(any(Pelicula.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -45,6 +48,7 @@ class PeliculaControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void postRechazaPeliculaInvalida() throws Exception {
         mockMvc.perform(post("/api/peliculas")
                         .contentType(APPLICATION_JSON)
