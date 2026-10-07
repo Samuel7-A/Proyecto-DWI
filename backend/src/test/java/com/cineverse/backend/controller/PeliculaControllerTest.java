@@ -3,17 +3,27 @@ package com.cineverse.backend.controller;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import org.junit.jupiter.api.Test;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import com.cineverse.backend.repository.UsuarioRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+
 import org.springframework.test.web.servlet.MockMvc;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.cineverse.backend.entity.Pelicula;
+import com.cineverse.backend.security.JwtService;
 import com.cineverse.backend.service.PeliculaService;
 
 @WebMvcTest(PeliculaController.class)
@@ -25,10 +35,18 @@ class PeliculaControllerTest {
     @MockitoBean
     private PeliculaService peliculaService;
 
+    @MockitoBean
+    private JwtService jwtService;
+
+    @MockitoBean
+    private UsuarioRepository usuarioRepository;
+
     @Test
     @WithMockUser(roles = "ADMIN")
     void postCreaPeliculaYDevuelve201() throws Exception {
-        when(peliculaService.crear(any(Pelicula.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        when(peliculaService.crear(any(Pelicula.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
 
         mockMvc.perform(post("/api/peliculas")
                         .contentType(APPLICATION_JSON)
@@ -50,6 +68,7 @@ class PeliculaControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void postRechazaPeliculaInvalida() throws Exception {
+
         mockMvc.perform(post("/api/peliculas")
                         .contentType(APPLICATION_JSON)
                         .content("{}"))
