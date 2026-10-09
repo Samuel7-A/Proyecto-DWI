@@ -1,3 +1,4 @@
+
 package com.cineverse.backend.repository;
 
 import com.cineverse.backend.entity.Funcion;
@@ -18,6 +19,6 @@ public interface FuncionRepository extends JpaRepository<Funcion, Long> {
         JOIN FETCH f.sala
         WHERE f.pelicula.id = :peliculaId
         ORDER BY f.fechaHora ASC
-    """)
+        """)
     List<Funcion> buscarPorPelicula(@Param("peliculaId") Long peliculaId);
 }

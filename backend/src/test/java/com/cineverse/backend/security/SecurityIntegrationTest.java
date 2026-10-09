@@ -72,6 +72,26 @@ class SecurityIntegrationTest {
         .andExpect(status().isOk());
     }
 
+
+    @Test
+    void loginConCredencialesIncorrectasDeberiaRetornar401() throws Exception {
+
+        String json = """
+                {
+                    "email": "cliente@cineverse.com",
+                    "password": "ClaveIncorrecta123!"
+                }
+                """;
+
+        mockMvc.perform(
+                post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
+        )
+        .andExpect(status().isUnauthorized());
+    }
+
+
     @Test
     void crearPeliculaSinTokenDeberiaRetornar401() throws Exception {
 

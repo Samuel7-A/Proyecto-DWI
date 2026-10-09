@@ -51,51 +51,33 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .findByEmail(email)
                     .orElse(null);
 
-            System.out.println("========== JWT DEBUG ==========");
-            System.out.println("Email del token: " + email);
-            System.out.println("Usuario encontrado: " + (usuario != null));
+            if (usuario != null
+                    && usuario.getActivo()
+                    && jwtService.isTokenValid(token, usuario)) {
 
-            if (usuario != null) {
+                var authorities = List.of(
+                        new SimpleGrantedAuthority(
+                                "ROLE_" + usuario.getRol().name()
+                        )
+                );
 
-                boolean tokenValido =
-                        jwtService.isTokenValid(token, usuario);
+                var authentication =
+                        new UsernamePasswordAuthenticationToken(
+                                usuario.getEmail(),
+                                null,
+                                authorities
+                        );
 
-                System.out.println("Usuario DB: " + usuario.getEmail());
-                System.out.println("Rol DB: " + usuario.getRol());
-                System.out.println("Activo DB: " + usuario.getActivo());
-                System.out.println("Token válido: " + tokenValido);
-
-                if (usuario.getActivo() && tokenValido) {
-
-                    String rol = usuario.getRol().name();
-
-                    var authorities = List.of(
-                            new SimpleGrantedAuthority("ROLE_" + rol)
-                    );
-
-                    UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(
-                                    usuario.getEmail(),
-                                    null,
-                                    authorities
-                            );
-
-                    SecurityContextHolder
-                            .getContext()
-                            .setAuthentication(authentication);
-
-                    System.out.println("AUTHENTICATION CREADA");
-                    System.out.println("Authority: ROLE_" + rol);
-                }
+                SecurityContextHolder.getContext()
+                        .setAuthentication(authentication);
+            } else {
+                SecurityContextHolder.clearContext();
             }
 
-            System.out.println("================================");
+        } catch (io.jsonwebtoken.JwtException
+                 | IllegalArgumentException exception) {
 
-        } catch (Exception e) {
-            System.out.println("========== ERROR JWT ==========");
-            System.out.println("Mensaje: " + e.getMessage());
-            e.printStackTrace();
-            System.out.println("================================");
+            SecurityContextHolder.clearContext();
         }
 
         filterChain.doFilter(request, response);
