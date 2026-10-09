@@ -150,6 +150,26 @@ class FuncionServiceTest {
     }
 
     @Test
+    void actualizarFuncionConEntradasLanzaConflictoSinGuardarCambios() {
+        Funcion existente = funcion();
+
+        when(funcionRepository.findById(3L)).thenReturn(Optional.of(existente));
+        when(entradaRepository.existsByFuncionId(3L)).thenReturn(true);
+
+        assertThrows(
+                ConflictoException.class,
+                () -> funcionService.actualizar(
+                        3L,
+                        request(
+                                LocalDateTime.of(2026, 10, 11, 16, 0),
+                                LocalDateTime.of(2026, 10, 11, 18, 0))));
+
+        verify(funcionRepository, never()).save(any(Funcion.class));
+        verify(peliculaRepository, never()).findById(any());
+        verify(salaRepository, never()).findById(any());
+    }
+
+    @Test
     void eliminarFuncionConEntradasLanzaConflicto() {
         Funcion existente = funcion();
         when(funcionRepository.findById(3L)).thenReturn(Optional.of(existente));

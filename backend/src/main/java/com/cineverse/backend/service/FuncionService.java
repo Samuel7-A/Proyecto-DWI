@@ -79,6 +79,10 @@ public class FuncionService {
     public FuncionResponse actualizar(Long id, FuncionRequest request) {
         validarHorario(request);
         Funcion funcion = buscarFuncion(id);
+        if (entradaRepository.existsByFuncionId(id)) {
+            throw new ConflictoException(
+                    "No se puede modificar la función porque ya tiene entradas asociadas.");
+        }
         Pelicula pelicula = peliculaRepository.findById(request.peliculaId())
                 .orElseThrow(() -> new RecursoNoEncontradoException(
                         "No se encontró la película con id " + request.peliculaId()));
