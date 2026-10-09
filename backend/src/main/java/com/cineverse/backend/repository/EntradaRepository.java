@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface EntradaRepository extends JpaRepository<Entrada, Long> {
 
+    boolean existsByFuncionId(Long funcionId);
+
     @Query("""
         SELECT e.asiento
         FROM Entrada e

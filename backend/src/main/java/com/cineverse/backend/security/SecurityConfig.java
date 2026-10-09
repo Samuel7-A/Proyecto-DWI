@@ -68,6 +68,23 @@ public class SecurityConfig {
                     HttpMethod.DELETE,
                     "/api/peliculas/**"
                 ).hasRole("ADMIN")
+                .requestMatchers(
+                    HttpMethod.GET,
+                    "/api/funciones",
+                    "/api/funciones/**"
+                ).permitAll()
+                .requestMatchers(
+                    HttpMethod.POST,
+                    "/api/funciones"
+                ).hasRole("ADMIN")
+                .requestMatchers(
+                    HttpMethod.PUT,
+                    "/api/funciones/{id}"
+                ).hasRole("ADMIN")
+                .requestMatchers(
+                    HttpMethod.DELETE,
+                    "/api/funciones/{id}"
+                ).hasRole("ADMIN")
                 .anyRequest().authenticated()
             );
 

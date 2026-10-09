@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface FuncionRepository extends JpaRepository<Funcion, Long> {
 
+    List<Funcion> findAllByOrderByFechaHoraAsc();
+
     @Query("""
         SELECT f
         FROM Funcion f

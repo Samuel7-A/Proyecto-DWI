@@ -1,0 +1,420 @@
+{
+  "info": {
+    "_postman_id": "75a91624-54bb-4ea0-8d4f-4f44a2a4f764",
+    "name": "CineVerse API",
+    "description": "Consultas JPQL de películas y operaciones del módulo de funciones. Las operaciones de escritura requieren el rol ADMIN.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "peliculaId",
+      "value": "1"
+    },
+    {
+      "key": "funcionId",
+      "value": "1"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "adminEmail",
+      "value": "admin@cineverse.com"
+    },
+    {
+      "key": "adminPassword",
+      "value": "Admin123!"
+    }
+  ],
+  "item": [
+    {
+      "name": "Autenticación",
+      "item": [
+        {
+          "name": "Login admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Login correcto', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "if (pm.response.code === 200) {",
+                  "  pm.collectionVariables.set('token', pm.response.json().token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Películas - consultas JPQL",
+      "item": [
+        {
+          "name": "Listar cartelera",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/peliculas/cartelera",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "peliculas",
+                "cartelera"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar por título (JPQL)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/peliculas/buscar?titulo=avatar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "peliculas",
+                "buscar"
+              ],
+              "query": [
+                {
+                  "key": "titulo",
+                  "value": "avatar"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar por género (JPQL)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/peliculas/genero/Drama",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "peliculas",
+                "genero",
+                "Drama"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar por título o género (JPQL)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/peliculas/buscar?texto=drama",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "peliculas",
+                "buscar"
+              ],
+              "query": [
+                {
+                  "key": "texto",
+                  "value": "drama"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Funciones",
+      "item": [
+        {
+          "name": "Listar funciones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/funciones",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "funciones"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar funciones por película",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/funciones?peliculaId={{peliculaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "funciones"
+              ],
+              "query": [
+                {
+                  "key": "peliculaId",
+                  "value": "{{peliculaId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtener función",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/funciones/{{funcionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "funciones",
+                "{{funcionId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Consultar asientos disponibles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/funciones/{{funcionId}}/asientos/disponibles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "funciones",
+                "{{funcionId}}",
+                "asientos",
+                "disponibles"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Consultar asientos ocupados",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/funciones/{{funcionId}}/asientos/ocupados",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "funciones",
+                "{{funcionId}}",
+                "asientos",
+                "ocupados"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear función (ADMIN)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"peliculaId\": {{peliculaId}},\n  \"salaId\": 1,\n  \"fechaHora\": \"2026-10-10T18:00:00\",\n  \"fechaHoraFin\": \"2026-10-10T20:30:00\",\n  \"precio\": 20.00\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/funciones",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "funciones"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Actualizar función (ADMIN)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"peliculaId\": {{peliculaId}},\n  \"salaId\": 1,\n  \"fechaHora\": \"2026-10-10T18:30:00\",\n  \"fechaHoraFin\": \"2026-10-10T21:00:00\",\n  \"precio\": 22.00\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/funciones/{{funcionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "funciones",
+                "{{funcionId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Eliminar función (ADMIN)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/funciones/{{funcionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "funciones",
+                "{{funcionId}}"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
