@@ -6,6 +6,21 @@ let peliculaEditando = null;
 
 const token = sessionStorage.getItem("cineverse_token");
 const rol = sessionStorage.getItem("cineverse_rol");
+const usuarioConectado = document.getElementById("usuario-conectado");
+const botonCerrarSesion = document.getElementById("btn-cerrar-sesion");
+
+if (usuarioConectado) {
+    usuarioConectado.textContent =
+        sessionStorage.getItem("cineverse_usuario") || "Administrador";
+}
+
+if (botonCerrarSesion) {
+    botonCerrarSesion.addEventListener("click", () => {
+        if (confirm("¿Deseas cerrar tu sesión?")) {
+            cerrarSesion();
+        }
+    });
+}
 
 const formulario = document.getElementById("pelicula-form");
 const tablaPeliculas = document.getElementById("peliculas-table-body");
