@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión | CineVerse</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #101827, #243b55);
+            font-family: Arial, sans-serif;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 430px;
+            padding: 35px;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 15px 40px #0005;
+        }
+
+        .brand {
+            color: #e63946;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .form-control {
+            padding: 12px;
+        }
+
+        .btn-cine {
+            background: #e63946;
+            color: #fff;
+            padding: 12px;
+            font-weight: bold;
+        }
+
+        .btn-cine:hover {
+            background: #c92332;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <main class="login-card">
+        <div class="text-center mb-4">
+            <h1 class="brand">CineVerse</h1>
+            <p class="text-secondary">Ingresa a tu cuenta</p>
+        </div>
+
+        <div id="mensaje" class="alert d-none" role="alert"></div>
+
+        <form id="loginForm">
+            <div class="mb-3">
+                <label for="correo" class="form-label">Correo electrónico</label>
+                <input type="email" id="correo" name="correo"
+                       class="form-control" required autocomplete="username">
+            </div>
+
+            <div class="mb-4">
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" id="password" name="password"
+                       class="form-control" required
+                       autocomplete="current-password">
+            </div>
+
+            <button id="btnLogin" type="submit" class="btn btn-cine w-100">
+                Iniciar sesión
+            </button>
+        </form>
+
+        <div class="text-center mt-4">
+            <a href="index.html" class="text-decoration-none">
+                Volver a CineVerse
+            </a>
+        </div>
+    </main>
+
+    <script src="../js/auth.js"></script>
+</body>
+</html>
