@@ -1,0 +1,9 @@
+body { background: #11131b; color: #f5f5f5; min-height: 100vh; }
+.cv-producto { background: #1d202b; border: 1px solid #383b47; border-radius: 14px; height: 100%; padding: 22px; }
+.cv-producto-icono { font-size: 3.2rem; color: #f4b85c; }
+.cv-producto h3 { font-size: 1.15rem; margin: 14px 0 6px; }
+.cv-producto .categoria { color: #b4b6c4; font-size: .8rem; }
+.cv-producto .precio { font-weight: 700; font-size: 1.25rem; }
+.cv-seleccion { background: #1d202b; border: 1px solid #383b47; border-radius: 14px; }
+.cv-seleccion li { margin-bottom: 8px; }
+.cv-cantidad { width: 72px; display: inline-block; }
