@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dulcería · CineVerse</title>
+  <meta name="description" content="Mira los productos de la dulcería de CineVerse: canchita, bebidas, dulces y combos." />
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+  />
+  <link rel="stylesheet" href="../css/public.css" />
+</head>
+<body>
+  <!-- ============================= NAVBAR ============================= -->
+  <header>
+    <nav class="navbar navbar-expand-lg cv-navbar py-3">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+          <span class="cv-brand-mark"><i class="bi bi-camera-reels-fill"></i></span>
+          <span class="cv-brand-text">
+            <span class="d-block cv-brand-name">CineVerse</span>
+            <span class="d-block cv-brand-tagline">MÁS QUE PELÍCULAS</span>
+          </span>
+        </a>
+        <button
+          class="navbar-toggler border-0 text-light"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#cvNavContent"
+          aria-controls="cvNavContent"
+          aria-expanded="false"
+          aria-label="Abrir menú"
+        >
+          <i class="bi bi-list fs-2"></i>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="cvNavContent">
+          <ul class="navbar-nav mx-auto my-3 my-lg-0">
+            <li class="nav-item"><a class="nav-link cv-nav-link" href="index.html">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link cv-nav-link" href="cartelera.html">Cartelera</a></li>
+            <li class="nav-item"><a class="nav-link cv-nav-link" href="proximamente.html">Próximamente</a></li>
+            <li class="nav-item"><a class="nav-link cv-nav-link active" href="productos.html">Dulcería</a></li>
+          </ul>
+          <div class="d-flex align-items-center gap-2">
+            <a href="cartelera.html" class="cv-nav-icon-btn" aria-label="Buscar películas">
+              <i class="bi bi-search"></i>
+            </a>
+            <a href="mis-entradas.html" class="cv-nav-icon-btn" aria-label="Mis entradas">
+              <i class="bi bi-ticket-perforated"></i>
+            </a>
+            <div id="cv-cuenta" class="cv-cuenta"></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="cv-section cv-prod-section">
+      <div class="container">
+        <h1 class="cv-section-title mt-2 mb-2">Dulcería</h1>
+        <p class="text-muted-cv mb-4">
+          Elige lo que quieres llevar a tu función. Tu selección se guarda y la usarás al crear tu orden.
+        </p>
+
+        <div id="cv-prod-filtros" class="d-flex flex-wrap gap-2 mb-4" role="group" aria-label="Filtrar por categoría"></div>
+
+        <div id="cv-prod-grid" class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 g-lg-4"></div>
+      </div>
+    </section>
+
+    <div id="cv-prod-resumen" class="cv-prod-resumen" hidden>
+      <div class="container d-flex align-items-center justify-content-between gap-3">
+        <div>
+          <span id="cv-prod-resumen-texto" class="text-muted-cv small d-block"></span>
+          <span id="cv-prod-resumen-total" class="cv-prod-resumen-total"></span>
+        </div>
+        <button type="button" id="cv-prod-vaciar" class="btn-cv-outline">Vaciar selección</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ============================= FOOTER ============================= -->
+  <footer class="cv-footer">
+    <div class="container">
+      <div class="row align-items-center gy-4">
+        <div class="col-12 col-md-4">
+          <a href="index.html" class="d-flex align-items-center gap-2">
+            <span class="cv-brand-mark"><i class="bi bi-camera-reels-fill"></i></span>
+            <span class="cv-brand-text">
+              <span class="d-block cv-brand-name">CineVerse</span>
+              <span class="d-block cv-brand-tagline">MÁS QUE PELÍCULAS</span>
+            </span>
+          </a>
+        </div>
+        <div class="col-12 col-md-4 text-center">
+          <span class="cv-footer-tagline">EL CINE SIEMPRE ES UNA BUENA IDEA</span>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="d-flex justify-content-center justify-content-md-end align-items-center gap-3 mb-3">
+            <a href="#" class="cv-social-icon" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="cv-social-icon" aria-label="TikTok"><i class="bi bi-tiktok"></i></a>
+            <a href="#" class="cv-social-icon" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+            <a href="#" class="cv-social-icon" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+          </div>
+          <div class="text-center text-md-end">
+            <a href="admin.html" class="text-decoration-underline text-muted-cv small cv-solo-admin" hidden>Administración</a>
+            <div><small>CineVerse © 2026 &nbsp;·&nbsp; Todos los derechos reservados.</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/public.js"></script>
+  <script src="../js/productos.js"></script>
+</body>
+</html>

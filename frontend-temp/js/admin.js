@@ -1,26 +1,42 @@
-
 const API_URL = "http://localhost:8080/api/peliculas";
+
+// Acceso restringido al rol ADMIN: redirige a login (sin sesión) o a index
+// (usuario sin permiso) antes de tocar la API.
+const CV_AUTORIZADO = cvAuthRequiereAdmin();
+
+// Cierra la sesión limpiando las claves cv_* (las mismas que usa login.html)
+// y redirige al formulario de acceso.
+function cerrarSesion() {
+    ["cv_token", "cv_nombre", "cv_email", "cv_rol"].forEach(function (clave) {
+        localStorage.removeItem(clave);
+    });
+    window.location.replace("login.html");
+}
+
+// Petición administrativa: añade el JWT y gestiona los errores 401/403.
+async function peticionAdmin(url, opciones = {}) {
+    const headers = new Headers(opciones.headers || {});
+
+    if (!headers.has("Authorization")) {
+        headers.set("Authorization", "Bearer " + cvAuthToken());
+    }
+
+    const respuesta = await fetch(url, { ...opciones, headers });
+
+    if (respuesta.status === 401) {
+        cerrarSesion();
+        throw new Error("Tu sesión ha expirado. Inicia sesión nuevamente.");
+    }
+
+    if (respuesta.status === 403) {
+        throw new Error("No tienes permisos para realizar esta operación.");
+    }
+
+    return respuesta;
+}
 
 let peliculas = [];
 let peliculaEditando = null;
-
-const token = sessionStorage.getItem("cineverse_token");
-const rol = sessionStorage.getItem("cineverse_rol");
-const usuarioConectado = document.getElementById("usuario-conectado");
-const botonCerrarSesion = document.getElementById("btn-cerrar-sesion");
-
-if (usuarioConectado) {
-    usuarioConectado.textContent =
-        sessionStorage.getItem("cineverse_usuario") || "Administrador";
-}
-
-if (botonCerrarSesion) {
-    botonCerrarSesion.addEventListener("click", () => {
-        if (confirm("¿Deseas cerrar tu sesión?")) {
-            cerrarSesion();
-        }
-    });
-}
 
 const formulario = document.getElementById("pelicula-form");
 const tablaPeliculas = document.getElementById("peliculas-table-body");
@@ -40,44 +56,8 @@ const inputFecha = document.getElementById("fechaEstreno");
 const inputImagen = document.getElementById("imagenUrl");
 const inputEstado = document.getElementById("estado");
 
-// Comprobar la sesión antes de permitir usar el panel.
-if (!token || rol !== "ADMIN") {
-    window.location.replace("login.html");
-    throw new Error("Acceso restringido: se requiere el rol ADMIN.");
-}
-
-// Añadir el JWT a las peticiones administrativas.
-async function peticionAdmin(url, opciones = {}) {
-    const headers = new Headers(opciones.headers || {});
-    headers.set("Authorization", `Bearer ${token}`);
-
-    const respuesta = await fetch(url, {
-        ...opciones,
-        headers
-    });
-
-    if (respuesta.status === 401) {
-        cerrarSesion();
-        throw new Error("Tu sesión ha expirado. Inicia sesión nuevamente.");
-    }
-
-    if (respuesta.status === 403) {
-        throw new Error("No tienes permisos para realizar esta operación.");
-    }
-
-    return respuesta;
-}
-
-function cerrarSesion() {
-    sessionStorage.removeItem("cineverse_token");
-    sessionStorage.removeItem("cineverse_rol");
-    sessionStorage.removeItem("cineverse_usuario");
-    window.location.replace("login.html");
-}
-
 async function cargarPeliculas() {
     try {
-        // La consulta de películas es pública.
         const respuesta = await fetch(API_URL);
 
         if (!respuesta.ok) {
@@ -87,7 +67,7 @@ async function cargarPeliculas() {
         peliculas = await respuesta.json();
         mostrarPeliculas();
     } catch (error) {
-        mostrarMensaje(error.message || "No se pudo conectar con el backend.", "danger");
+        mostrarMensaje("No se pudo conectar con el backend.", "danger");
         console.error(error);
     }
 }
@@ -108,62 +88,51 @@ function mostrarPeliculas() {
         fila.innerHTML = `
             <td>${pelicula.id}</td>
             <td>
-                <div class="movie-title"></div>
-                <div class="movie-synopsis"></div>
+                <div class="movie-title">${pelicula.titulo}</div>
+                <div class="movie-synopsis">${pelicula.sinopsis || "Sin sinopsis"}</div>
             </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>${pelicula.genero}</td>
+            <td>${pelicula.duracionMinutos} min</td>
+            <td>${pelicula.clasificacion}</td>
+            <td>${formatearFecha(pelicula.fechaEstreno)}</td>
             <td>
                 <span class="${pelicula.estado ? "badge-active" : "badge-inactive"}">
                     ${pelicula.estado ? "Activa" : "Inactiva"}
                 </span>
             </td>
             <td class="text-center">
-                <button type="button" class="btn-action btn-edit"
-                    data-editar="${pelicula.id}" title="Editar">
+                <button
+                    type="button"
+                    class="btn-action btn-edit"
+                    onclick="editarPelicula(${pelicula.id})"
+                    title="Editar">
                     <i class="bi bi-pencil"></i>
                 </button>
-                <button type="button" class="btn-action btn-delete"
-                    data-eliminar="${pelicula.id}" title="Eliminar">
+
+                <button
+                    type="button"
+                    class="btn-action btn-delete"
+                    onclick="eliminarPelicula(${pelicula.id})"
+                    title="Eliminar">
                     <i class="bi bi-trash"></i>
                 </button>
             </td>
         `;
 
-        // Insertar texto como texto, evitando interpretar datos como HTML.
-        const celdas = fila.querySelectorAll("td");
-        fila.querySelector(".movie-title").textContent = pelicula.titulo || "";
-        fila.querySelector(".movie-synopsis").textContent =
-            pelicula.sinopsis || "Sin sinopsis";
-        celdas[2].textContent = pelicula.genero || "";
-        celdas[3].textContent = `${pelicula.duracionMinutos} min`;
-        celdas[4].textContent = pelicula.clasificacion || "";
-        celdas[5].textContent = formatearFecha(pelicula.fechaEstreno);
-
         tablaPeliculas.appendChild(fila);
     });
 }
 
-tablaPeliculas.addEventListener("click", (event) => {
-    const botonEditar = event.target.closest("[data-editar]");
-    const botonEliminar = event.target.closest("[data-eliminar]");
-
-    if (botonEditar) {
-        editarPelicula(Number(botonEditar.dataset.editar));
-    }
-
-    if (botonEliminar) {
-        eliminarPelicula(Number(botonEliminar.dataset.eliminar));
-    }
-});
-
 function formatearFecha(fecha) {
-    if (!fecha) return "-";
+    if (!fecha) {
+        return "-";
+    }
 
     const partes = fecha.split("-");
-    if (partes.length !== 3) return fecha;
+
+    if (partes.length !== 3) {
+        return fecha;
+    }
 
     return `${partes[2]}/${partes[1]}/${partes[0]}`;
 }
@@ -184,7 +153,9 @@ function obtenerDatosFormulario() {
 function validarFormulario() {
     formulario.classList.add("was-validated");
 
-    if (!formulario.checkValidity()) return false;
+    if (!formulario.checkValidity()) {
+        return false;
+    }
 
     if (Number(inputDuracion.value) <= 0) {
         inputDuracion.setCustomValidity("La duración debe ser mayor a 0.");
@@ -192,37 +163,46 @@ function validarFormulario() {
     }
 
     inputDuracion.setCustomValidity("");
+
     return true;
 }
 
-formulario.addEventListener("submit", async (event) => {
+formulario.addEventListener("submit", async function (event) {
     event.preventDefault();
 
-    if (!validarFormulario()) return;
+    if (!validarFormulario()) {
+        return;
+    }
 
     const datos = obtenerDatosFormulario();
-    const editando = peliculaEditando !== null;
 
     try {
-        const respuesta = await peticionAdmin(
-            editando ? `${API_URL}/${peliculaEditando}` : API_URL,
-            {
-                method: editando ? "PUT" : "POST",
+        let respuesta;
+
+        if (peliculaEditando === null) {
+            respuesta = await peticionAdmin(API_URL, {
+                method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(datos)
-            }
-        );
-
-        if (!respuesta.ok) {
-            const texto = await respuesta.text();
-            throw new Error(texto || "Error al guardar la película.");
+            });
+        } else {
+            respuesta = await peticionAdmin(`${API_URL}/${peliculaEditando}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(datos)
+            });
         }
 
-        mostrarMensaje(
-            editando ? "Película actualizada correctamente." :
-                "Película registrada correctamente.",
-            "success"
-        );
+        if (!respuesta.ok) {
+            const errorTexto = await respuesta.text();
+            throw new Error(errorTexto || "Error al guardar la película.");
+        }
+
+        if (peliculaEditando === null) {
+            mostrarMensaje("Película registrada correctamente.", "success");
+        } else {
+            mostrarMensaje("Película actualizada correctamente.", "success");
+        }
 
         limpiarFormulario();
         await cargarPeliculas();
@@ -233,34 +213,55 @@ formulario.addEventListener("submit", async (event) => {
 });
 
 function editarPelicula(id) {
-    const pelicula = peliculas.find((p) => p.id === id);
-    if (!pelicula) return;
+    const pelicula = peliculas.find((pelicula) => pelicula.id === id);
+
+    if (!pelicula) {
+        return;
+    }
 
     peliculaEditando = id;
 
     inputId.value = pelicula.id;
-    inputTitulo.value = pelicula.titulo || "";
+    inputTitulo.value = pelicula.titulo;
     inputSinopsis.value = pelicula.sinopsis || "";
-    inputGenero.value = pelicula.genero || "";
+    inputGenero.value = pelicula.genero;
     inputDuracion.value = pelicula.duracionMinutos;
-    inputClasificacion.value = pelicula.clasificacion || "";
-    inputFecha.value = pelicula.fechaEstreno || "";
+    inputClasificacion.value = pelicula.clasificacion;
+    inputFecha.value = pelicula.fechaEstreno;
     inputImagen.value = pelicula.imagenUrl || "";
     inputEstado.checked = pelicula.estado;
 
     tituloFormulario.textContent = "Editar película";
-    botonGuardar.innerHTML = '<i class="bi bi-check-circle"></i> Guardar cambios';
+
+    botonGuardar.innerHTML = `
+        <i class="bi bi-check-circle"></i>
+        Guardar cambios
+    `;
+
     botonCancelar.classList.remove("d-none");
+
     formulario.classList.remove("was-validated");
 
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
 
 async function eliminarPelicula(id) {
-    const pelicula = peliculas.find((p) => p.id === id);
-    if (!pelicula) return;
+    const pelicula = peliculas.find((pelicula) => pelicula.id === id);
 
-    if (!confirm(`¿Eliminar la película "${pelicula.titulo}"?`)) return;
+    if (!pelicula) {
+        return;
+    }
+
+    const confirmar = confirm(
+        `¿Estás seguro de eliminar la película "${pelicula.titulo}"?`
+    );
+
+    if (!confirmar) {
+        return;
+    }
 
     try {
         const respuesta = await peticionAdmin(`${API_URL}/${id}`, {
@@ -268,13 +269,14 @@ async function eliminarPelicula(id) {
         });
 
         if (!respuesta.ok) {
-            const texto = await respuesta.text();
-            throw new Error(texto || "Error al eliminar la película.");
+            throw new Error("Error al eliminar la película.");
         }
 
         mostrarMensaje("Película eliminada correctamente.", "success");
 
-        if (peliculaEditando === id) limpiarFormulario();
+        if (peliculaEditando === id) {
+            limpiarFormulario();
+        }
 
         await cargarPeliculas();
     } catch (error) {
@@ -285,28 +287,45 @@ async function eliminarPelicula(id) {
 
 function limpiarFormulario() {
     formulario.reset();
+
     inputId.value = "";
     inputEstado.checked = true;
+
     peliculaEditando = null;
+
     tituloFormulario.textContent = "Registrar película";
-    botonGuardar.innerHTML = '<i class="bi bi-plus-circle"></i> Registrar película';
+
+    botonGuardar.innerHTML = `
+        <i class="bi bi-plus-circle"></i>
+        Registrar película
+    `;
+
     botonCancelar.classList.add("d-none");
+
     formulario.classList.remove("was-validated");
 }
 
-botonCancelar.addEventListener("click", limpiarFormulario);
+botonCancelar.addEventListener("click", function () {
+    limpiarFormulario();
+});
 
 function mostrarMensaje(texto, tipo) {
-    mensaje.textContent = texto;
     mensaje.className = `alert alert-${tipo}`;
+    mensaje.textContent = texto;
 
-    setTimeout(() => mensaje.classList.add("d-none"), 3000);
+    setTimeout(() => {
+        mensaje.classList.add("d-none");
+    }, 3000);
 }
 
 inputDuracion.addEventListener("input", function () {
-    this.setCustomValidity(
-        Number(this.value) <= 0 ? "La duración debe ser mayor a 0." : ""
-    );
+    if (Number(this.value) <= 0) {
+        this.setCustomValidity("La duración debe ser mayor a 0.");
+    } else {
+        this.setCustomValidity("");
+    }
 });
 
-cargarPeliculas();
+if (CV_AUTORIZADO) {
+    cargarPeliculas();
+}

@@ -41,6 +41,27 @@ function cvFormatDuracion(minutos) {
 }
 
 /**
+ * Formatea el LocalDateTime que Spring Boot serializa como array [año,mes,dia,hora,min]
+ * o como string ISO "2026-11-01T20:30:00". Devuelve "dd/mm/aaaa hh:mm".
+ */
+function cvFormatFechaHora(fechaHora) {
+  if (!fechaHora) return "Sin fecha";
+  let d;
+  if (Array.isArray(fechaHora)) {
+    // Spring Boot jackson serializa LocalDateTime como [año,mes,dia,h,m,s?,ns?]
+    const [anio, mes, dia, hora = 0, min = 0] = fechaHora;
+    d = new Date(anio, mes - 1, dia, hora, min);
+  } else {
+    d = new Date(fechaHora);
+  }
+  if (isNaN(d.getTime())) return String(fechaHora);
+  return d.toLocaleDateString("es-PE", { day: "2-digit", month: "2-digit", year: "numeric" })
+       + " " + d.toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" });
+}
+
+
+
+/**
  * Construye el bloque visual del poster (imagen real si existe imagenUrl,
  * o un placeholder con gradiente + título mientras no haya API real).
  */
@@ -275,17 +296,20 @@ async function initDetallePage() {
           <p class="cv-synopsis mb-4">${pelicula.sinopsis || "Sinopsis no disponible por el momento."}</p>
 
           <div class="d-flex flex-wrap gap-2">
-            <button type="button" class="btn-cv-primary" disabled title="Disponible próximamente">
+            <a id="btn-comprar" href="asientos.html?id=${pelicula.id}" class="btn-cv-primary">
               <i class="bi bi-ticket-perforated"></i> Comprar entradas
-            </button>
+            </a>
             <a href="cartelera.html" class="btn-cv-outline">Volver a la cartelera</a>
           </div>
         </div>
       </div>`;
+
+    // El flujo de compra vive ahora en asientos.html → bocaditos.html → checkout.html.
+
   } catch (err) {
-    console.error(err);
+    console.error("[CineVerse] Error al cargar detalle de película:", err);
     container.innerHTML = cvDetalleNotFound(
-      "Ocurrió un error al cargar la película. Intenta nuevamente."
+      "Ocurrió un error al cargar la película. Intenta de nuevo más tarde."
     );
   }
 }

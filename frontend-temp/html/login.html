@@ -1,89 +1,272 @@
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar sesión | CineVerse</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-          rel="stylesheet">
-    <style>
-        body {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #101827, #243b55);
-            font-family: Arial, sans-serif;
-        }
-
-        .login-card {
-            width: 100%;
-            max-width: 430px;
-            padding: 35px;
-            background: #fff;
-            border-radius: 18px;
-            box-shadow: 0 15px 40px #0005;
-        }
-
-        .brand {
-            color: #e63946;
-            font-weight: 800;
-            letter-spacing: 1px;
-        }
-
-        .form-control {
-            padding: 12px;
-        }
-
-        .btn-cine {
-            background: #e63946;
-            color: #fff;
-            padding: 12px;
-            font-weight: bold;
-        }
-
-        .btn-cine:hover {
-            background: #c92332;
-            color: #fff;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iniciar sesion - CineVerse</title>
+  <meta name="description" content="Inicia sesion o registrate en CineVerse para comprar tus entradas al cine." />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="../css/public.css" />
+  <style>
+    .cv-auth-wrap { min-height:calc(100vh - 130px); display:flex; align-items:center; justify-content:center; padding:3rem 1rem; }
+    .cv-auth-card { background:var(--cv-surface); border:1px solid var(--cv-surface-border); border-radius:var(--cv-radius); padding:2.5rem 2rem; width:100%; max-width:420px; box-shadow:var(--cv-shadow); }
+    .cv-auth-title { font-size:1.5rem; font-weight:700; margin-bottom:0.25rem; }
+    .cv-auth-sub { color:var(--cv-text-muted); font-size:0.85rem; margin-bottom:1.75rem; }
+    .cv-auth-tabs { display:flex; border-bottom:1px solid var(--cv-surface-border); margin-bottom:1.75rem; }
+    .cv-auth-tab { flex:1; background:none; border:none; border-bottom:2px solid transparent; color:var(--cv-text-muted); font-family:inherit; font-size:0.9rem; font-weight:600; padding:0.6rem 0; cursor:pointer; transition:color .2s,border-color .2s; }
+    .cv-auth-tab.active { color:var(--cv-red); border-bottom-color:var(--cv-red); }
+    .cv-field { margin-bottom:1rem; }
+    .cv-field label { display:block; font-size:0.8rem; font-weight:600; color:var(--cv-text-muted); margin-bottom:0.4rem; text-transform:uppercase; letter-spacing:.04em; }
+    .cv-field input { width:100%; background:var(--cv-bg-soft); border:1px solid var(--cv-surface-border); border-radius:var(--cv-radius-sm); color:var(--cv-text); font-family:inherit; font-size:0.95rem; padding:0.65rem 0.9rem; transition:border-color .2s; outline:none; }
+    .cv-field input:focus { border-color:var(--cv-red); }
+    .cv-field input::placeholder { color:#555; }
+    .cv-btn-submit { width:100%; background:var(--cv-red); border:none; border-radius:var(--cv-radius-sm); color:#fff; font-family:inherit; font-size:0.95rem; font-weight:700; padding:0.75rem; cursor:pointer; margin-top:0.5rem; transition:background .2s,transform .1s; display:flex; align-items:center; justify-content:center; gap:0.5rem; }
+    .cv-btn-submit:hover:not(:disabled) { background:var(--cv-red-dark); }
+    .cv-btn-submit:active:not(:disabled) { transform:scale(0.98); }
+    .cv-btn-submit:disabled { opacity:.6; cursor:not-allowed; }
+    .cv-auth-msg { border-radius:var(--cv-radius-sm); font-size:0.85rem; padding:0.65rem 0.9rem; margin-top:1rem; display:none; }
+    .cv-auth-msg.show { display:block; }
+    .cv-auth-msg.error { background:rgba(230,57,80,.15); border:1px solid var(--cv-red); color:#f87890; }
+    .cv-auth-msg.success { background:rgba(25,200,120,.12); border:1px solid #19c878; color:#5de8a8; }
+    .cv-spin { display:inline-block; width:1em; height:1em; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:cv-spin .6s linear infinite; }
+    @keyframes cv-spin { to { transform:rotate(360deg); } }
+  </style>
 </head>
 <body>
-    <main class="login-card">
-        <div class="text-center mb-4">
-            <h1 class="brand">CineVerse</h1>
-            <p class="text-secondary">Ingresa a tu cuenta</p>
+  <header>
+    <nav class="navbar navbar-expand-lg cv-navbar py-3">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+          <span class="cv-brand-mark"><i class="bi bi-camera-reels-fill"></i></span>
+          <span class="cv-brand-text">
+            <span class="d-block cv-brand-name">CineVerse</span>
+            <span class="d-block cv-brand-tagline">MAS QUE PELICULAS</span>
+          </span>
+        </a>
+        <div class="d-flex align-items-center gap-2">
+          <a href="cartelera.html" class="cv-nav-icon-btn" aria-label="Cartelera">
+            <i class="bi bi-film"></i>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="cv-auth-wrap">
+      <div class="cv-auth-card">
+        <p class="cv-auth-title">Bienvenido</p>
+        <p class="cv-auth-sub">Inicia sesion o crea una cuenta para comprar tus entradas.</p>
+
+        <div class="cv-auth-tabs" role="tablist">
+          <button id="tab-login" class="cv-auth-tab active" role="tab" aria-selected="true" aria-controls="panel-login">Iniciar sesion</button>
+          <button id="tab-register" class="cv-auth-tab" role="tab" aria-selected="false" aria-controls="panel-register">Registrarse</button>
         </div>
 
-        <div id="mensaje" class="alert d-none" role="alert"></div>
-
-        <form id="loginForm">
-            <div class="mb-3">
-                <label for="correo" class="form-label">Correo electrónico</label>
-                <input type="email" id="correo" name="email"
-                       class="form-control" required autocomplete="username">
+        <div id="panel-login" role="tabpanel" aria-labelledby="tab-login">
+          <form id="form-login" novalidate>
+            <div class="cv-field">
+              <label for="login-email">Correo electronico</label>
+              <input id="login-email" type="email" placeholder="tu@correo.com" autocomplete="email" required />
             </div>
-
-            <div class="mb-4">
-                <label for="password" class="form-label">Contraseña</label>
-                <input type="password" id="password" name="password"
-                       class="form-control" required
-                       autocomplete="current-password">
+            <div class="cv-field">
+              <label for="login-password">Contrasena</label>
+              <input id="login-password" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" autocomplete="current-password" required />
             </div>
-
-            <button id="btnLogin" type="submit" class="btn btn-cine w-100">
-                Iniciar sesión
+            <button type="submit" id="btn-login" class="cv-btn-submit">
+              <i class="bi bi-box-arrow-in-right"></i> Iniciar sesion
             </button>
-        </form>
-
-        <div class="text-center mt-4">
-            <a href="index.html" class="text-decoration-none">
-                Volver a CineVerse
-            </a>
+          </form>
+          <div id="msg-login" class="cv-auth-msg" role="alert" aria-live="polite"></div>
         </div>
-    </main>
 
-    <script src="../js/auth.js"></script>
+        <div id="panel-register" role="tabpanel" aria-labelledby="tab-register" style="display:none">
+          <form id="form-register" novalidate>
+            <div class="cv-field">
+              <label for="reg-nombre">Nombre completo</label>
+              <input id="reg-nombre" type="text" placeholder="Juan Perez" autocomplete="name" required />
+            </div>
+            <div class="cv-field">
+              <label for="reg-email">Correo electronico</label>
+              <input id="reg-email" type="email" placeholder="tu@correo.com" autocomplete="email" required />
+            </div>
+            <div class="cv-field">
+              <label for="reg-password">Contrasena</label>
+              <input id="reg-password" type="password" placeholder="Minimo 6 caracteres" autocomplete="new-password" minlength="6" required />
+            </div>
+            <button type="submit" id="btn-register" class="cv-btn-submit">
+              <i class="bi bi-person-plus"></i> Crear cuenta
+            </button>
+          </form>
+          <div id="msg-register" class="cv-auth-msg" role="alert" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="cv-footer">
+    <div class="container">
+      <div class="row align-items-center gy-4">
+        <div class="col-12 col-md-4">
+          <a href="index.html" class="d-flex align-items-center gap-2">
+            <span class="cv-brand-mark"><i class="bi bi-camera-reels-fill"></i></span>
+            <span class="cv-brand-text">
+              <span class="d-block cv-brand-name">CineVerse</span>
+              <span class="d-block cv-brand-tagline">MAS QUE PELICULAS</span>
+            </span>
+          </a>
+        </div>
+        <div class="col-12 col-md-4 text-center">
+          <span class="cv-footer-tagline">EL CINE SIEMPRE ES UNA BUENA IDEA</span>
+        </div>
+        <div class="col-12 col-md-4 text-center text-md-end">
+          <small>CineVerse &copy; 2026 &nbsp;&middot;&nbsp; Todos los derechos reservados.</small>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const API_AUTH = "http://localhost:8080/api/auth";
+
+    function getRedirectUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.get("redirect");
+      if (!raw) return null;
+      try { return decodeURIComponent(raw); } catch { return null; }
+    }
+
+    function guardarSesion(data) {
+      localStorage.setItem("cv_token",  data.token);
+      localStorage.setItem("cv_nombre", data.nombre);
+      localStorage.setItem("cv_email",  data.email);
+      localStorage.setItem("cv_rol",    data.rol);
+    }
+
+    function redirigirTrasLogin() {
+      const dest = getRedirectUrl();
+      window.location.href = dest || "index.html";
+    }
+
+    function mostrarMsg(elId, texto, tipo) {
+      const el = document.getElementById(elId);
+      el.textContent = texto;
+      el.className = "cv-auth-msg show " + tipo;
+    }
+
+    function ocultarMsg(elId) {
+      const el = document.getElementById(elId);
+      el.className = "cv-auth-msg";
+      el.textContent = "";
+    }
+
+    function setBtnLoading(btn, loading, textoOriginal) {
+      if (loading) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="cv-spin"></span> Procesando...';
+      } else {
+        btn.disabled = false;
+        btn.innerHTML = textoOriginal;
+      }
+    }
+
+    /* ── Tabs ── */
+    document.getElementById("tab-login").addEventListener("click", function() {
+      this.classList.add("active");
+      document.getElementById("tab-register").classList.remove("active");
+      document.getElementById("panel-login").style.display = "block";
+      document.getElementById("panel-register").style.display = "none";
+      ocultarMsg("msg-login"); ocultarMsg("msg-register");
+    });
+
+    document.getElementById("tab-register").addEventListener("click", function() {
+      this.classList.add("active");
+      document.getElementById("tab-login").classList.remove("active");
+      document.getElementById("panel-register").style.display = "block";
+      document.getElementById("panel-login").style.display = "none";
+      ocultarMsg("msg-login"); ocultarMsg("msg-register");
+    });
+
+    /* ── Login ── */
+    var btnLogin = document.getElementById("btn-login");
+    var BTN_LOGIN_ORIG = btnLogin.innerHTML;
+
+    document.getElementById("form-login").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      ocultarMsg("msg-login");
+      var email    = document.getElementById("login-email").value.trim();
+      var password = document.getElementById("login-password").value;
+      if (!email || !password) { mostrarMsg("msg-login", "Completa todos los campos.", "error"); return; }
+      setBtnLoading(btnLogin, true, BTN_LOGIN_ORIG);
+      try {
+        var res  = await fetch(API_AUTH + "/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email, password: password })
+        });
+        var data = await res.json();
+        if (!res.ok) {
+          var msg = data.mensaje || data.error || data.message || "Correo o contrasena incorrectos.";
+          mostrarMsg("msg-login", msg, "error");
+          return;
+        }
+        guardarSesion(data);
+        mostrarMsg("msg-login", "Bienvenido, " + data.nombre + "! Redirigiendo...", "success");
+        setTimeout(redirigirTrasLogin, 800);
+      } catch(err) {
+        console.error("[CineVerse login]", err);
+        mostrarMsg("msg-login", "No se pudo conectar con el servidor. Verifica que el backend este activo.", "error");
+      } finally {
+        setBtnLoading(btnLogin, false, BTN_LOGIN_ORIG);
+      }
+    });
+
+    /* ── Register ── */
+    var btnReg = document.getElementById("btn-register");
+    var BTN_REG_ORIG = btnReg.innerHTML;
+
+    document.getElementById("form-register").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      ocultarMsg("msg-register");
+      var nombre   = document.getElementById("reg-nombre").value.trim();
+      var email    = document.getElementById("reg-email").value.trim();
+      var password = document.getElementById("reg-password").value;
+      if (!nombre || !email || !password) { mostrarMsg("msg-register", "Completa todos los campos.", "error"); return; }
+      if (password.length < 6) { mostrarMsg("msg-register", "La contrasena debe tener al menos 6 caracteres.", "error"); return; }
+      setBtnLoading(btnReg, true, BTN_REG_ORIG);
+      try {
+        var res  = await fetch(API_AUTH + "/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nombre: nombre, email: email, password: password })
+        });
+        var data = await res.json();
+        if (!res.ok) {
+          var msg = data.mensaje || data.error || data.message || "No se pudo crear la cuenta. Intenta con otro correo.";
+          mostrarMsg("msg-register", msg, "error");
+          return;
+        }
+        guardarSesion(data);
+        mostrarMsg("msg-register", "Cuenta creada! Bienvenido, " + data.nombre + ". Redirigiendo...", "success");
+        setTimeout(redirigirTrasLogin, 900);
+      } catch(err) {
+        console.error("[CineVerse register]", err);
+        mostrarMsg("msg-register", "No se pudo conectar con el servidor. Verifica que el backend este activo.", "error");
+      } finally {
+        setBtnLoading(btnReg, false, BTN_REG_ORIG);
+      }
+    });
+
+    /* ── Si ya hay sesion y viene con redirect, ir directo ── */
+    (function() {
+      var token = localStorage.getItem("cv_token");
+      if (token) {
+        var dest = getRedirectUrl();
+        if (dest) { window.location.href = dest; }
+      }
+    })();
+  </script>
 </body>
 </html>

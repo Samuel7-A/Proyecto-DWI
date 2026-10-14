@@ -12,3 +12,9 @@ async function getPeliculaPorId(id) {
   if (!res.ok) return null;
   return await res.json();
 }
+
+async function getProductos() {
+  const res = await fetch("http://localhost:8080/api/productos");
+  if (!res.ok) throw new Error("No se pudieron obtener los productos");
+  return await res.json();
+}

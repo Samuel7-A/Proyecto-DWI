@@ -1,4 +1,3 @@
-
 package com.cineverse.backend.dto;
 
 import jakarta.validation.constraints.Max;
@@ -7,46 +6,23 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public class SalaRequest {
+/**
+ * Cuerpo de POST /api/salas y PUT /api/salas/{id}.
+ * Al crear la sala se generan automáticamente filas × columnas asientos.
+ */
+public record SalaRequest(
 
-    @NotBlank(message = "El nombre de la sala es obligatorio")
-    @Size(max = 50, message = "El nombre no puede superar 50 caracteres")
-    private String nombre;
+        @NotBlank(message = "El nombre es obligatorio")
+        @Size(max = 100, message = "El nombre no puede superar los 100 caracteres")
+        String nombre,
 
-    @NotNull(message = "La cantidad de filas es obligatoria")
-    @Min(value = 1, message = "Debe existir al menos una fila")
-    @Max(value = 26, message = "El máximo permitido es 26 filas")
-    private Integer filas;
+        @NotNull(message = "El número de filas es obligatorio")
+        @Min(value = 1, message = "Debe haber al menos 1 fila")
+        @Max(value = 26, message = "Máximo 26 filas (una letra por fila, de A a Z)")
+        Integer filas,
 
-    @NotNull(message = "La cantidad de columnas es obligatoria")
-    @Min(value = 1, message = "Debe existir al menos una columna")
-    @Max(value = 50, message = "El máximo permitido es 50 columnas")
-    private Integer columnas;
-
-    public SalaRequest() {
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public Integer getFilas() {
-        return filas;
-    }
-
-    public void setFilas(Integer filas) {
-        this.filas = filas;
-    }
-
-    public Integer getColumnas() {
-        return columnas;
-    }
-
-    public void setColumnas(Integer columnas) {
-        this.columnas = columnas;
-    }
+        @NotNull(message = "El número de columnas es obligatorio")
+        @Min(value = 1, message = "Debe haber al menos 1 columna")
+        @Max(value = 50, message = "Máximo 50 columnas")
+        Integer columnas) {
 }

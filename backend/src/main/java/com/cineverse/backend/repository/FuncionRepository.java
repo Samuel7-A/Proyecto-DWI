@@ -21,4 +21,8 @@ public interface FuncionRepository extends JpaRepository<Funcion, Long> {
         ORDER BY f.fechaHora ASC
         """)
     List<Funcion> buscarPorPelicula(@Param("peliculaId") Long peliculaId);
+
+    boolean existsBySalaId(Long salaId);
+
+    boolean existsByPeliculaId(Long peliculaId);
 }

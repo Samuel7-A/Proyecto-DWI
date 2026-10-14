@@ -1,0 +1,747 @@
+/* ==========================================================================
+   CineVerse — Estilos del flujo de compra
+   (selección de asientos · bocaditos y bebidas · checkout)
+   Complementa public.css; reutiliza sus variables y componentes base.
+   ========================================================================== */
+
+.cv-buy-section {
+  padding: 2.5rem 0 3.5rem;
+}
+
+.cv-buy-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 1.75rem;
+  align-items: start;
+}
+
+.cv-panel {
+  background-color: var(--cv-surface);
+  border: 1px solid var(--cv-surface-border);
+  border-radius: var(--cv-radius);
+  padding: 1.5rem;
+  box-shadow: var(--cv-shadow);
+}
+
+.cv-panel-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+
+.cv-panel-sub {
+  color: var(--cv-text-muted);
+  font-size: 0.9rem;
+  margin: 0 0 1.25rem;
+}
+
+/* ------------------------------ Progreso -------------------------------- */
+
+.cv-pasos-wrap {
+  margin-bottom: 2rem;
+}
+
+.cv-steps {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0;
+}
+
+.cv-step {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--cv-text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.cv-step + .cv-step::before {
+  content: "";
+  width: 2.25rem;
+  height: 2px;
+  background-color: var(--cv-surface-border);
+  margin-right: 0.55rem;
+  border-radius: 999px;
+}
+
+.cv-step-dot {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--cv-surface);
+  border: 1px solid var(--cv-surface-border);
+  color: var(--cv-text-muted);
+  font-size: 0.95rem;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.cv-step.done .cv-step-dot {
+  background-color: var(--cv-red);
+  border-color: var(--cv-red);
+  color: #fff;
+}
+
+.cv-step.done + .cv-step::before {
+  background-color: var(--cv-red);
+}
+
+.cv-step.active {
+  color: var(--cv-text);
+}
+
+.cv-step.active .cv-step-dot {
+  border-color: var(--cv-red);
+  color: var(--cv-red);
+  box-shadow: 0 0 0 4px rgba(230, 57, 80, 0.15);
+}
+
+/* --------------------------- Encabezado película ------------------------- */
+
+.cv-movie-strip {
+  display: flex;
+  gap: 1.1rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.cv-mini-poster {
+  width: 72px;
+  height: 100px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  color: #fff;
+  padding: 0.5rem;
+  text-align: center;
+  overflow: hidden;
+  box-shadow: var(--cv-shadow);
+}
+
+.cv-mini-poster i {
+  font-size: 1.4rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.cv-mini-poster span {
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.cv-movie-strip-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0 0 0.35rem;
+  letter-spacing: -0.01em;
+}
+
+.cv-movie-strip-meta {
+  color: var(--cv-text-muted);
+  font-size: 0.85rem;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+.cv-movie-strip-meta i {
+  color: var(--cv-red);
+  margin-right: 0.3rem;
+}
+
+/* ------------------------------ Funciones -------------------------------- */
+
+.cv-funciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.cv-funcion-pill {
+  background-color: var(--cv-bg-soft);
+  border: 1px solid var(--cv-surface-border);
+  color: var(--cv-text);
+  border-radius: 999px;
+  padding: 0.55rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.cv-funcion-pill small {
+  color: var(--cv-text-muted);
+  font-weight: 500;
+}
+
+.cv-funcion-pill:hover {
+  border-color: rgba(230, 57, 80, 0.5);
+}
+
+.cv-funcion-pill.active {
+  background-color: var(--cv-red);
+  border-color: var(--cv-red);
+  color: #fff;
+}
+
+.cv-funcion-pill.active small {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ------------------------------- Pantalla -------------------------------- */
+
+.cv-screen {
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto 2rem;
+  text-align: center;
+}
+
+.cv-screen-bar {
+  height: 16px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #5b6673 0%, #2b3038 100%);
+  box-shadow: 0 6px 22px rgba(230, 57, 80, 0.22);
+}
+
+.cv-screen-label {
+  margin-top: 0.5rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.35em;
+  color: var(--cv-text-muted);
+  font-weight: 600;
+}
+
+/* ------------------------------ Mapa de asientos ------------------------- */
+
+.cv-seat-map {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 100%;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+
+.cv-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.cv-row-label {
+  width: 1.4rem;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--cv-text-muted);
+  flex-shrink: 0;
+}
+
+.cv-row-seats {
+  display: flex;
+  gap: 0.45rem;
+}
+
+.cv-seat {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 7px 7px 5px 5px;
+  border: 1px solid transparent;
+  background-color: #262a33;
+  color: #c8ccd4;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.12s ease, background-color 0.15s ease,
+    border-color 0.15s ease, color 0.15s ease;
+}
+
+.cv-seat.available {
+  background-color: #262a33;
+  border-color: #3a3f4b;
+  color: #c8ccd4;
+}
+
+.cv-seat.available:hover {
+  background-color: #3a3f4b;
+  transform: translateY(-2px);
+}
+
+.cv-seat.selected {
+  background-color: var(--cv-red);
+  border-color: var(--cv-red);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(230, 57, 80, 0.4);
+}
+
+.cv-seat.occupied {
+  background-color: #1b1d23;
+  border-color: #23262d;
+  color: #5a5f69;
+  cursor: not-allowed;
+}
+
+.cv-seat:disabled {
+  cursor: not-allowed;
+}
+
+.cv-seat:focus-visible {
+  outline: 2px solid var(--cv-red);
+  outline-offset: 2px;
+}
+
+/* -------------------------------- Leyenda -------------------------------- */
+
+.cv-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+  color: var(--cv-text-muted);
+  font-size: 0.82rem;
+}
+
+.cv-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.cv-legend-swatch {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.cv-legend-swatch.available {
+  background-color: #262a33;
+  border: 1px solid #3a3f4b;
+}
+
+.cv-legend-swatch.selected {
+  background-color: var(--cv-red);
+}
+
+.cv-legend-swatch.occupied {
+  background-color: #1b1d23;
+  border: 1px solid #23262d;
+}
+
+
+/* ------------------------------- Resumen --------------------------------- */
+
+.cv-summary {
+  position: sticky;
+  top: 96px;
+}
+
+.cv-summary .cv-panel-title {
+  font-size: 1.05rem;
+}
+
+.cv-summary-list {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+}
+
+.cv-summary-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--cv-surface-border);
+  font-size: 0.85rem;
+}
+
+.cv-summary-item:last-of-type {
+  border-bottom: 0;
+}
+
+.cv-summary-key {
+  color: var(--cv-text-muted);
+}
+
+.cv-summary-val {
+  text-align: right;
+  font-weight: 600;
+}
+
+.cv-summary-seats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.cv-seat-chip {
+  background-color: var(--cv-red);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+}
+
+.cv-summary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--cv-surface-border);
+  padding-top: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.cv-summary-total-label {
+  font-weight: 700;
+}
+
+.cv-summary-total-value {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--cv-red);
+}
+
+/* ------------------------------- Bocaditos ------------------------------- */
+
+.cv-snack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.cv-snack-card {
+  background-color: var(--cv-bg-soft);
+  border: 1px solid var(--cv-surface-border);
+  border-radius: var(--cv-radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.18s ease, transform 0.18s ease;
+}
+
+.cv-snack-card.is-selected {
+  border-color: var(--cv-red);
+}
+
+.cv-snack-card:hover {
+  border-color: rgba(230, 57, 80, 0.5);
+  transform: translateY(-3px);
+}
+
+.cv-snack-visual {
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(
+    ellipse 80% 100% at 50% 0%,
+    rgba(230, 57, 80, 0.16),
+    transparent 70%
+  );
+  color: var(--cv-red);
+  font-size: 2.4rem;
+}
+
+.cv-snack-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  flex: 1;
+}
+
+.cv-snack-cat {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cv-text-muted);
+  font-weight: 600;
+}
+
+.cv-snack-name {
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.cv-snack-precio {
+  font-weight: 800;
+  color: var(--cv-red);
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+/* ------------------------------- Stepper --------------------------------- */
+
+.cv-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.cv-stepper-btn {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 1px solid var(--cv-surface-border);
+  background-color: var(--cv-surface);
+  color: var(--cv-text);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  transition: all 0.15s ease;
+}
+
+.cv-stepper-btn:hover:not(:disabled) {
+  border-color: var(--cv-red);
+  color: var(--cv-red);
+}
+
+.cv-stepper-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.cv-stepper-qty {
+  min-width: 1.5rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+
+/* ------------------------------ Checkout --------------------------------- */
+
+.cv-bill {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cv-bill-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--cv-surface-border);
+  font-size: 0.9rem;
+}
+
+.cv-bill-row .cv-bill-qty {
+  color: var(--cv-text-muted);
+  font-size: 0.8rem;
+}
+
+.cv-bill-section {
+  margin: 1.25rem 0 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--cv-surface-border);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cv-text-muted);
+  font-weight: 700;
+}
+
+.cv-bill-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  margin-top: 0.5rem;
+}
+
+.cv-bill-total .cv-bill-label {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.cv-bill-total .cv-bill-value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--cv-red);
+}
+
+/* ---------------------------- Acciones / botones ------------------------- */
+
+.cv-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.cv-actions .btn-cv-primary,
+.cv-actions .btn-cv-outline {
+  flex: 1 1 auto;
+  justify-content: center;
+  text-align: center;
+}
+
+.btn-cv-primary:disabled,
+.btn-cv-outline:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ------------------------------- Avisos ---------------------------------- */
+
+.cv-alert {
+  border-radius: var(--cv-radius-sm);
+  padding: 0.9rem 1.1rem;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin: 1rem 0;
+}
+
+.cv-alert-error {
+  background-color: rgba(230, 57, 80, 0.12);
+  border: 1px solid var(--cv-red);
+  color: #f87890;
+}
+
+.cv-alert-info {
+  background-color: rgba(230, 57, 80, 0.08);
+  border: 1px solid rgba(230, 57, 80, 0.4);
+  color: var(--cv-text);
+}
+
+/* ---------------------------- Confirmación ------------------------------- */
+
+.cv-confirm {
+  text-align: center;
+  padding: 1.5rem 0 0.5rem;
+}
+
+.cv-confirm-badge {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: rgba(25, 200, 120, 0.12);
+  border: 1px solid #19c878;
+  color: #5de8a8;
+  font-size: 2.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.1rem;
+}
+
+.cv-confirm-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.cv-confirm-sub {
+  color: var(--cv-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.cv-confirm-code {
+  display: inline-block;
+  background-color: var(--cv-bg-soft);
+  border: 1px dashed var(--cv-surface-border);
+  border-radius: var(--cv-radius-sm);
+  padding: 0.5rem 1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.25rem;
+}
+
+/* ------------------------------- Responsive ------------------------------ */
+
+@media (max-width: 991.98px) {
+  .cv-buy-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cv-summary {
+    position: static;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .cv-panel {
+    padding: 1.1rem;
+  }
+
+  .cv-seat {
+    width: 1.7rem;
+    height: 1.7rem;
+    font-size: 0.62rem;
+  }
+
+  .cv-row-seats {
+    gap: 0.32rem;
+  }
+
+  .cv-movie-strip {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cv-step-label {
+    display: none;
+  }
+
+  .cv-step + .cv-step::before {
+    width: 1.25rem;
+  }
+}
+
+
+/* --------------------------- Bocaditos (extra) -------------------------- */
+
+.cv-snack-remove {
+  background: none;
+  border: none;
+  color: var(--cv-text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: color 0.15s ease;
+}
+
+.cv-snack-remove:hover {
+  color: var(--cv-red);
+}
+
+.cv-snack-grid > .cv-empty-state {
+  grid-column: 1 / -1;
+}
+

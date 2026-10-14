@@ -350,3 +350,109 @@ body {
         margin-left: 0;
     }
 }
+
+/* ------------------------------- Cuenta --------------------------------- */
+
+.cv-cuenta {
+    display: inline-flex;
+    align-items: center;
+}
+
+.cv-cuenta-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: 1px solid var(--cv-border);
+    color: var(--cv-text);
+    border-radius: 10px;
+    padding: 6px 14px 6px 6px;
+    font-weight: 600;
+    font-size: 0.88rem;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.cv-cuenta-toggle:hover {
+    border-color: var(--cv-red);
+}
+
+.cv-cuenta-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--cv-red);
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+.cv-cuenta-nombre {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cv-cuenta-menu {
+    background: var(--cv-card);
+    border: 1px solid var(--cv-border);
+    border-radius: 12px;
+    padding: 0.5rem;
+    min-width: 230px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.cv-cuenta-menu .dropdown-item {
+    color: var(--cv-text);
+    border-radius: 8px;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.9rem;
+}
+
+.cv-cuenta-menu .dropdown-item:hover {
+    background: var(--cv-card-light);
+    color: var(--cv-red);
+}
+
+.cv-cuenta-menu .dropdown-item i {
+    color: var(--cv-muted);
+}
+
+.cv-cuenta-menu .dropdown-item:hover i {
+    color: var(--cv-red);
+}
+
+.cv-cuenta-menu .dropdown-divider {
+    border-color: var(--cv-border);
+}
+
+.cv-cuenta-email {
+    padding: 0.4rem 0.75rem 0.3rem;
+    color: var(--cv-muted);
+    font-size: 0.78rem;
+    word-break: break-all;
+}
+
+.cv-cuenta-menu .dropdown-item.cv-cuenta-logout {
+    color: #ff6b7a;
+}
+
+.cv-cuenta-menu .dropdown-item.cv-cuenta-logout:hover {
+    color: #ff6b7a;
+    background: rgba(230, 57, 80, 0.12);
+}
+
+.cv-cuenta-menu .dropdown-item.cv-cuenta-logout i {
+    color: #ff6b7a;
+}
+
+/* Enlace activo de la navegación administrativa */
+.cv-nav-link.active {
+    color: var(--cv-red) !important;
+}
+
