@@ -4,11 +4,35 @@ const API_URL = "http://localhost:8080/api/peliculas";
 // (usuario sin permiso) antes de tocar la API.
 const CV_AUTORIZADO = cvAuthRequiereAdmin();
 
-function authHeaders() {
-    return {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + cvAuthToken()
-    };
+// Cierra la sesión limpiando las claves cv_* (las mismas que usa login.html)
+// y redirige al formulario de acceso.
+function cerrarSesion() {
+    ["cv_token", "cv_nombre", "cv_email", "cv_rol"].forEach(function (clave) {
+        localStorage.removeItem(clave);
+    });
+    window.location.replace("login.html");
+}
+
+// Petición administrativa: añade el JWT y gestiona los errores 401/403.
+async function peticionAdmin(url, opciones = {}) {
+    const headers = new Headers(opciones.headers || {});
+
+    if (!headers.has("Authorization")) {
+        headers.set("Authorization", "Bearer " + cvAuthToken());
+    }
+
+    const respuesta = await fetch(url, { ...opciones, headers });
+
+    if (respuesta.status === 401) {
+        cerrarSesion();
+        throw new Error("Tu sesión ha expirado. Inicia sesión nuevamente.");
+    }
+
+    if (respuesta.status === 403) {
+        throw new Error("No tienes permisos para realizar esta operación.");
+    }
+
+    return respuesta;
 }
 
 let peliculas = [];
@@ -156,15 +180,15 @@ formulario.addEventListener("submit", async function (event) {
         let respuesta;
 
         if (peliculaEditando === null) {
-            respuesta = await fetch(API_URL, {
+            respuesta = await peticionAdmin(API_URL, {
                 method: "POST",
-                headers: authHeaders(),
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(datos)
             });
         } else {
-            respuesta = await fetch(`${API_URL}/${peliculaEditando}`, {
+            respuesta = await peticionAdmin(`${API_URL}/${peliculaEditando}`, {
                 method: "PUT",
-                headers: authHeaders(),
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(datos)
             });
         }
@@ -183,7 +207,7 @@ formulario.addEventListener("submit", async function (event) {
         limpiarFormulario();
         await cargarPeliculas();
     } catch (error) {
-        mostrarMensaje("No se pudo guardar la película.", "danger");
+        mostrarMensaje(error.message || "No se pudo guardar la película.", "danger");
         console.error(error);
     }
 });
@@ -240,11 +264,8 @@ async function eliminarPelicula(id) {
     }
 
     try {
-        const respuesta = await fetch(`${API_URL}/${id}`, {
-            method: "DELETE",
-            headers: {
-                "Authorization": "Bearer " + cvAuthToken()
-            }
+        const respuesta = await peticionAdmin(`${API_URL}/${id}`, {
+            method: "DELETE"
         });
 
         if (!respuesta.ok) {
@@ -259,7 +280,7 @@ async function eliminarPelicula(id) {
 
         await cargarPeliculas();
     } catch (error) {
-        mostrarMensaje("No se pudo eliminar la película.", "danger");
+        mostrarMensaje(error.message || "No se pudo eliminar la película.", "danger");
         console.error(error);
     }
 }
