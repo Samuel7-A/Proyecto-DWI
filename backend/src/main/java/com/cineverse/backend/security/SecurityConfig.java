@@ -71,6 +71,27 @@ public class SecurityConfig {
                     "/api/funciones/**"
                 ).permitAll()
                 .requestMatchers(
+                    HttpMethod.GET,
+                    "/api/productos/admin"
+                ).hasRole("ADMIN")
+                .requestMatchers(
+                    HttpMethod.GET,
+                    "/api/productos",
+                    "/api/productos/**"
+                ).permitAll()
+                .requestMatchers(
+                    HttpMethod.POST,
+                    "/api/productos"
+                ).hasRole("ADMIN")
+                .requestMatchers(
+                    HttpMethod.PUT,
+                    "/api/productos/**"
+                ).hasRole("ADMIN")
+                .requestMatchers(
+                    HttpMethod.DELETE,
+                    "/api/productos/**"
+                ).hasRole("ADMIN")
+                .requestMatchers(
                     HttpMethod.POST,
                     "/api/funciones"
                 ).hasRole("ADMIN")
@@ -82,6 +103,14 @@ public class SecurityConfig {
                     HttpMethod.DELETE,
                     "/api/funciones/{id}"
                 ).hasRole("ADMIN")
+                .requestMatchers(
+                    "/api/salas",
+                    "/api/salas/**"
+                ).hasRole("ADMIN")
+                .requestMatchers(
+                    "/api/ordenes",
+                    "/api/ordenes/**"
+                ).authenticated()
                 .anyRequest().authenticated()
             );
 

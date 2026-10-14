@@ -2,6 +2,7 @@ package com.cineverse.backend.repository;
 
 import com.cineverse.backend.entity.Asiento;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -26,4 +27,10 @@ public interface AsientoRepository extends JpaRepository<Asiento, Long> {
         ORDER BY a.fila ASC, a.numero ASC
     """)
     List<Asiento> buscarAsientosDisponibles(@Param("funcionId") Long funcionId);
+
+    boolean existsBySalaId(Long salaId);
+
+    @Modifying
+    @Query("DELETE FROM Asiento a WHERE a.sala.id = :salaId")
+    void deleteBySalaId(@Param("salaId") Long salaId);
 }

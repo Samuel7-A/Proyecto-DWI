@@ -633,3 +633,262 @@ select:focus-visible {
     text-align: left;
   }
 }
+
+/* ------------------------------- Cuenta ------------------------------- */
+
+.cv-cuenta {
+  display: inline-flex;
+  align-items: center;
+}
+
+.cv-cuenta-login {
+  color: var(--cv-text);
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.cv-cuenta-login:hover {
+  background-color: var(--cv-surface);
+  color: var(--cv-red);
+}
+
+.cv-cuenta-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: 1px solid var(--cv-surface-border);
+  color: var(--cv-text);
+  border-radius: 999px;
+  padding: 0.28rem 0.75rem 0.28rem 0.3rem;
+  font-weight: 600;
+  font-size: 0.88rem;
+  font-family: inherit;
+  transition: border-color 0.2s ease;
+}
+
+.cv-cuenta-toggle:hover {
+  border-color: var(--cv-red);
+}
+
+.cv-cuenta-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--cv-red);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.cv-cuenta-nombre {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cv-cuenta-menu {
+  background: var(--cv-surface);
+  border: 1px solid var(--cv-surface-border);
+  border-radius: var(--cv-radius);
+  padding: 0.5rem;
+  min-width: 230px;
+  box-shadow: var(--cv-shadow);
+}
+
+.cv-cuenta-menu .dropdown-item {
+  color: var(--cv-text);
+  border-radius: var(--cv-radius-sm);
+  padding: 0.55rem 0.75rem;
+  font-size: 0.9rem;
+}
+
+.cv-cuenta-menu .dropdown-item:hover {
+  background: var(--cv-bg-soft);
+  color: var(--cv-red);
+}
+
+.cv-cuenta-menu .dropdown-item i {
+  color: var(--cv-text-muted);
+}
+
+.cv-cuenta-menu .dropdown-item:hover i {
+  color: var(--cv-red);
+}
+
+.cv-cuenta-menu .dropdown-divider {
+  border-color: var(--cv-surface-border);
+}
+
+.cv-cuenta-email {
+  padding: 0.4rem 0.75rem 0.3rem;
+  color: var(--cv-text-muted);
+  font-size: 0.78rem;
+  word-break: break-all;
+}
+
+.cv-cuenta-menu .dropdown-item.cv-cuenta-logout {
+  color: #ff6b7a;
+}
+
+.cv-cuenta-menu .dropdown-item.cv-cuenta-logout:hover {
+  color: #ff6b7a;
+  background: rgba(230, 57, 80, 0.12);
+}
+
+.cv-cuenta-menu .dropdown-item.cv-cuenta-logout i {
+  color: #ff6b7a;
+}
+
+/* ----------------------- Cuenta: perfil y órdenes ----------------------- */
+
+.cv-profile-card {
+  background: var(--cv-surface);
+  border: 1px solid var(--cv-surface-border);
+  border-radius: var(--cv-radius);
+  padding: 2rem;
+  box-shadow: var(--cv-shadow);
+  max-width: 720px;
+}
+
+.cv-profile-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--cv-red);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.cv-profile-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--cv-surface-border);
+  flex-wrap: wrap;
+}
+
+.cv-profile-row:last-of-type {
+  border-bottom: none;
+}
+
+.cv-profile-key {
+  color: var(--cv-text-muted);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+
+.cv-profile-val {
+  color: var(--cv-text);
+  font-weight: 500;
+  word-break: break-all;
+}
+
+.cv-order-card {
+  background: var(--cv-surface);
+  border: 1px solid var(--cv-surface-border);
+  border-radius: var(--cv-radius);
+  padding: 1.25rem 1.4rem;
+  box-shadow: var(--cv-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+}
+
+.cv-order-code {
+  font-weight: 700;
+  color: var(--cv-text);
+}
+
+.cv-order-total {
+  font-weight: 700;
+  color: var(--cv-red);
+  font-size: 1.15rem;
+}
+
+.cv-order-meta {
+  color: var(--cv-text-muted);
+  font-size: 0.85rem;
+}
+
+.cv-order-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(25, 200, 120, 0.12);
+  border: 1px solid #19c878;
+  color: #5de8a8;
+  align-self: flex-start;
+}
+
+/* ---------- Modal: compra exclusiva para clientes ---------- */
+
+#cv-modal-admin-compra .modal-content {
+  background: var(--cv-surface);
+  border: 1px solid var(--cv-surface-border);
+  border-radius: var(--cv-radius);
+  color: var(--cv-text);
+  box-shadow: var(--cv-shadow);
+}
+
+#cv-modal-admin-compra .cv-modal-body {
+  padding: 2rem 1.75rem;
+  text-align: center;
+}
+
+#cv-modal-admin-compra .cv-modal-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(230, 57, 80, 0.15);
+  color: var(--cv-red);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+#cv-modal-admin-compra .cv-modal-title {
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-bottom: 0.6rem;
+}
+
+#cv-modal-admin-compra .cv-modal-text {
+  color: var(--cv-text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+
+#cv-modal-admin-compra .cv-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+

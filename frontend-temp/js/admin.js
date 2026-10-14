@@ -1,5 +1,16 @@
 const API_URL = "http://localhost:8080/api/peliculas";
 
+// Acceso restringido al rol ADMIN: redirige a login (sin sesión) o a index
+// (usuario sin permiso) antes de tocar la API.
+const CV_AUTORIZADO = cvAuthRequiereAdmin();
+
+function authHeaders() {
+    return {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + cvAuthToken()
+    };
+}
+
 let peliculas = [];
 let peliculaEditando = null;
 
@@ -147,17 +158,13 @@ formulario.addEventListener("submit", async function (event) {
         if (peliculaEditando === null) {
             respuesta = await fetch(API_URL, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: authHeaders(),
                 body: JSON.stringify(datos)
             });
         } else {
             respuesta = await fetch(`${API_URL}/${peliculaEditando}`, {
                 method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: authHeaders(),
                 body: JSON.stringify(datos)
             });
         }
@@ -234,7 +241,10 @@ async function eliminarPelicula(id) {
 
     try {
         const respuesta = await fetch(`${API_URL}/${id}`, {
-            method: "DELETE"
+            method: "DELETE",
+            headers: {
+                "Authorization": "Bearer " + cvAuthToken()
+            }
         });
 
         if (!respuesta.ok) {
@@ -295,4 +305,6 @@ inputDuracion.addEventListener("input", function () {
     }
 });
 
-cargarPeliculas();
+if (CV_AUTORIZADO) {
+    cargarPeliculas();
+}
