@@ -1,0 +1,61 @@
+<header>
+  <nav class="navbar navbar-expand-lg cv-navbar py-3">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/">
+        <span class="cv-brand-mark">
+          <i class="bi bi-camera-reels-fill"></i>
+        </span>
+        <span class="cv-brand-text">
+          <span class="d-block cv-brand-name">CineVerse</span>
+          <span class="d-block cv-brand-tagline">MÁS QUE PELÍCULAS</span>
+        </span>
+      </a>
+
+      <button
+        class="navbar-toggler border-0 text-light"
+        type="button"
+        (click)="alternarNav()"
+        aria-label="Abrir menú">
+        <i class="bi bi-list fs-2"></i>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" [class.show]="navAbierto">
+        <ul class="navbar-nav align-items-lg-center">
+          <li class="nav-item">
+            <a class="nav-link cv-nav-link" routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Películas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link cv-nav-link" routerLink="/admin/bocaditos" routerLinkActive="active">Bocaditos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link cv-nav-link" routerLink="/">
+              <i class="bi bi-box-arrow-up-right me-1"></i> Vista previa
+            </a>
+          </li>
+          <li class="nav-item ms-lg-3">
+            <app-cuenta />
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <router-outlet />
+</main>
+
+<footer class="cv-footer">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+      <div>
+        <span class="cv-brand-name">CineVerse</span>
+        <small class="d-block text-muted-cv">MÁS QUE PELÍCULAS</small>
+      </div>
+      <div class="text-end">
+        <a routerLink="/" class="text-muted-cv small">Volver al inicio</a>
+        <div><small>CineVerse © 2026</small></div>
+      </div>
+    </div>
+  </div>
+</footer>

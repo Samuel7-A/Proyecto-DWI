@@ -1,5 +1,6 @@
 package com.cineverse.backend;
 
+import org.springframework.context.annotation.Profile;
 import com.cineverse.backend.entity.Rol;
 import com.cineverse.backend.entity.Usuario;
 import com.cineverse.backend.repository.UsuarioRepository;
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+@Profile("!supabase")
 @Configuration
 public class DataInitializer {
 

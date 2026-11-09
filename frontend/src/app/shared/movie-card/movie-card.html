@@ -1,0 +1,22 @@
+<div class="cv-card">
+  @if (pelicula.imagenUrl) {
+    <div
+      class="cv-poster"
+      [style.background-image]="'url(' + pelicula.imagenUrl + ')'"
+      style="background-size: cover; background-position: center;">
+      <span class="cv-badge-clasif">{{ pelicula.clasificacion }}</span>
+    </div>
+  } @else {
+    <div class="cv-poster" [style.background]="gradiente">
+      <span class="cv-badge-clasif">{{ pelicula.clasificacion }}</span>
+      <i class="bi bi-film cv-poster-icon"></i>
+      <span class="cv-poster-title">{{ pelicula.titulo }}</span>
+    </div>
+  }
+
+  <div class="cv-card-body">
+    <h3 class="cv-card-title">{{ pelicula.titulo }}</h3>
+    <p class="cv-card-meta mb-0">{{ pelicula.genero }} &nbsp;|&nbsp; {{ duracion }}</p>
+    <a [routerLink]="['/pelicula', pelicula.id]" class="btn-cv-outline">Ver más</a>
+  </div>
+</div>

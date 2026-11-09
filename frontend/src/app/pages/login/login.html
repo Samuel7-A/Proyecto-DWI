@@ -1,0 +1,106 @@
+<header>
+  <nav class="navbar navbar-expand-lg cv-navbar py-3">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/">
+        <span class="cv-brand-mark"><i class="bi bi-camera-reels-fill"></i></span>
+        <span class="cv-brand-text">
+          <span class="d-block cv-brand-name">CineVerse</span>
+          <span class="d-block cv-brand-tagline">MÁS QUE PELÍCULAS</span>
+        </span>
+      </a>
+      <div class="d-flex align-items-center gap-2">
+        <a routerLink="/cartelera" class="cv-nav-icon-btn" aria-label="Cartelera">
+          <i class="bi bi-film"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <div class="cv-auth-wrap">
+    <div class="cv-auth-card">
+      <p class="cv-auth-title">Bienvenido</p>
+      <p class="cv-auth-sub">Inicia sesión o crea una cuenta para comprar tus entradas.</p>
+
+      <div class="cv-auth-tabs" role="tablist">
+        <button
+          class="cv-auth-tab"
+          [class.active]="tab === 'login'"
+          type="button"
+          (click)="cambiarTab('login')">Iniciar sesión</button>
+        <button
+          class="cv-auth-tab"
+          [class.active]="tab === 'register'"
+          type="button"
+          (click)="cambiarTab('register')">Registrarse</button>
+      </div>
+
+      @if (tab === 'login') {
+        <form (ngSubmit)="submitLogin()" novalidate>
+          <div class="cv-field">
+            <label for="login-email">Correo electrónico</label>
+            <input id="login-email" type="email" placeholder="tu@correo.com" autocomplete="email" required [(ngModel)]="loginEmail" name="loginEmail" />
+          </div>
+          <div class="cv-field">
+            <label for="login-password">Contraseña</label>
+            <input id="login-password" type="password" placeholder="••••••••" autocomplete="current-password" required [(ngModel)]="loginPassword" name="loginPassword" />
+          </div>
+          <button type="submit" class="cv-btn-submit" [disabled]="loginLoading">
+            @if (loginLoading) {
+              <span class="cv-spin"></span> Procesando...
+            } @else {
+              <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
+            }
+          </button>
+        </form>
+        <div class="cv-auth-msg show {{ loginTipo }}" role="alert" aria-live="polite">{{ loginMsg }}</div>
+      } @else {
+        <form (ngSubmit)="submitRegister()" novalidate>
+          <div class="cv-field">
+            <label for="reg-nombre">Nombre completo</label>
+            <input id="reg-nombre" type="text" placeholder="Juan Pérez" autocomplete="name" required [(ngModel)]="regNombre" name="regNombre" />
+          </div>
+          <div class="cv-field">
+            <label for="reg-email">Correo electrónico</label>
+            <input id="reg-email" type="email" placeholder="tu@correo.com" autocomplete="email" required [(ngModel)]="regEmail" name="regEmail" />
+          </div>
+          <div class="cv-field">
+            <label for="reg-password">Contraseña</label>
+            <input id="reg-password" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" minlength="6" required [(ngModel)]="regPassword" name="regPassword" />
+          </div>
+          <button type="submit" class="cv-btn-submit" [disabled]="regLoading">
+            @if (regLoading) {
+              <span class="cv-spin"></span> Procesando...
+            } @else {
+              <i class="bi bi-person-plus"></i> Crear cuenta
+            }
+          </button>
+        </form>
+        <div class="cv-auth-msg show {{ regTipo }}" role="alert" aria-live="polite">{{ regMsg }}</div>
+      }
+    </div>
+  </div>
+</main>
+
+<footer class="cv-footer">
+  <div class="container">
+    <div class="row align-items-center gy-4">
+      <div class="col-12 col-md-4">
+        <a routerLink="/" class="d-flex align-items-center gap-2">
+          <span class="cv-brand-mark"><i class="bi bi-camera-reels-fill"></i></span>
+          <span class="cv-brand-text">
+            <span class="d-block cv-brand-name">CineVerse</span>
+            <span class="d-block cv-brand-tagline">MÁS QUE PELÍCULAS</span>
+          </span>
+        </a>
+      </div>
+      <div class="col-12 col-md-4 text-center">
+        <span class="cv-footer-tagline">EL CINE SIEMPRE ES UNA BUENA IDEA</span>
+      </div>
+      <div class="col-12 col-md-4 text-center text-md-end">
+        <small>CineVerse &copy; 2026 &nbsp;&middot;&nbsp; Todos los derechos reservados.</small>
+      </div>
+    </div>
+  </div>
+</footer>

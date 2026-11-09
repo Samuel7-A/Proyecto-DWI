@@ -1,0 +1,165 @@
+<section class="admin-section">
+  <div class="container">
+    <div class="mb-4">
+      <span class="eyebrow">PANEL ADMINISTRATIVO</span>
+      <h1 class="admin-title mt-2">Gestión de películas</h1>
+      <p class="admin-description">
+        Registra, consulta, modifica y elimina las películas de CineVerse.
+      </p>
+    </div>
+
+    <div class="admin-card mb-5">
+      <div class="admin-card-header">
+        <div>
+          <h2>{{ editandoId === null ? 'Registrar película' : 'Editar película' }}</h2>
+          <p>Completa la información de la película.</p>
+        </div>
+        <i class="bi bi-film admin-header-icon"></i>
+      </div>
+
+      <form (ngSubmit)="guardar()">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <label for="titulo" class="form-label">Título *</label>
+            <input type="text" class="form-control" id="titulo" placeholder="Ej. Avengers: Endgame" required [(ngModel)]="titulo" name="titulo" />
+            <div class="invalid-feedback">Ingresa el título de la película.</div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="genero" class="form-label">Género *</label>
+            <select class="form-select" id="genero" required [(ngModel)]="genero" name="genero">
+              <option value="">Selecciona un género</option>
+              @for (g of generos; track g) {
+                <option [value]="g">{{ g }}</option>
+              }
+            </select>
+            <div class="invalid-feedback">Selecciona un género.</div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="duracionMinutos" class="form-label">Duración (minutos) *</label>
+            <input type="number" class="form-control" id="duracionMinutos" min="1" placeholder="120" required [(ngModel)]="duracionMinutos" name="duracionMinutos" />
+            <div class="invalid-feedback">Ingresa una duración válida.</div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="clasificacion" class="form-label">Clasificación *</label>
+            <select class="form-select" id="clasificacion" required [(ngModel)]="clasificacion" name="clasificacion">
+              <option value="">Selecciona</option>
+              @for (c of clasificaciones; track c) {
+                <option [value]="c">{{ c }}</option>
+              }
+            </select>
+            <div class="invalid-feedback">Selecciona una clasificación.</div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="fechaEstreno" class="form-label">Fecha de estreno *</label>
+            <input type="date" class="form-control" id="fechaEstreno" required [(ngModel)]="fechaEstreno" name="fechaEstreno" />
+            <div class="invalid-feedback">Ingresa la fecha de estreno.</div>
+          </div>
+
+          <div class="col-12">
+            <label for="imagenUrl" class="form-label">URL de imagen</label>
+            <input type="url" class="form-control" id="imagenUrl" placeholder="https://ejemplo.com/imagen.jpg" [(ngModel)]="imagenUrl" name="imagenUrl" />
+            <div class="form-text">Campo opcional.</div>
+          </div>
+
+          <div class="col-12">
+            <label for="sinopsis" class="form-label">Sinopsis</label>
+            <textarea class="form-control" id="sinopsis" rows="4" placeholder="Escribe una breve descripción de la película..." [(ngModel)]="sinopsis" name="sinopsis"></textarea>
+            <div class="form-text">Campo opcional.</div>
+          </div>
+
+          <div class="col-12">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="estado" [(ngModel)]="estado" name="estado" />
+              <label class="form-check-label" for="estado">Película activa</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-form-actions mt-4">
+          <button type="submit" class="btn-cv-primary" [disabled]="guardando">
+            <i [class]="'bi ' + (editandoId === null ? 'bi-plus-circle' : 'bi-check-circle')"></i>
+            {{ editandoId === null ? 'Registrar película' : 'Guardar cambios' }}
+          </button>
+
+          @if (editandoId !== null) {
+            <button type="button" class="btn-cv-secondary" (click)="limpiar()">
+              <i class="bi bi-x-circle"></i> Cancelar edición
+            </button>
+          }
+        </div>
+      </form>
+    </div>
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <div>
+          <h2>Películas registradas</h2>
+          <p>Administra las películas disponibles en CineVerse.</p>
+        </div>
+        <i class="bi bi-collection-play admin-header-icon"></i>
+      </div>
+
+      @if (mensaje) {
+        <div class="alert alert-{{ mensajeTipo }}" role="alert">{{ mensaje }}</div>
+      }
+
+      @if (cargando) {
+        <div class="text-center py-4 text-muted-cv">
+          <div class="spinner-border text-light" role="status"><span class="visually-hidden">Cargando…</span></div>
+        </div>
+      } @else if (peliculas.length === 0) {
+        <div class="empty-state">
+          <i class="bi bi-film"></i>
+          <h3>No hay películas registradas</h3>
+          <p>Utiliza el formulario para registrar la primera película.</p>
+        </div>
+      } @else {
+        <div class="table-responsive">
+          <table class="table admin-table align-middle">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Película</th>
+                <th>Género</th>
+                <th>Duración</th>
+                <th>Clasificación</th>
+                <th>Estreno</th>
+                <th>Estado</th>
+                <th class="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (p of peliculas; track p.id) {
+                <tr>
+                  <td>{{ p.id }}</td>
+                  <td>
+                    <div class="movie-title">{{ p.titulo }}</div>
+                    <div class="movie-synopsis">{{ p.sinopsis || 'Sin sinopsis' }}</div>
+                  </td>
+                  <td>{{ p.genero }}</td>
+                  <td>{{ p.duracionMinutos }} min</td>
+                  <td>{{ p.clasificacion }}</td>
+                  <td>{{ formatearFecha(p.fechaEstreno) }}</td>
+                  <td>
+                    <span [class]="p.estado ? 'badge-active' : 'badge-inactive'">{{ p.estado ? 'Activa' : 'Inactiva' }}</span>
+                  </td>
+                  <td class="text-center">
+                    <button type="button" class="btn-action btn-edit" title="Editar" (click)="editar(p)">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button type="button" class="btn-action btn-delete" title="Eliminar" (click)="eliminar(p)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  </div>
+</section>

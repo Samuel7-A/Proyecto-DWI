@@ -1,0 +1,12 @@
+<div class="cv-pasos-wrap">
+  <ol class="cv-steps" aria-label="Progreso de la compra">
+    @for (paso of pasos; track paso.id; let i = $index) {
+      <li class="cv-step" [class.done]="i < idxActual" [class.active]="i === idxActual">
+        <span class="cv-step-dot">
+          <i [class]="'bi ' + (i < idxActual ? 'bi-check-lg' : paso.icono)"></i>
+        </span>
+        <span class="cv-step-label">{{ paso.etiqueta }}</span>
+      </li>
+    }
+  </ol>
+</div>

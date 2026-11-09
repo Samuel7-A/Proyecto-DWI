@@ -1,0 +1,42 @@
+<section class="cv-section">
+  <div class="container">
+    <span class="eyebrow">MI CUENTA</span>
+    <h1 class="cv-section-title mt-2 mb-2">Mis entradas</h1>
+    <p class="text-muted-cv mb-4">Estas son las órdenes de compra registradas con tu cuenta.</p>
+
+    @if (cargando()) {
+      <div class="cv-skeleton" style="height: 180px;"></div>
+    } @else if (error()) {
+      <div class="cv-empty-state">
+        <i class="bi bi-wifi-off mb-2 d-block" style="font-size: 1.8rem;"></i>
+        {{ error() }}
+        <div class="mt-3">
+          <button type="button" class="btn-cv-outline" (click)="cargar()">Reintentar</button>
+        </div>
+      </div>
+    } @else if (ordenes().length === 0) {
+      <div class="cv-empty-state">
+        <i class="bi bi-ticket-perforated mb-2 d-block" style="font-size: 1.8rem;"></i>
+        Aún no tienes compras registradas.
+        <div class="mt-3"><a routerLink="/cartelera" class="btn-cv-primary">Ver cartelera</a></div>
+      </div>
+    } @else {
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 g-lg-4">
+        @for (o of ordenes(); track o.id) {
+          <div class="col">
+            <article class="cv-order-card">
+              <span class="cv-order-badge"><i class="bi bi-check-circle"></i>{{ o.estado || 'PAGADA' }}</span>
+              <div class="cv-order-code">Orden #{{ o.id }}</div>
+              <div class="cv-order-total">{{ total(o) }}</div>
+              <div class="cv-order-meta"><i class="bi bi-calendar-event me-2"></i>{{ fecha(o) }}</div>
+            </article>
+          </div>
+        }
+      </div>
+      <p class="text-muted-cv small mt-4 mb-0">
+        El backend actual expone el resumen de cada orden (número, estado, total y fecha).
+        El detalle por asiento de cada entrada no está disponible a través de un endpoint público.
+      </p>
+    }
+  </div>
+</section>

@@ -1,0 +1,68 @@
+<section class="cv-section">
+  <div class="container">
+    <a routerLink="/cartelera" class="link-cv-arrow mb-4">
+      <i class="bi bi-arrow-left"></i> Volver a la cartelera
+    </a>
+
+    @if (cargando()) {
+      <div class="row g-4">
+        <div class="col-12 col-md-4 col-lg-3">
+          <div class="cv-skeleton" style="aspect-ratio: 2/3;"></div>
+        </div>
+        <div class="col-12 col-md-8 col-lg-9">
+          <div class="cv-skeleton mb-3" style="height: 2.5rem; width: 60%;"></div>
+          <div class="cv-skeleton mb-4" style="height: 1.5rem; width: 40%;"></div>
+          <div class="cv-skeleton" style="height: 6rem; width: 100%;"></div>
+        </div>
+      </div>
+    } @else if (noEncontrada()) {
+      <div class="cv-empty-state py-5">
+        <i class="bi bi-emoji-frown mb-3 d-block" style="font-size: 2.2rem;"></i>
+        <p class="mb-3">No encontramos la película que buscas.</p>
+        <a routerLink="/cartelera" class="btn-cv-primary">Ver cartelera</a>
+      </div>
+    } @else if (pelicula(); as p) {
+      <div class="row g-4 g-lg-5 align-items-start">
+        <div class="col-12 col-md-4 col-lg-3">
+          @if (p.imagenUrl) {
+            <div
+              class="cv-detail-poster"
+              [style.background-image]="'url(' + p.imagenUrl + ')'"
+              style="background-size: cover; background-position: center;">
+              <span>{{ p.titulo }}</span>
+            </div>
+          } @else {
+            <div class="cv-detail-poster" [style.background]="gradiente">
+              <i class="bi bi-film"></i>
+              <span>{{ p.titulo }}</span>
+            </div>
+          }
+        </div>
+
+        <div class="col-12 col-md-8 col-lg-9">
+          <span class="eyebrow">{{ p.estado ? 'EN CARTELERA' : 'PRÓXIMAMENTE' }}</span>
+          <h1 class="fw-bold mt-2 mb-3" style="font-size: clamp(1.8rem, 3vw, 2.6rem);">
+            {{ p.titulo }}
+          </h1>
+
+          <div class="d-flex flex-wrap gap-2 mb-4">
+            <span class="cv-chip"><i class="bi bi-tags"></i>{{ p.genero }}</span>
+            <span class="cv-chip"><i class="bi bi-clock"></i>{{ duracion }}</span>
+            <span class="cv-chip"><i class="bi bi-shield-check"></i>{{ p.clasificacion }}</span>
+            <span class="cv-chip"><i class="bi bi-calendar-event"></i>{{ fechaEstreno }}</span>
+          </div>
+
+          <h2 class="h5 fw-bold mb-2">Sinopsis</h2>
+          <p class="cv-synopsis mb-4">{{ p.sinopsis || 'Sinopsis no disponible por el momento.' }}</p>
+
+          <div class="d-flex flex-wrap gap-2">
+            <a [routerLink]="['/asientos', p.id]" class="btn-cv-primary">
+              <i class="bi bi-ticket-perforated"></i> Comprar entradas
+            </a>
+            <a routerLink="/cartelera" class="btn-cv-outline">Volver a la cartelera</a>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>

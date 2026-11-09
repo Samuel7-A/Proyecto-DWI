@@ -1,0 +1,32 @@
+<footer class="cv-footer">
+  <div class="container">
+    <div class="row align-items-center gy-4">
+      <div class="col-12 col-md-4">
+        <a routerLink="/" class="d-flex align-items-center gap-2">
+          <span class="cv-brand-mark"><i class="bi bi-camera-reels-fill"></i></span>
+          <span class="cv-brand-text">
+            <span class="d-block cv-brand-name">CineVerse</span>
+            <span class="d-block cv-brand-tagline">MÁS QUE PELÍCULAS</span>
+          </span>
+        </a>
+      </div>
+      <div class="col-12 col-md-4 text-center">
+        <span class="cv-footer-tagline">EL CINE SIEMPRE ES UNA BUENA IDEA</span>
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="d-flex justify-content-center justify-content-md-end align-items-center gap-3 mb-3">
+          <a href="#" class="cv-social-icon" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="cv-social-icon" aria-label="TikTok"><i class="bi bi-tiktok"></i></a>
+          <a href="#" class="cv-social-icon" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+          <a href="#" class="cv-social-icon" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+        </div>
+        <div class="text-center text-md-end">
+          @if (auth.isAdmin()) {
+            <a routerLink="/admin" class="text-decoration-underline text-muted-cv small">Administración</a>
+          }
+          <div><small>CineVerse © 2026 &nbsp;·&nbsp; Todos los derechos reservados.</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

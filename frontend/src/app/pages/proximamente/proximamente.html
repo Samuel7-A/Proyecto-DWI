@@ -1,0 +1,37 @@
+<section class="cv-section pb-0">
+  <div class="container">
+    <span class="eyebrow">LO QUE SE VIENE</span>
+    <h1 class="cv-section-title mt-2 mb-2">Próximamente</h1>
+    <p class="text-muted-cv mb-4">
+      Marca en tu calendario los estrenos que llegarán pronto a CineVerse.
+    </p>
+  </div>
+</section>
+
+<section class="cv-section pt-0">
+  <div class="container">
+    @if (cargando) {
+      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3 g-lg-4">
+        @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+          <div class="col"><div class="cv-skeleton" style="aspect-ratio: 2/3.6;"></div></div>
+        }
+      </div>
+    } @else if (error) {
+      <div class="cv-empty-state">
+        <i class="bi bi-camera-reels mb-2 d-block" style="font-size: 1.8rem;"></i>
+        No se pudieron cargar los estrenos. Intenta nuevamente más tarde.
+      </div>
+    } @else if (proximas.length === 0) {
+      <div class="cv-empty-state">
+        <i class="bi bi-camera-reels mb-2 d-block" style="font-size: 1.8rem;"></i>
+        Por ahora no hay estrenos próximos anunciados.
+      </div>
+    } @else {
+      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3 g-lg-4">
+        @for (p of proximas; track p.id) {
+          <div class="col"><app-movie-card [pelicula]="p" /></div>
+        }
+      </div>
+    }
+  </div>
+</section>

@@ -1,0 +1,68 @@
+<section class="cv-section pb-0">
+  <div class="container">
+    <span class="eyebrow">TODA LA CARTELERA</span>
+    <h1 class="cv-section-title mt-2 mb-2">Cartelera</h1>
+    <p class="text-muted-cv mb-4">
+      Filtra por género o busca directamente el título que quieres ver.
+    </p>
+
+    <div class="cv-filters mb-4">
+      <div class="row g-3 align-items-center">
+        <div class="col-12 col-md-5">
+          <label for="cv-filtro-buscar" class="form-label small text-muted-cv mb-1">Buscar por título</label>
+          <div class="input-group">
+            <span class="input-group-text bg-transparent border-0 pe-0" style="color: var(--cv-text-muted);">
+              <i class="bi bi-search"></i>
+            </span>
+            <input
+              type="search"
+              id="cv-filtro-buscar"
+              class="form-control border-0"
+              placeholder="Ej. Superman, Minecraft..."
+              [(ngModel)]="texto" />
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <label for="cv-filtro-genero" class="form-label small text-muted-cv mb-1">Género</label>
+          <select id="cv-filtro-genero" class="form-select" [(ngModel)]="genero">
+            <option value="">Todos los géneros</option>
+            @for (g of generos; track g) {
+              <option [value]="g">{{ g }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-12 col-md-3 text-md-end">
+          <span class="text-muted-cv small">{{ countLabel }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cv-section pt-0">
+  <div class="container">
+    @if (cargando) {
+      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3 g-lg-4">
+        @for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) {
+          <div class="col"><div class="cv-skeleton" style="aspect-ratio: 2/3.6;"></div></div>
+        }
+      </div>
+    } @else if (error) {
+      <div class="cv-empty-state">
+        <i class="bi bi-camera-reels mb-2 d-block" style="font-size: 1.8rem;"></i>
+        No se pudieron cargar las películas. Intenta nuevamente más tarde.
+      </div>
+    } @else if (filtradas.length === 0) {
+      <div class="cv-empty-state">
+        <i class="bi bi-camera-reels mb-2 d-block" style="font-size: 1.8rem;"></i>
+        No encontramos películas que coincidan con tu búsqueda.
+      </div>
+    } @else {
+      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3 g-lg-4">
+        @for (p of filtradas; track p.id) {
+          <div class="col"><app-movie-card [pelicula]="p" /></div>
+        }
+      </div>
+    }
+  </div>
+</section>

@@ -1,0 +1,112 @@
+/* Variables usadas por admin.css, que se carga de forma encapsulada en el
+   panel de administración (su :root no se aplica al estar dentro de un
+   componente con ViewEncapsulation emulada). */
+:root {
+  --cv-card: #15151c;
+  --cv-card-light: #1d1d26;
+  --cv-border: #292934;
+  --cv-muted: #a7a7b3;
+}
+
+/* El frontend original tenía <body><header/><main/><footer/></body> con
+   body { display:flex; flex-direction:column } y main { flex:1 0 auto }.
+   En Angular el árbol es <body><app-root><layout>…</layout></app-root></body>,
+   así que replicamos ese comportamiento en los nodos intermedios. */
+app-root,
+app-public-layout,
+app-admin-layout,
+app-login {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+app-public-layout,
+app-admin-layout,
+app-login {
+  flex: 1 0 auto;
+}
+
+/* --------------------------------------------------------------------------
+   Dulcería (/productos): completa los estilos que el HTML original ya
+   usaba (cv-prod-*, cv-chip-filtro) y que no estaban definidos en ningún CSS,
+   manteniendo la identidad visual de CineVerse (misma paleta que bocaditos).
+   -------------------------------------------------------------------------- */
+.cv-prod-section {
+  padding-bottom: 5rem;
+}
+
+.cv-chip-filtro {
+  background: var(--cv-surface);
+  border: 1px solid var(--cv-surface-border);
+  color: var(--cv-text-muted);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cv-chip-filtro:hover {
+  color: var(--cv-text);
+  border-color: rgba(230, 57, 80, 0.5);
+}
+
+.cv-chip-filtro.active {
+  background: var(--cv-red);
+  border-color: var(--cv-red);
+  color: #fff;
+}
+
+.cv-prod-card .cv-prod-visual {
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(
+    ellipse 80% 100% at 50% 0%,
+    rgba(230, 57, 80, 0.16),
+    transparent 70%
+  );
+  color: var(--cv-red);
+  font-size: 2.4rem;
+}
+
+.cv-prod-card.is-selected {
+  border-color: var(--cv-red);
+}
+
+.cv-prod-categoria {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cv-text-muted);
+  font-weight: 600;
+}
+
+.cv-prod-precio {
+  font-weight: 800;
+  color: var(--cv-red);
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.cv-prod-resumen {
+  position: sticky;
+  bottom: 0;
+  z-index: 1030;
+  background: var(--cv-surface);
+  border-top: 1px solid var(--cv-surface-border);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.25);
+  padding: 0.9rem 0;
+  margin-top: 2rem;
+}
+
+.cv-prod-resumen-total {
+  font-weight: 800;
+  color: var(--cv-red);
+  font-size: 1.15rem;
+}
+

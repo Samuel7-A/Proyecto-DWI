@@ -1,5 +1,6 @@
 package com.cineverse.backend;
 
+import org.springframework.context.annotation.Profile;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ import com.cineverse.backend.service.SalaService;
  *
  * No borra datos existentes: solo crea lo que falta.
  */
+@Profile("!supabase")
 @Configuration
 public class SalaFuncionDataInitializer {
 

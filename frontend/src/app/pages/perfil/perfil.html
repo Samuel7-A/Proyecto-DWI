@@ -1,0 +1,36 @@
+<section class="cv-section">
+  <div class="container">
+    <span class="eyebrow">MI CUENTA</span>
+    <h1 class="cv-section-title mt-2 mb-4">Mi perfil</h1>
+
+    <div class="cv-profile-card">
+      <div class="d-flex align-items-center gap-3 mb-4 flex-wrap">
+        <span class="cv-profile-avatar">{{ inicial }}</span>
+        <div>
+          <h2 class="cv-section-title mb-2" style="font-size: 1.4rem;">
+            {{ auth.nombre() || 'Usuario' }}
+          </h2>
+          <span class="cv-chip"><i class="bi bi-person-badge"></i>{{ rolLabel }}</span>
+        </div>
+      </div>
+
+      <div class="cv-profile-row">
+        <span class="cv-profile-key">Nombre</span>
+        <span class="cv-profile-val">{{ auth.nombre() || '—' }}</span>
+      </div>
+      <div class="cv-profile-row">
+        <span class="cv-profile-key">Correo electrónico</span>
+        <span class="cv-profile-val">{{ auth.email() || '—' }}</span>
+      </div>
+      <div class="cv-profile-row">
+        <span class="cv-profile-key">Rol</span>
+        <span class="cv-profile-val">{{ rolLabel }}</span>
+      </div>
+
+      <p class="text-muted-cv small mt-4 mb-0">
+        La edición de datos personales no está disponible en esta versión:
+        el backend actual no expone un servicio para actualizar el perfil.
+      </p>
+    </div>
+  </div>
+</section>

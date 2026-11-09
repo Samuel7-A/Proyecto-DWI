@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -27,7 +28,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            @Value("${spring.h2.console.enabled:false}") boolean h2ConsoleEnabled
+    ) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -45,10 +49,14 @@ public class SecurityConfig {
                         )
                 )
             )
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers(PathRequest.toH2Console()).permitAll()
-                .requestMatchers(
+            .authorizeHttpRequests(auth -> {
+                auth.requestMatchers("/api/auth/**").permitAll();
+
+                if (h2ConsoleEnabled) {
+                    auth.requestMatchers(PathRequest.toH2Console()).permitAll();
+                }
+
+                auth.requestMatchers(
                     HttpMethod.GET,
                     "/api/peliculas",
                     "/api/peliculas/**"
@@ -111,8 +119,8 @@ public class SecurityConfig {
                     "/api/ordenes",
                     "/api/ordenes/**"
                 ).authenticated()
-                .anyRequest().authenticated()
-            );
+                .anyRequest().authenticated();
+                });
 
         http.addFilterBefore(
             jwtAuthenticationFilter,
@@ -131,7 +139,9 @@ public class SecurityConfig {
             "http://localhost:5500",
             "http://127.0.0.1:5500",
             "http://localhost:8080",
-            "http://127.0.0.1:8080"
+            "http://127.0.0.1:8080",
+            "http://localhost:4200",
+            "http://127.0.0.1:4200"
         ));
 
         configuration.setAllowedMethods(List.of(

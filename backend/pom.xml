@@ -35,6 +35,12 @@
             <artifactId>spring-boot-h2console</artifactId>
         </dependency>
 
+        <!-- PostgreSQL / Supabase -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 
         <!-- ======================================== -->
         <!-- SPRING SECURITY -->

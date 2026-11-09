@@ -1,0 +1,170 @@
+<section class="cv-buy-section">
+  <div class="container">
+    <app-steps actual="asientos" />
+
+    <div class="cv-buy-grid">
+      <div>
+        @if (cargando) {
+          <div class="cv-panel" style="min-height: 320px;">
+            <div class="text-center py-5 text-muted-cv">
+              <div class="spinner-border text-light mb-3" role="status">
+                <span class="visually-hidden">Cargando…</span>
+              </div>
+              <p class="mb-0">Cargando funciones…</p>
+            </div>
+          </div>
+        } @else if (error) {
+          <div class="cv-panel">
+            <div class="cv-alert cv-alert-error">
+              <i class="bi bi-exclamation-triangle"></i>
+              <span>{{ error }} <a routerLink="/cartelera" class="link-cv-arrow">Ver cartelera</a></span>
+            </div>
+          </div>
+        } @else if (pelicula) {
+          <div class="cv-panel">
+            <div class="cv-movie-strip">
+              @if (pelicula.imagenUrl) {
+                <div class="cv-mini-poster" [style.background-image]="'url(' + pelicula.imagenUrl + ')'" style="background-size: cover; background-position: center;"></div>
+              } @else {
+                <div class="cv-mini-poster" [style.background]="gradiente">
+                  <i class="bi bi-film"></i>
+                  <span>{{ pelicula.titulo }}</span>
+                </div>
+              }
+              <div>
+                <h1 class="cv-movie-strip-title">{{ pelicula.titulo }}</h1>
+                <p class="cv-movie-strip-meta">
+                  <span><i class="bi bi-tags"></i>{{ pelicula.genero }}</span>
+                  <span><i class="bi bi-clock"></i>{{ duracion }} min</span>
+                  <span><i class="bi bi-shield-check"></i>{{ pelicula.clasificacion }}</span>
+                </p>
+              </div>
+            </div>
+
+            @if (funciones.length === 0) {
+              <div class="cv-alert cv-alert-info">
+                <i class="bi bi-info-circle"></i>
+                <span>No hay funciones disponibles para esta película en este momento.</span>
+              </div>
+            } @else {
+              <h2 class="cv-panel-title"><i class="bi bi-calendar3 me-2"></i>Elige tu función</h2>
+              <p class="cv-panel-sub">Selecciona la fecha y el horario que prefieras.</p>
+
+              <div class="cv-funciones" role="group" aria-label="Funciones disponibles">
+                @for (f of funciones; track f.id) {
+                  <button
+                    type="button"
+                    class="cv-funcion-pill"
+                    [class.active]="f.id === funcionId"
+                    (click)="seleccionarFuncion(f.id)"
+                    [attr.aria-pressed]="f.id === funcionId">
+                    <i class="bi bi-calendar-event"></i>
+                    <span>{{ hora(f) }}</span>
+                    <small>{{ fecha(f) }} · {{ f.salaNombre || 'Sala' }}</small>
+                  </button>
+                }
+              </div>
+
+              @if (funcion) {
+                @if (cargandoAsientos) {
+                  <div class="text-center py-4 text-muted-cv">
+                    <div class="spinner-border text-light mb-3" role="status"><span class="visually-hidden">Cargando…</span></div>
+                    <p class="mb-0">Cargando asientos…</p>
+                  </div>
+                } @else if (disponibles.length === 0) {
+                  <div class="cv-alert cv-alert-info">
+                    <i class="bi bi-info-circle"></i>
+                    <span>Esta función no tiene asientos disponibles. Prueba con otra función.</span>
+                  </div>
+                } @else {
+                  <div class="cv-screen" aria-hidden="true">
+                    <div class="cv-screen-bar"></div>
+                    <div class="cv-screen-label">PANTALLA</div>
+                  </div>
+
+                  <div class="cv-seat-map">
+                    @for (fila of filas; track fila.fila) {
+                      <div class="cv-row">
+                        <span class="cv-row-label">{{ fila.fila }}</span>
+                        <div class="cv-row-seats">
+                          @for (a of fila.asientos; track a.id) {
+                            <button
+                              type="button"
+                              class="cv-seat"
+                              [class.occupied]="a.ocupado"
+                              [class.selected]="a.seleccionado"
+                              [class.available]="!a.ocupado && !a.seleccionado"
+                              [disabled]="a.ocupado"
+                              (click)="alternarAsiento(a.id)"
+                              [attr.aria-pressed]="a.seleccionado"
+                              [attr.aria-label]="a.ocupado ? 'Asiento ' + fila.fila + a.numero + ' ocupado' : 'Asiento ' + fila.fila + a.numero">
+                              {{ a.numero }}
+                            </button>
+                          }
+                        </div>
+                      </div>
+                    }
+                  </div>
+
+                  <div class="cv-legend" aria-hidden="true">
+                    <span class="cv-legend-item"><span class="cv-legend-swatch available"></span>Disponible</span>
+                    <span class="cv-legend-item"><span class="cv-legend-swatch selected"></span>Seleccionado</span>
+                    <span class="cv-legend-item"><span class="cv-legend-swatch occupied"></span>Ocupado</span>
+                  </div>
+                }
+              }
+            }
+          </div>
+        }
+      </div>
+      <aside class="cv-summary">
+        <div class="cv-panel">
+          <h2 class="cv-panel-title"><i class="bi bi-receipt me-2"></i>Tu selección</h2>
+
+          <ul class="cv-summary-list">
+            <li class="cv-summary-item">
+              <span class="cv-summary-key">Película</span>
+              <span class="cv-summary-val">{{ pelicula?.titulo || '—' }}</span>
+            </li>
+            <li class="cv-summary-item">
+              <span class="cv-summary-key">Función</span>
+              <span class="cv-summary-val">{{ resumenFechaHora() }}</span>
+            </li>
+            <li class="cv-summary-item">
+              <span class="cv-summary-key">Sala</span>
+              <span class="cv-summary-val">{{ funcion?.salaNombre || '—' }}</span>
+            </li>
+            <li class="cv-summary-item">
+              <span class="cv-summary-key">Asientos ({{ cantidadSeleccion }})</span>
+              @if (asientosSeleccionados.length) {
+                <div class="cv-summary-seats">
+                  @for (a of asientosSeleccionados; track a.id) {
+                    <span class="cv-seat-chip">{{ a.fila }}{{ a.numero }}</span>
+                  }
+                </div>
+              } @else {
+                <span class="cv-summary-val">—</span>
+              }
+            </li>
+          </ul>
+
+          <div class="cv-summary-total">
+            <span class="cv-summary-total-label">Subtotal entradas</span>
+            <span class="cv-summary-total-value">{{ subtotalLabel }}</span>
+          </div>
+
+          <div class="cv-actions">
+            <button
+              type="button"
+              class="btn-cv-primary"
+              [disabled]="cantidadSeleccion === 0"
+              (click)="continuar()">
+              Continuar a bocaditos <i class="bi bi-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+

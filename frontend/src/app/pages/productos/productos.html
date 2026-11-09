@@ -1,0 +1,96 @@
+<section class="cv-section cv-prod-section">
+  <div class="container">
+    <h1 class="cv-section-title mt-2 mb-2">Dulcería</h1>
+    <p class="text-muted-cv mb-4">
+      Elige lo que quieres llevar a tu función. Tu selección se guarda y la usarás al crear tu orden.
+    </p>
+
+    @if (cargando) {
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 g-lg-4">
+        @for (i of [1, 2, 3, 4]; track i) {
+          <div class="col"><div class="cv-skeleton" style="height: 260px;"></div></div>
+        }
+      </div>
+    } @else if (error) {
+      <div class="cv-empty-state">
+        <i class="bi bi-wifi-off mb-2 d-block" style="font-size: 1.8rem;"></i>
+        No se pudo cargar el catálogo. Revisa que el backend esté encendido en localhost:8080.
+        <div class="mt-3">
+          <button type="button" class="btn-cv-outline" (click)="cargar()">Reintentar</button>
+        </div>
+      </div>
+    } @else {
+      <div class="d-flex flex-wrap gap-2 mb-4" role="group" aria-label="Filtrar por categoría">
+        <button
+          type="button"
+          class="cv-chip-filtro"
+          [class.active]="filtroCategoria === ''"
+          (click)="filtroCategoria = ''">
+          Todos
+        </button>
+        @for (c of categorias; track c) {
+          <button
+            type="button"
+            class="cv-chip-filtro"
+            [class.active]="filtroCategoria === c"
+            (click)="filtroCategoria = c">
+            {{ info(c).label }}
+          </button>
+        }
+      </div>
+
+      @if (visibles.length === 0) {
+        <div class="cv-empty-state">
+          <i class="bi bi-bag mb-2 d-block" style="font-size: 1.8rem;"></i>
+          {{ productos.length === 0 ? 'Todavía no hay productos disponibles. Vuelve en unos minutos.' : 'No hay productos en esta categoría.' }}
+        </div>
+      } @else {
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 g-lg-4">
+          @for (p of visibles; track p.id) {
+            <div class="col">
+              <article class="cv-card cv-prod-card" [class.is-selected]="cantidad(p.id) > 0">
+                <div class="cv-prod-visual" aria-hidden="true">
+                  <i [class]="'bi ' + info(p.categoria).icon"></i>
+                </div>
+                <div class="cv-card-body">
+                  <span class="cv-prod-categoria">{{ info(p.categoria).label }}</span>
+                  <h3 class="cv-card-title">{{ p.nombre }}</h3>
+                  <p class="cv-prod-precio">{{ totalProducto(p) }}</p>
+                  <div class="cv-stepper" role="group" [attr.aria-label]="'Cantidad de ' + p.nombre">
+                    <button
+                      type="button"
+                      class="cv-stepper-btn"
+                      [disabled]="cantidad(p.id) === 0"
+                      (click)="cambiarCantidad(p.id, -1)">
+                      <i class="bi bi-dash-lg"></i>
+                    </button>
+                    <span class="cv-stepper-qty">{{ cantidad(p.id) }}</span>
+                    <button
+                      type="button"
+                      class="cv-stepper-btn"
+                      [disabled]="cantidad(p.id) >= 10"
+                      (click)="cambiarCantidad(p.id, 1)">
+                      <i class="bi bi-plus-lg"></i>
+                    </button>
+                  </div>
+                </div>
+              </article>
+            </div>
+          }
+        </div>
+      }
+    }
+  </div>
+</section>
+
+<div class="cv-prod-resumen" [hidden]="unidades === 0">
+  <div class="container d-flex align-items-center justify-content-between gap-3">
+    <div>
+      <span class="text-muted-cv small d-block">
+        {{ unidades }} {{ unidades === 1 ? 'producto' : 'productos' }}
+      </span>
+      <span class="cv-prod-resumen-total">{{ totalLabel }}</span>
+    </div>
+    <button type="button" class="btn-cv-outline" (click)="vaciar()">Vaciar selección</button>
+  </div>
+</div>
