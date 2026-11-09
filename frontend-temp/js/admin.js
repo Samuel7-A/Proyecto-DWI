@@ -269,7 +269,9 @@ async function eliminarPelicula(id) {
         });
 
         if (!respuesta.ok) {
-            throw new Error("Error al eliminar la película.");
+            const data = await respuesta.json().catch(() => null);
+            const mensaje = data && (data.mensaje || data.message);
+            throw new Error(mensaje || "Error al eliminar la película.");
         }
 
         mostrarMensaje("Película eliminada correctamente.", "success");

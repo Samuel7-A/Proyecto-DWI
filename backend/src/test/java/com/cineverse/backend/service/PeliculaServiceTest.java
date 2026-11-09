@@ -9,12 +9,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.cineverse.backend.entity.Pelicula;
+import com.cineverse.backend.exception.ConflictoException;
 import com.cineverse.backend.exception.PeliculaNotFoundException;
+import com.cineverse.backend.repository.FuncionRepository;
 import com.cineverse.backend.repository.PeliculaRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -22,6 +25,9 @@ class PeliculaServiceTest {
 
     @Mock
     private PeliculaRepository peliculaRepository;
+
+    @Mock
+    private FuncionRepository funcionRepository;
 
     @InjectMocks
     private PeliculaService peliculaService;
@@ -49,9 +55,28 @@ class PeliculaServiceTest {
     void eliminarBuscaYEliminaLaPelicula() {
         Pelicula pelicula = new Pelicula();
         when(peliculaRepository.findById(1L)).thenReturn(Optional.of(pelicula));
+        when(funcionRepository.existsByPeliculaId(1L)).thenReturn(false);
 
         peliculaService.eliminar(1L);
 
         verify(peliculaRepository).delete(pelicula);
+    }
+
+    @Test
+    void eliminarConFuncionesAsociadasLanzaConflicto() {
+        Pelicula pelicula = new Pelicula();
+        when(peliculaRepository.findById(1L)).thenReturn(Optional.of(pelicula));
+        when(funcionRepository.existsByPeliculaId(1L)).thenReturn(true);
+
+        ConflictoException exception = assertThrows(
+                ConflictoException.class,
+                () -> peliculaService.eliminar(1L));
+
+        assertEquals(
+                "No se puede eliminar la película porque tiene funciones asociadas. "
+                        + "Elimina o reasigna sus funciones antes de borrarla.",
+                exception.getMessage());
+
+        verify(peliculaRepository, never()).delete(pelicula);
     }
 }

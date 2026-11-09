@@ -6,16 +6,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cineverse.backend.entity.Pelicula;
+import com.cineverse.backend.exception.ConflictoException;
 import com.cineverse.backend.exception.PeliculaNotFoundException;
+import com.cineverse.backend.repository.FuncionRepository;
 import com.cineverse.backend.repository.PeliculaRepository;
 
 @Service
 public class PeliculaService {
 
     private final PeliculaRepository peliculaRepository;
+    private final FuncionRepository funcionRepository;
 
-    public PeliculaService(PeliculaRepository peliculaRepository) {
+    public PeliculaService(
+            PeliculaRepository peliculaRepository,
+            FuncionRepository funcionRepository) {
         this.peliculaRepository = peliculaRepository;
+        this.funcionRepository = funcionRepository;
     }
 
     @Transactional(readOnly = true)
@@ -55,6 +61,14 @@ public class PeliculaService {
     public void eliminar(Long id) {
 
         Pelicula pelicula = buscarPorId(id);
+
+        // Una película con funciones no se puede borrar sin romper la
+        // integridad referencial (funciones.pelicula_id -> peliculas.id).
+        if (funcionRepository.existsByPeliculaId(id)) {
+            throw new ConflictoException(
+                    "No se puede eliminar la película porque tiene funciones asociadas. "
+                            + "Elimina o reasigna sus funciones antes de borrarla.");
+        }
 
         peliculaRepository.delete(pelicula);
     }

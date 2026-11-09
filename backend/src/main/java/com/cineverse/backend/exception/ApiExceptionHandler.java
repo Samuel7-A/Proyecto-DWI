@@ -1,5 +1,6 @@
 package com.cineverse.backend.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -7,11 +8,17 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(ApiExceptionHandler.class);
 
     @ExceptionHandler(CredencialesInvalidasException.class)
     public ResponseEntity<Map<String, Object>> handleCredencialesInvalidas(
@@ -43,6 +50,22 @@ public class ApiExceptionHandler {
                 .body(Map.of(
                         "status", HttpStatus.CONFLICT.value(),
                         "mensaje", exception.getMessage() != null ? exception.getMessage() : "Conflicto en la operación"
+                ));
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, Object>> handleIntegridadReferencial(
+            DataIntegrityViolationException exception) {
+
+        // Registra el detalle en el log del servidor, pero no expone la
+        // estructura interna de la base de datos al cliente.
+        logger.error("Violación de integridad referencial al procesar la petición", exception);
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(Map.of(
+                        "status", HttpStatus.CONFLICT.value(),
+                        "mensaje", "No se puede completar la operación porque existen registros relacionados."
                 ));
     }
 
