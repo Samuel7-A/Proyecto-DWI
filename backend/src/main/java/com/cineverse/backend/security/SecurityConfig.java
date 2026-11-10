@@ -104,6 +104,10 @@ public class SecurityConfig {
                     "/api/funciones"
                 ).hasRole("ADMIN")
                 .requestMatchers(
+                    HttpMethod.POST,
+                    "/api/funciones/{id}/cancelar"
+                ).hasRole("ADMIN")
+                .requestMatchers(
                     HttpMethod.PUT,
                     "/api/funciones/{id}"
                 ).hasRole("ADMIN")
@@ -115,6 +119,10 @@ public class SecurityConfig {
                     "/api/salas",
                     "/api/salas/**"
                 ).hasRole("ADMIN")
+                .requestMatchers(
+                    "/api/notificaciones",
+                    "/api/notificaciones/**"
+                ).authenticated()
                 .requestMatchers(
                     "/api/ordenes",
                     "/api/ordenes/**"

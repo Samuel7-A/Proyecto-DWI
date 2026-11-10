@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,6 +52,18 @@ public class OrdenService {
 
         Funcion funcion = funcionRepository.findById(request.getFuncionId())
                 .orElseThrow(() -> new RecursoNoEncontradoException("Función no encontrada"));
+
+        // Reglas de negocio: no se puede comprar una función cancelada,
+        // ya iniciada o de una película retirada de cartelera.
+        if (Boolean.TRUE.equals(funcion.getCancelada())) {
+            throw new ConflictoException("La función fue cancelada y no acepta compras.");
+        }
+        if (funcion.getFechaHora() == null || !funcion.getFechaHora().isAfter(LocalDateTime.now())) {
+            throw new ConflictoException("La función ya comenzó y no acepta compras.");
+        }
+        if (funcion.getPelicula().getEstado() != null && !funcion.getPelicula().getEstado()) {
+            throw new ConflictoException("La película fue retirada de cartelera y no acepta compras.");
+        }
 
         // Validar asientos
         List<Asiento> asientos = asientoRepository.findAllById(request.getAsientoIds());

@@ -39,9 +39,17 @@
           <a routerLink="/cartelera" class="cv-nav-icon-btn" aria-label="Buscar películas">
             <i class="bi bi-search"></i>
           </a>
-          <a routerLink="/mis-entradas" class="cv-nav-icon-btn" aria-label="Mis entradas">
-            <i class="bi bi-ticket-perforated"></i>
-          </a>
+          @if (auth.isLoggedIn() && !auth.isAdmin()) {
+            <a routerLink="/notificaciones" class="cv-nav-icon-btn position-relative" aria-label="Notificaciones">
+              <i class="bi bi-bell"></i>
+              @if (noLeidas() > 0) {
+                <span class="cv-notif-badge">{{ noLeidas() }}</span>
+              }
+            </a>
+            <a routerLink="/mis-entradas" class="cv-nav-icon-btn" aria-label="Mis entradas">
+              <i class="bi bi-ticket-perforated"></i>
+            </a>
+          }
           <app-cuenta />
         </div>
       </div>

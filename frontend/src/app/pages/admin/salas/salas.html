@@ -1,0 +1,116 @@
+<section class="admin-section">
+  <div class="container">
+    <div class="mb-4">
+      <span class="eyebrow">PANEL ADMINISTRATIVO</span>
+      <h1 class="admin-title mt-2">Gestión de salas</h1>
+      <p class="admin-description">
+        Registra, consulta, modifica y elimina las salas de CineVerse.
+      </p>
+    </div>
+
+    <div class="admin-card mb-5">
+      <div class="admin-card-header">
+        <div>
+          <h2>{{ editandoId === null ? 'Registrar sala' : 'Editar sala' }}</h2>
+          <p>Completa la información de la sala.</p>
+        </div>
+        <i class="bi bi-door-open admin-header-icon"></i>
+      </div>
+
+      <form (ngSubmit)="guardar()">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <label for="sala-nombre" class="form-label">Nombre *</label>
+            <input type="text" id="sala-nombre" class="form-control" maxlength="100" required [(ngModel)]="nombre" name="nombre" />
+            <div class="invalid-feedback">Ingresa el nombre de la sala.</div>
+          </div>
+
+          <div class="col-md-3">
+            <label for="sala-filas" class="form-label">Filas (1–26) *</label>
+            <input type="number" id="sala-filas" class="form-control" min="1" max="26" required [(ngModel)]="filas" name="filas" />
+            <div class="invalid-feedback">Filas entre 1 y 26.</div>
+          </div>
+
+          <div class="col-md-3">
+            <label for="sala-columnas" class="form-label">Columnas (1–50) *</label>
+            <input type="number" id="sala-columnas" class="form-control" min="1" max="50" required [(ngModel)]="columnas" name="columnas" />
+            <div class="invalid-feedback">Columnas entre 1 y 50.</div>
+          </div>
+        </div>
+
+        <div class="admin-form-actions mt-4">
+          <button type="submit" class="btn-cv-primary" [disabled]="guardando">
+            <i [class]="'bi ' + (editandoId === null ? 'bi-plus-circle' : 'bi-check-circle')"></i>
+            {{ editandoId === null ? 'Registrar sala' : 'Guardar cambios' }}
+          </button>
+
+          @if (editandoId !== null) {
+            <button type="button" class="btn-cv-secondary" (click)="limpiar()">
+              <i class="bi bi-x-circle"></i> Cancelar edición
+            </button>
+          }
+        </div>
+      </form>
+    </div>
+
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <div>
+          <h2>Salas registradas</h2>
+          <p>Administra las salas disponibles en CineVerse.</p>
+        </div>
+        <i class="bi bi-collection admin-header-icon"></i>
+      </div>
+
+      @if (mensaje) {
+        <div class="alert alert-{{ mensajeTipo }}" role="alert">{{ mensaje }}</div>
+      }
+
+      @if (cargando) {
+        <div class="text-center py-4 text-muted-cv">
+          <div class="spinner-border text-light" role="status"><span class="visually-hidden">Cargando…</span></div>
+        </div>
+      } @else if (salas.length === 0) {
+        <div class="empty-state">
+          <i class="bi bi-door-open"></i>
+          <h3>No hay salas registradas</h3>
+          <p>Utiliza el formulario para crear la primera sala.</p>
+        </div>
+      } @else {
+        <div class="table-responsive">
+          <table class="table admin-table align-middle">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Filas</th>
+                <th>Columnas</th>
+                <th>Total asientos</th>
+                <th class="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (s of salas; track s.id) {
+                <tr>
+                  <td>{{ s.id }}</td>
+                  <td><div class="movie-title">{{ s.nombre }}</div></td>
+                  <td>{{ s.filas }}</td>
+                  <td>{{ s.columnas }}</td>
+                  <td>{{ s.totalAsientos }}</td>
+                  <td class="text-center">
+                    <button type="button" class="btn-action btn-edit" title="Editar" (click)="editar(s)">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button type="button" class="btn-action btn-delete" title="Eliminar" (click)="eliminar(s)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  </div>
+</section>

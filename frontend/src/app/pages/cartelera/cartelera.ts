@@ -29,7 +29,7 @@ export class Cartelera implements OnInit {
 
     this.api.listarPeliculas().subscribe({
       next: (datos) => {
-        this.todas = datos.filter((p) => p.estado);
+        this.todas = datos.filter((p) => p.estado && this.esEstrenada(p));
 
         const set = new Set<string>();
         this.todas.forEach((p) =>
@@ -59,5 +59,13 @@ export class Cartelera implements OnInit {
   get countLabel(): string {
     const n = this.filtradas.length;
     return `${n} película${n === 1 ? '' : 's'}`;
+  }
+
+  private esEstrenada(p: Pelicula): boolean {
+    if (!p.fechaEstreno) return true;
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const estreno = new Date(`${p.fechaEstreno}T00:00:00`);
+    return estreno.getTime() <= hoy.getTime();
   }
 }

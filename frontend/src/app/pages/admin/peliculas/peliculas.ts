@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../../core/api.service';
 import type { Pelicula } from '../../../core/models';
 import { mensajeError } from '../../../core/utils';
@@ -12,6 +13,9 @@ import { mensajeError } from '../../../core/utils';
 })
 export class AdminPeliculas implements OnInit {
   private readonly api = inject(ApiService);
+  private readonly route = inject(ActivatedRoute);
+
+  private pendienteEditar: number | null = null;
 
   peliculas: Pelicula[] = [];
   cargando = true;
@@ -35,6 +39,9 @@ export class AdminPeliculas implements OnInit {
   readonly clasificaciones = ['APT', '+12', '+14', '+18'];
 
   ngOnInit(): void {
+    const raw = this.route.snapshot.queryParamMap.get('editar');
+    const id = raw ? Number(raw) : NaN;
+    this.pendienteEditar = Number.isInteger(id) && id > 0 ? id : null;
     this.cargar();
   }
 
@@ -45,12 +52,22 @@ export class AdminPeliculas implements OnInit {
       next: (datos) => {
         this.peliculas = datos;
         this.cargando = false;
+        this.autoEditar();
       },
       error: (err) => {
         this.mostrarMensaje(mensajeError(err, 'No se pudieron obtener las películas.'), 'danger');
         this.cargando = false;
       }
     });
+  }
+
+  private autoEditar(): void {
+    if (this.pendienteEditar === null) return;
+
+    const pelicula = this.peliculas.find((p) => p.id === this.pendienteEditar);
+    this.pendienteEditar = null;
+
+    if (pelicula) this.editar(pelicula);
   }
 
   formatearFecha(fecha: string): string {

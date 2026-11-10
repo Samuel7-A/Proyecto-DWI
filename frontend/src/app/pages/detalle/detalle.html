@@ -40,7 +40,7 @@
         </div>
 
         <div class="col-12 col-md-8 col-lg-9">
-          <span class="eyebrow">{{ p.estado ? 'EN CARTELERA' : 'PRÓXIMAMENTE' }}</span>
+          <span class="eyebrow">{{ etiquetaEstado() }}</span>
           <h1 class="fw-bold mt-2 mb-3" style="font-size: clamp(1.8rem, 3vw, 2.6rem);">
             {{ p.titulo }}
           </h1>
@@ -56,9 +56,15 @@
           <p class="cv-synopsis mb-4">{{ p.sinopsis || 'Sinopsis no disponible por el momento.' }}</p>
 
           <div class="d-flex flex-wrap gap-2">
-            <a [routerLink]="['/asientos', p.id]" class="btn-cv-primary">
-              <i class="bi bi-ticket-perforated"></i> Comprar entradas
-            </a>
+            @if (auth.isAdmin()) {
+              <a [routerLink]="['/admin']" [queryParams]="{ editar: p.id }" class="btn-cv-primary">
+                <i class="bi bi-pencil"></i> Editar película
+              </a>
+            } @else if (p.estado) {
+              <a [routerLink]="['/asientos', p.id]" class="btn-cv-primary">
+                <i class="bi bi-ticket-perforated"></i> Comprar entradas
+              </a>
+            }
             <a routerLink="/cartelera" class="btn-cv-outline">Volver a la cartelera</a>
           </div>
         </div>

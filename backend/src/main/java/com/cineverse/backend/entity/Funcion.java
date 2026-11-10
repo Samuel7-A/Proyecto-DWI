@@ -36,6 +36,10 @@ public class Funcion {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal precio;
 
+    @NotNull
+    @Column(nullable = false)
+    private Boolean cancelada = false;
+
     public Funcion() {
     }
 
@@ -94,5 +98,13 @@ public class Funcion {
 
     public void setPrecio(BigDecimal precio) {
         this.precio = precio;
+    }
+
+    public Boolean getCancelada() {
+        return cancelada;
+    }
+
+    public void setCancelada(Boolean cancelada) {
+        this.cancelada = cancelada;
     }
 }

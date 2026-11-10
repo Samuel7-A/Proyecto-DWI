@@ -26,7 +26,7 @@ export class Proximamente implements OnInit {
     this.api.listarPeliculas().subscribe({
       next: (datos) => {
         this.proximas = datos
-          .filter((p) => !p.estado)
+          .filter((p) => p.estado && !this.esEstrenada(p))
           .sort((a, b) => new Date(a.fechaEstreno).getTime() - new Date(b.fechaEstreno).getTime());
         this.cargando = false;
       },
@@ -35,5 +35,13 @@ export class Proximamente implements OnInit {
         this.cargando = false;
       }
     });
+  }
+
+  private esEstrenada(p: Pelicula): boolean {
+    if (!p.fechaEstreno) return true;
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const estreno = new Date(`${p.fechaEstreno}T00:00:00`);
+    return estreno.getTime() <= hoy.getTime();
   }
 }

@@ -4,14 +4,17 @@ import { Observable, catchError, shareReplay, throwError } from 'rxjs';
 import type {
   Asiento,
   Funcion,
+  FuncionRequest,
   LoginRequest,
   LoginResponse,
+  Notificacion,
   Orden,
   OrdenRequest,
   Pelicula,
   Producto,
   RegisterRequest,
-  Sala
+  Sala,
+  SalaRequest
 } from './models';
 
 const API_BASE_URL = 'http://localhost:8080/api';
@@ -77,6 +80,26 @@ export class ApiService {
     });
   }
 
+  listarTodasLasFunciones(): Observable<Funcion[]> {
+    return this.http.get<Funcion[]>(`${API_BASE_URL}/funciones`);
+  }
+
+  crearFuncion(request: FuncionRequest): Observable<Funcion> {
+    return this.http.post<Funcion>(`${API_BASE_URL}/funciones`, request);
+  }
+
+  actualizarFuncion(id: number, request: FuncionRequest): Observable<Funcion> {
+    return this.http.put<Funcion>(`${API_BASE_URL}/funciones/${id}`, request);
+  }
+
+  eliminarFuncion(id: number): Observable<void> {
+    return this.http.delete<void>(`${API_BASE_URL}/funciones/${id}`);
+  }
+
+  cancelarFuncion(id: number): Observable<Funcion> {
+    return this.http.post<Funcion>(`${API_BASE_URL}/funciones/${id}/cancelar`, null);
+  }
+
   obtenerFuncion(id: number): Observable<Funcion> {
     return this.http.get<Funcion>(`${API_BASE_URL}/funciones/${id}`);
   }
@@ -93,6 +116,18 @@ export class ApiService {
 
   listarSalas(): Observable<Sala[]> {
     return this.http.get<Sala[]>(`${API_BASE_URL}/salas`);
+  }
+
+  crearSala(request: SalaRequest): Observable<Sala> {
+    return this.http.post<Sala>(`${API_BASE_URL}/salas`, request);
+  }
+
+  actualizarSala(id: number, request: SalaRequest): Observable<Sala> {
+    return this.http.put<Sala>(`${API_BASE_URL}/salas/${id}`, request);
+  }
+
+  eliminarSala(id: number): Observable<void> {
+    return this.http.delete<void>(`${API_BASE_URL}/salas/${id}`);
   }
 
   /* ----------------------------- productos -------------------------- */
@@ -141,6 +176,24 @@ export class ApiService {
 
   obtenerOrden(id: number): Observable<Orden> {
     return this.http.get<Orden>(`${API_BASE_URL}/ordenes/${id}`);
+  }
+
+  /* ---------------------------- notificaciones ----------------------- */
+
+  listarNotificaciones(): Observable<Notificacion[]> {
+    return this.http.get<Notificacion[]>(`${API_BASE_URL}/notificaciones`);
+  }
+
+  noLeidas(): Observable<number> {
+    return this.http.get<number>(`${API_BASE_URL}/notificaciones/no-leidas`);
+  }
+
+  marcarNotificacionLeida(id: number): Observable<void> {
+    return this.http.put<void>(`${API_BASE_URL}/notificaciones/${id}/leida`, null);
+  }
+
+  marcarTodasLeidas(): Observable<void> {
+    return this.http.put<void>(`${API_BASE_URL}/notificaciones/leer-todas`, null);
   }
 }
 

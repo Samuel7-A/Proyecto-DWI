@@ -25,7 +25,9 @@
         @for (o of ordenes(); track o.id) {
           <div class="col">
             <article class="cv-order-card">
-              <span class="cv-order-badge"><i class="bi bi-check-circle"></i>{{ o.estado || 'PAGADA' }}</span>
+              <span class="cv-order-badge" [class.cv-order-badge-cancel]="o.estado === 'CANCELADA'">
+                <i [class]="'bi ' + (o.estado === 'CANCELADA' ? 'bi-x-circle' : 'bi-check-circle')"></i>{{ o.estado || 'PAGADA' }}
+              </span>
               <div class="cv-order-code">Orden #{{ o.id }}</div>
               <div class="cv-order-total">{{ total(o) }}</div>
               <div class="cv-order-meta"><i class="bi bi-calendar-event me-2"></i>{{ fecha(o) }}</div>

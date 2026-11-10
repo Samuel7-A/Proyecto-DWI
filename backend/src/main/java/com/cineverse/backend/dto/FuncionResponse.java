@@ -13,7 +13,8 @@ public record FuncionResponse(
         String salaNombre,
         LocalDateTime fechaHora,
         LocalDateTime fechaHoraFin,
-        BigDecimal precio) {
+        BigDecimal precio,
+        Boolean cancelada) {
 
     public static FuncionResponse desde(Funcion funcion) {
         return new FuncionResponse(
@@ -24,6 +25,7 @@ public record FuncionResponse(
                 funcion.getSala().getNombre(),
                 funcion.getFechaHora(),
                 funcion.getFechaHoraFin(),
-                funcion.getPrecio());
+                funcion.getPrecio(),
+                funcion.getCancelada());
     }
 }

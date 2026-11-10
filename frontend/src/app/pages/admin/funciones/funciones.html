@@ -1,0 +1,149 @@
+<section class="admin-section">
+  <div class="container">
+    <div class="mb-4">
+      <span class="eyebrow">PANEL ADMINISTRATIVO</span>
+      <h1 class="admin-title mt-2">Gestión de funciones</h1>
+      <p class="admin-description">
+        Registra, consulta, modifica y elimina las funciones (proyecciones) de CineVerse.
+      </p>
+    </div>
+
+    <div class="admin-card mb-5">
+      <div class="admin-card-header">
+        <div>
+          <h2>{{ editandoId === null ? 'Registrar función' : 'Editar función' }}</h2>
+          <p>Completa la información de la función.</p>
+        </div>
+        <i class="bi bi-calendar3 admin-header-icon"></i>
+      </div>
+
+      <form (ngSubmit)="guardar()">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <label for="funcion-pelicula" class="form-label">Película *</label>
+            <select id="funcion-pelicula" class="form-select" required [(ngModel)]="peliculaId" name="peliculaId">
+              <option [ngValue]="null" disabled>Selecciona una película</option>
+              @for (p of peliculas; track p.id) {
+                <option [ngValue]="p.id">{{ p.titulo }}</option>
+              }
+            </select>
+            <div class="invalid-feedback">Selecciona una película.</div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="funcion-sala" class="form-label">Sala *</label>
+            <select id="funcion-sala" class="form-select" required [(ngModel)]="salaId" name="salaId">
+              <option [ngValue]="null" disabled>Selecciona una sala</option>
+              @for (s of salas; track s.id) {
+                <option [ngValue]="s.id">{{ s.nombre }}</option>
+              }
+            </select>
+            <div class="invalid-feedback">Selecciona una sala.</div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="funcion-inicio" class="form-label">Fecha y hora de inicio *</label>
+            <input type="datetime-local" id="funcion-inicio" class="form-control" required [(ngModel)]="fechaHora" name="fechaHora" />
+            <div class="invalid-feedback">Ingresa la fecha y hora de inicio.</div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="funcion-fin" class="form-label">Fecha y hora de fin *</label>
+            <input type="datetime-local" id="funcion-fin" class="form-control" required [(ngModel)]="fechaHoraFin" name="fechaHoraFin" />
+            <div class="invalid-feedback">Ingresa la fecha y hora de fin.</div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="funcion-precio" class="form-label">Precio (S/) *</label>
+            <input type="number" id="funcion-precio" class="form-control" min="0.01" step="0.01" required [(ngModel)]="precio" name="precio" />
+            <div class="invalid-feedback">Ingresa un precio válido.</div>
+          </div>
+        </div>
+
+        <div class="admin-form-actions mt-4">
+          <button type="submit" class="btn-cv-primary" [disabled]="guardando">
+            <i [class]="'bi ' + (editandoId === null ? 'bi-plus-circle' : 'bi-check-circle')"></i>
+            {{ editandoId === null ? 'Registrar función' : 'Guardar cambios' }}
+          </button>
+
+          @if (editandoId !== null) {
+            <button type="button" class="btn-cv-secondary" (click)="limpiar()">
+              <i class="bi bi-x-circle"></i> Cancelar edición
+            </button>
+          }
+        </div>
+      </form>
+    </div>
+
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <div>
+          <h2>Funciones registradas</h2>
+          <p>Administra las proyecciones disponibles en CineVerse.</p>
+        </div>
+        <i class="bi bi-collection-play admin-header-icon"></i>
+      </div>
+
+      @if (mensaje) {
+        <div class="alert alert-{{ mensajeTipo }}" role="alert">{{ mensaje }}</div>
+      }
+
+      @if (cargando) {
+        <div class="text-center py-4 text-muted-cv">
+          <div class="spinner-border text-light" role="status"><span class="visually-hidden">Cargando…</span></div>
+        </div>
+      } @else if (funciones.length === 0) {
+        <div class="empty-state">
+          <i class="bi bi-calendar3"></i>
+          <h3>No hay funciones registradas</h3>
+          <p>Utiliza el formulario para crear la primera función.</p>
+        </div>
+      } @else {
+        <div class="table-responsive">
+          <table class="table admin-table align-middle">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Película</th>
+                <th>Sala</th>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>Precio</th>
+                <th>Estado</th>
+                <th class="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (f of funciones; track f.id) {
+                <tr>
+                  <td>{{ f.id }}</td>
+                  <td><div class="movie-title">{{ f.peliculaTitulo }}</div></td>
+                  <td>{{ f.salaNombre }}</td>
+                  <td>{{ horario(f) }}</td>
+                  <td>{{ horarioFin(f) }}</td>
+                  <td>{{ precioLabel(f) }}</td>
+                  <td>
+                    <span [class]="f.cancelada ? 'badge-inactive' : 'badge-active'">{{ f.cancelada ? 'Cancelada' : 'Activa' }}</span>
+                  </td>
+                  <td class="text-center">
+                    <button type="button" class="btn-action btn-edit" title="Editar" (click)="editar(f)">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    @if (!f.cancelada) {
+                      <button type="button" class="btn-action btn-delete" title="Cancelar función" (click)="cancelar(f)">
+                        <i class="bi bi-slash-circle"></i>
+                      </button>
+                    }
+                    <button type="button" class="btn-action btn-delete" title="Eliminar" (click)="eliminar(f)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  </div>
+</section>

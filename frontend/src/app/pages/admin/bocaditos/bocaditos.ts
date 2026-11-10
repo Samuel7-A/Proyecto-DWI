@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ApiService } from '../../../core/api.service';
 import type { Categoria, Producto } from '../../../core/models';
 import { categoriaInfo, centimos, mensajeError, soles } from '../../../core/utils';
@@ -13,6 +13,9 @@ import { categoriaInfo, centimos, mensajeError, soles } from '../../../core/util
 })
 export class AdminBocaditos implements OnInit {
   private readonly api = inject(ApiService);
+  private readonly route = inject(ActivatedRoute);
+
+  private pendienteEditar: number | null = null;
 
   productos: Producto[] = [];
   cargando = true;
@@ -30,6 +33,9 @@ export class AdminBocaditos implements OnInit {
   readonly categorias: Categoria[] = ['CANCHITA', 'BEBIDA', 'DULCE', 'COMBO'];
 
   ngOnInit(): void {
+    const raw = this.route.snapshot.queryParamMap.get('editar');
+    const id = raw ? Number(raw) : NaN;
+    this.pendienteEditar = Number.isInteger(id) && id > 0 ? id : null;
     this.cargar();
   }
 
@@ -40,12 +46,22 @@ export class AdminBocaditos implements OnInit {
       next: (datos) => {
         this.productos = datos;
         this.cargando = false;
+        this.autoEditar();
       },
       error: (err) => {
         this.mostrarMensaje(mensajeError(err, 'No se pudieron obtener los productos.'), 'danger');
         this.cargando = false;
       }
     });
+  }
+
+  private autoEditar(): void {
+    if (this.pendienteEditar === null) return;
+
+    const producto = this.productos.find((p) => p.id === this.pendienteEditar);
+    this.pendienteEditar = null;
+
+    if (producto) this.editar(producto);
   }
 
   info(categoria: Categoria) {

@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ApiService } from '../../core/api.service';
+import { AuthService } from '../../core/auth.service';
 import type { Pelicula } from '../../core/models';
 import { formatDuracion, formatFechaEstreno, gradientFor } from '../../core/utils';
 
@@ -12,6 +13,7 @@ import { formatDuracion, formatFechaEstreno, gradientFor } from '../../core/util
 export class Detalle implements OnInit {
   private readonly api = inject(ApiService);
   private readonly route = inject(ActivatedRoute);
+  protected readonly auth = inject(AuthService);
 
   readonly pelicula = signal<Pelicula | null>(null);
   readonly cargando = signal(true);
@@ -48,5 +50,20 @@ export class Detalle implements OnInit {
 
   get gradiente(): string {
     return gradientFor(this.pelicula()?.id);
+  }
+
+  etiquetaEstado(): string {
+    const p = this.pelicula();
+    if (!p) return '';
+    if (!p.estado) return 'RETIRADA';
+    return this.esEstrenada(p) ? 'EN CARTELERA' : 'PRÓXIMAMENTE';
+  }
+
+  private esEstrenada(p: Pelicula): boolean {
+    if (!p.fechaEstreno) return true;
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const estreno = new Date(`${p.fechaEstreno}T00:00:00`);
+    return estreno.getTime() <= hoy.getTime();
   }
 }

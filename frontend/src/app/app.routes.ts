@@ -14,7 +14,10 @@ import { Bocaditos } from './pages/bocaditos/bocaditos';
 import { Checkout } from './pages/checkout/checkout';
 import { Perfil } from './pages/perfil/perfil';
 import { MisEntradas } from './pages/mis-entradas/mis-entradas';
+import { Notificaciones } from './pages/notificaciones/notificaciones';
 import { AdminPeliculas } from './pages/admin/peliculas/peliculas';
+import { AdminSalas } from './pages/admin/salas/salas';
+import { AdminFunciones } from './pages/admin/funciones/funciones';
 import { AdminBocaditos } from './pages/admin/bocaditos/bocaditos';
 
 import { adminGuard, authGuard, compraGuard } from './core/guards';
@@ -33,7 +36,8 @@ export const routes: Routes = [
       { path: 'bocaditos', component: Bocaditos, canActivate: [compraGuard] },
       { path: 'checkout', component: Checkout, canActivate: [compraGuard] },
       { path: 'perfil', component: Perfil, canActivate: [authGuard] },
-      { path: 'mis-entradas', component: MisEntradas, canActivate: [authGuard] }
+      { path: 'mis-entradas', component: MisEntradas, canActivate: [authGuard] },
+      { path: 'notificaciones', component: Notificaciones, canActivate: [authGuard] }
     ]
   },
   { path: 'login', component: Login },
@@ -43,6 +47,8 @@ export const routes: Routes = [
     canActivate: [adminGuard],
     children: [
       { path: '', component: AdminPeliculas },
+      { path: 'salas', component: AdminSalas },
+      { path: 'funciones', component: AdminFunciones },
       { path: 'bocaditos', component: AdminBocaditos }
     ]
   },

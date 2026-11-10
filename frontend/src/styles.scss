@@ -110,3 +110,27 @@ app-login {
   font-size: 1.15rem;
 }
 
+/* Insignia de notificaciones (campana del navbar) */
+.cv-notif-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--cv-red);
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+}
+
+/* Orden cancelada en "Mis entradas" */
+.cv-order-badge.cv-order-badge-cancel {
+  background: rgba(220, 53, 69, 0.12);
+  border-color: #dc3545;
+  color: #ff6b7a;
+}
+

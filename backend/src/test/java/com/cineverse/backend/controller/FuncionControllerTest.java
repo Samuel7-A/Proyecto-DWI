@@ -136,7 +136,8 @@ class FuncionControllerTest {
                 "Sala 1",
                 LocalDateTime.of(2026, 10, 10, 12, 0),
                 LocalDateTime.of(2026, 10, 10, 14, 0),
-                new BigDecimal("20.00"));
+                new BigDecimal("20.00"),
+                false);
     }
 
     private String requestJson() {

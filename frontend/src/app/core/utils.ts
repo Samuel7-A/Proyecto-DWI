@@ -53,6 +53,20 @@ export function formatFechaCompleta(value: FechaInput | null | undefined): strin
   return fecha.toLocaleDateString('es-PE', { weekday: 'long', day: '2-digit', month: 'long' });
 }
 
+/** Convierte LocalDateTime (array o ISO) a "YYYY-MM-DDTHH:mm" para <input type="datetime-local">. */
+export function toDatetimeLocal(value: FechaInput | null | undefined): string {
+  const fecha = aFecha(value);
+  if (!fecha) return '';
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${fecha.getFullYear()}-${pad(fecha.getMonth() + 1)}-${pad(fecha.getDate())}T${pad(fecha.getHours())}:${pad(fecha.getMinutes())}`;
+}
+
+/** Normaliza "YYYY-MM-DDTHH:mm" a "YYYY-MM-DDTHH:mm:ss" (LocalDateTime sin zona horaria). */
+export function fromDatetimeLocal(value: string): string {
+  if (!value) return value;
+  return value.length === 16 ? `${value}:00` : value;
+}
+
 /** LocalDate ("2026-11-01") -> "01 de noviembre de 2026" */
 export function formatFechaEstreno(fechaISO: string | null | undefined): string {
   if (!fechaISO) return 'Fecha por confirmar';

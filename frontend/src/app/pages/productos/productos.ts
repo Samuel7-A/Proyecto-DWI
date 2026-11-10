@@ -1,5 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ApiService } from '../../core/api.service';
+import { AuthService } from '../../core/auth.service';
 import type { Categoria, Producto } from '../../core/models';
 import { categoriaInfo, centimos, soles } from '../../core/utils';
 
@@ -8,10 +10,12 @@ const CANTIDAD_MAX = 10;
 
 @Component({
   selector: 'app-productos',
+  imports: [RouterLink],
   templateUrl: './productos.html'
 })
 export class Productos implements OnInit {
   private readonly api = inject(ApiService);
+  protected readonly auth = inject(AuthService);
 
   productos: Producto[] = [];
   seleccion: Record<number, number> = {};

@@ -70,7 +70,13 @@ export class Asientos implements OnInit {
     forkJoin([this.api.obtenerPelicula(peliculaId), this.api.listarFunciones(peliculaId)]).subscribe({
       next: ([pelicula, funciones]) => {
         this.pelicula = pelicula;
-        this.funciones = funciones || [];
+        this.funciones = (funciones || []).filter((f) => !f.cancelada);
+
+        if (!pelicula.estado) {
+          this.cargando = false;
+          this.error = 'Esta película fue retirada de cartelera y no acepta compras.';
+          return;
+        }
 
         if (this.funcionId && !this.funciones.some((f) => f.id === this.funcionId)) {
           this.funcionId = null;

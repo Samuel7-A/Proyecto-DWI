@@ -26,6 +26,15 @@ export interface Funcion {
   fechaHora: FechaInput;
   fechaHoraFin: FechaInput;
   precio: number;
+  cancelada: boolean;
+}
+
+export interface FuncionRequest {
+  peliculaId: number;
+  salaId: number;
+  fechaHora: string;
+  fechaHoraFin: string;
+  precio: number;
 }
 
 export interface Asiento {
@@ -48,6 +57,12 @@ export interface Sala {
   filas: number;
   columnas: number;
   totalAsientos: number;
+}
+
+export interface SalaRequest {
+  nombre: string;
+  filas: number;
+  columnas: number;
 }
 
 export interface LoginRequest {
@@ -75,6 +90,13 @@ export interface Orden {
   total: number;
   fechaCreacion: FechaInput;
   usuarioEmail: string;
+}
+
+export interface Notificacion {
+  id: number;
+  mensaje: string;
+  leida: boolean;
+  fechaCreacion: FechaInput;
 }
 
 export interface ItemProducto {

@@ -55,6 +55,12 @@ public class FuncionController {
         return ResponseEntity.ok(funcionService.actualizar(id, request));
     }
 
+    @PostMapping("/{id}/cancelar")
+    public ResponseEntity<FuncionResponse> cancelar(@PathVariable Long id) {
+        funcionService.cancelar(id);
+        return ResponseEntity.ok(funcionService.obtener(id));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         funcionService.eliminar(id);

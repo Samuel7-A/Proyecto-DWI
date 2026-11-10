@@ -56,23 +56,29 @@
                   <span class="cv-prod-categoria">{{ info(p.categoria).label }}</span>
                   <h3 class="cv-card-title">{{ p.nombre }}</h3>
                   <p class="cv-prod-precio">{{ totalProducto(p) }}</p>
-                  <div class="cv-stepper" role="group" [attr.aria-label]="'Cantidad de ' + p.nombre">
-                    <button
-                      type="button"
-                      class="cv-stepper-btn"
-                      [disabled]="cantidad(p.id) === 0"
-                      (click)="cambiarCantidad(p.id, -1)">
-                      <i class="bi bi-dash-lg"></i>
-                    </button>
-                    <span class="cv-stepper-qty">{{ cantidad(p.id) }}</span>
-                    <button
-                      type="button"
-                      class="cv-stepper-btn"
-                      [disabled]="cantidad(p.id) >= 10"
-                      (click)="cambiarCantidad(p.id, 1)">
-                      <i class="bi bi-plus-lg"></i>
-                    </button>
-                  </div>
+                  @if (auth.isAdmin()) {
+                    <a [routerLink]="['/admin/bocaditos']" [queryParams]="{ editar: p.id }" class="btn-cv-outline">
+                      <i class="bi bi-pencil"></i> Editar producto
+                    </a>
+                  } @else {
+                    <div class="cv-stepper" role="group" [attr.aria-label]="'Cantidad de ' + p.nombre">
+                      <button
+                        type="button"
+                        class="cv-stepper-btn"
+                        [disabled]="cantidad(p.id) === 0"
+                        (click)="cambiarCantidad(p.id, -1)">
+                        <i class="bi bi-dash-lg"></i>
+                      </button>
+                      <span class="cv-stepper-qty">{{ cantidad(p.id) }}</span>
+                      <button
+                        type="button"
+                        class="cv-stepper-btn"
+                        [disabled]="cantidad(p.id) >= 10"
+                        (click)="cambiarCantidad(p.id, 1)">
+                        <i class="bi bi-plus-lg"></i>
+                      </button>
+                    </div>
+                  }
                 </div>
               </article>
             </div>
@@ -83,7 +89,7 @@
   </div>
 </section>
 
-<div class="cv-prod-resumen" [hidden]="unidades === 0">
+<div class="cv-prod-resumen" [hidden]="unidades === 0 || auth.isAdmin()">
   <div class="container d-flex align-items-center justify-content-between gap-3">
     <div>
       <span class="text-muted-cv small d-block">
