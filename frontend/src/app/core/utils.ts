@@ -19,13 +19,19 @@ function aFecha(value: FechaInput | null | undefined): Date | null {
   if (value == null) return null;
 
   if (Array.isArray(value)) {
-    const [anio, mes, dia, hora = 0, min = 0] = value;
-    const fecha = new Date(anio, mes - 1, dia, hora, min);
+    const [anio, mes, dia, hora = 0, min = 0, seg = 0] = value;
+    const fecha = new Date(anio, mes - 1, dia, hora, min, seg);
     return isNaN(fecha.getTime()) ? null : fecha;
   }
 
   const fecha = new Date(value);
   return isNaN(fecha.getTime()) ? null : fecha;
+}
+
+/** Compara horarios locales del cine (servidor y navegador en zona Lima). */
+export function funcionVigente(f: { cancelada: boolean; fechaHora: FechaInput }, ahora = Date.now()): boolean {
+  const fecha = aFecha(f.fechaHora);
+  return !f.cancelada && fecha !== null && fecha.getTime() > ahora;
 }
 
 /** "dd/mm/aaaa · hh:mm" */

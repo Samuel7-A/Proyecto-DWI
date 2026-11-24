@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,7 +51,8 @@ public class OrdenService {
         Usuario usuario = usuarioRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado"));
 
-        Funcion funcion = funcionRepository.findById(request.getFuncionId())
+        validarSeleccion(request);
+        Funcion funcion = funcionRepository.buscarParaActualizar(request.getFuncionId())
                 .orElseThrow(() -> new RecursoNoEncontradoException("Función no encontrada"));
 
         // Reglas de negocio: no se puede comprar una función cancelada,
@@ -126,7 +128,7 @@ public class OrdenService {
         orden.setTotal(totalGeneral);
 
         try {
-            entradaRepository.saveAll(entradas);
+            entradaRepository.saveAllAndFlush(entradas);
             if (!detalles.isEmpty()) {
                 detalleProductoRepository.saveAll(detalles);
             }
@@ -135,7 +137,31 @@ public class OrdenService {
             throw new ConflictoException("Conflicto de concurrencia: uno o más asientos ya fueron reservados");
         }
 
-        return new OrdenResponse(orden);
+        return detalle(orden);
+    }
+
+    private OrdenResponse detalle(Orden orden) {
+        return new OrdenResponse(orden,
+                entradaRepository.buscarDetallePorOrden(orden.getId()),
+                detalleProductoRepository.buscarDetallePorOrden(orden.getId()));
+    }
+
+    private void validarSeleccion(OrdenRequest request) {
+        if (request.getAsientoIds() == null || request.getAsientoIds().isEmpty()
+                || request.getAsientoIds().stream().anyMatch(id -> id == null || id <= 0)
+                || new HashSet<>(request.getAsientoIds()).size() != request.getAsientoIds().size()) {
+            throw new ConflictoException("Selecciona asientos válidos sin repetir.");
+        }
+        if (request.getProductos() != null) {
+            var ids = new HashSet<Long>();
+            for (ItemProductoRequest item : request.getProductos()) {
+                if (item == null || item.getProductoId() == null || item.getProductoId() <= 0
+                        || item.getCantidad() == null || item.getCantidad() < 1 || item.getCantidad() > 10
+                        || !ids.add(item.getProductoId())) {
+                    throw new ConflictoException("Selecciona productos sin repetir y entre 1 y 10 unidades.");
+                }
+            }
+        }
     }
 
     @Transactional(readOnly = true)
@@ -145,7 +171,7 @@ public class OrdenService {
 
         return ordenRepository.buscarPorUsuario(usuario.getId())
                 .stream()
-                .map(OrdenResponse::new)
+                .map(this::detalle)
                 .collect(Collectors.toList());
     }
 
@@ -153,7 +179,7 @@ public class OrdenService {
     public List<OrdenResponse> listarTodas() {
         return ordenRepository.findAll()
                 .stream()
-                .map(OrdenResponse::new)
+                .map(this::detalle)
                 .collect(Collectors.toList());
     }
 
@@ -166,6 +192,6 @@ public class OrdenService {
             throw new RecursoNoEncontradoException("Orden no encontrada");
         }
 
-        return new OrdenResponse(orden);
+        return detalle(orden);
     }
 }

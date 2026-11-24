@@ -36,6 +36,12 @@ export class MisEntradas implements OnInit {
     });
   }
 
+  fechaFuncion(fecha: import('../../core/models').FechaInput): string {
+    return formatFechaHora(fecha);
+  }
+
+  importe(precio: number): string { return formatTotal(precio); }
+
   fecha(orden: Orden): string {
     return formatFechaHora(orden.fechaCreacion);
   }

@@ -1,9 +1,10 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { ApiService } from '../../core/api.service';
 import { PurchaseService } from '../../core/purchase.service';
 import type { CompraState, Orden, Producto } from '../../core/models';
-import { centimos, formatFechaHora, gradientFor, mensajeError, soles } from '../../core/utils';
+import { centimos, formatFechaHora, funcionVigente, gradientFor, mensajeError, soles } from '../../core/utils';
 import { Steps } from '../../shared/steps/steps';
 
 const CANTIDAD_MAX = 10;
@@ -48,23 +49,45 @@ export class Checkout implements OnInit {
     this.cargando = true;
     this.error = '';
 
-    this.api.listarProductos().subscribe({
-      next: (productos) => {
+    const compra = this.compra;
+    if (!compra?.funcion) { this.cargando = false; return; }
+    forkJoin([
+      this.api.listarProductosActuales(),
+      this.api.obtenerFuncion(compra.funcion.id),
+      this.api.listarAsientosDisponibles(compra.funcion.id),
+      this.api.obtenerPelicula(compra.peliculaId!)
+    ]).subscribe({
+      next: ([productos, funcion, disponibles, pelicula]) => {
+        this.cargando = false;
+        if (!funcionVigente(funcion) || !pelicula.estado || funcion.peliculaId !== pelicula.id
+            || funcion.salaId !== compra.funcion?.salaId) {
+          this.error = 'La función cambió o ya no está disponible. Vuelve a elegir tus asientos.';
+          return;
+        }
+        const ids = new Set(disponibles.map(a => a.id));
+        if (!compra.asientos.length || new Set(compra.asientos.map(a => a.id)).size !== compra.asientos.length
+            || compra.asientos.some(a => !ids.has(a.id))) {
+          this.error = 'Uno o más asientos ya no están disponibles. Vuelve a seleccionarlos.';
+          return;
+        }
+        this.compra = { ...compra, funcion, pelicula };
         this.catalogo = new Map((productos || []).map((p) => [p.id, p]));
 
         const guardados = this.compra?.productos || [];
         this.productosValidos = [];
 
-        guardados.forEach((item) => {
+        const productosIds = new Set<number>();
+        for (const item of guardados) {
           const prod = this.catalogo.get(Number(item.productoId));
-          if (prod && prod.activo !== false) {
-            this.productosValidos.push({
-              productoId: prod.id,
-              cantidad: Math.min(Number(item.cantidad) || 1, CANTIDAD_MAX),
-              producto: prod
-            });
+          const cantidad = Number(item.cantidad);
+          if (!prod || prod.activo === false || !Number.isInteger(cantidad) || cantidad < 1
+              || cantidad > CANTIDAD_MAX || productosIds.has(prod.id)) {
+            this.error = 'Tu selección de bocaditos cambió. Regresa para revisarla.';
+            return;
           }
-        });
+          productosIds.add(prod.id);
+          this.productosValidos.push({ productoId: prod.id, cantidad, producto: prod });
+        }
 
         this.cargando = false;
       },
@@ -112,7 +135,11 @@ export class Checkout implements OnInit {
   }
 
   confirmar(): void {
-    if (this.confirmando || !this.compra || !this.compra.funcion) return;
+    if (this.confirmando || this.cargando || this.error || this.orden || !this.compra || !this.compra.funcion) return;
+    if (!funcionVigente(this.compra.funcion)) {
+      this.error = 'La función ya comenzó o fue cancelada.';
+      return;
+    }
 
     this.confirmando = true;
     this.aviso = 'Procesando tu compra… no cierres la página.';

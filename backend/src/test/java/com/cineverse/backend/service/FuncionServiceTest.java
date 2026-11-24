@@ -132,7 +132,7 @@ class FuncionServiceTest {
         Pelicula nuevaPelicula = pelicula();
         nuevaPelicula.setTitulo("Otra película");
         Sala nuevaSala = new Sala("Sala 2", 6, 9);
-        when(funcionRepository.findById(3L)).thenReturn(Optional.of(existente));
+        when(funcionRepository.buscarParaActualizar(3L)).thenReturn(Optional.of(existente));
         when(peliculaRepository.findById(4L)).thenReturn(Optional.of(nuevaPelicula));
         when(salaRepository.findById(9L)).thenReturn(Optional.of(nuevaSala));
         when(funcionRepository.save(any(Funcion.class)))
@@ -153,7 +153,7 @@ class FuncionServiceTest {
     void actualizarFuncionConEntradasLanzaConflictoSinGuardarCambios() {
         Funcion existente = funcion();
 
-        when(funcionRepository.findById(3L)).thenReturn(Optional.of(existente));
+        when(funcionRepository.buscarParaActualizar(3L)).thenReturn(Optional.of(existente));
         when(entradaRepository.existsByFuncionId(3L)).thenReturn(true);
 
         assertThrows(
@@ -172,7 +172,7 @@ class FuncionServiceTest {
     @Test
     void eliminarFuncionConEntradasLanzaConflicto() {
         Funcion existente = funcion();
-        when(funcionRepository.findById(3L)).thenReturn(Optional.of(existente));
+        when(funcionRepository.buscarParaActualizar(3L)).thenReturn(Optional.of(existente));
         when(entradaRepository.existsByFuncionId(3L)).thenReturn(true);
 
         assertThrows(ConflictoException.class, () -> funcionService.eliminar(3L));
@@ -183,7 +183,7 @@ class FuncionServiceTest {
     @Test
     void eliminarFuncionSinEntradasLaBorra() {
         Funcion existente = funcion();
-        when(funcionRepository.findById(3L)).thenReturn(Optional.of(existente));
+        when(funcionRepository.buscarParaActualizar(3L)).thenReturn(Optional.of(existente));
         when(entradaRepository.existsByFuncionId(3L)).thenReturn(false);
 
         funcionService.eliminar(3L);

@@ -8,8 +8,15 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import jakarta.persistence.LockModeType;
+import org.springframework.data.jpa.repository.Lock;
 
 public interface FuncionRepository extends JpaRepository<Funcion, Long> {
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT f FROM Funcion f WHERE f.id = :id")
+    Optional<Funcion> buscarParaActualizar(@Param("id") Long id);
 
     List<Funcion> findAllByOrderByFechaHoraAsc();
 

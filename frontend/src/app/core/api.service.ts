@@ -132,6 +132,10 @@ export class ApiService {
 
   /* ----------------------------- productos -------------------------- */
 
+  listarProductosActuales(): Observable<Producto[]> {
+    return this.http.get<Producto[]>(`${API_BASE_URL}/productos`);
+  }
+
   listarProductos(): Observable<Producto[]> {
     if (!this.productosCache$) {
       this.productosCache$ = this.http.get<Producto[]>(`${API_BASE_URL}/productos`).pipe(

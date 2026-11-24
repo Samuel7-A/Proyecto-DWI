@@ -84,12 +84,33 @@ export interface LoginResponse {
   rol: Rol;
 }
 
+export interface EntradaDetalle {
+  id: number;
+  funcionId: number;
+  peliculaTitulo: string;
+  salaNombre: string;
+  fechaHora: FechaInput;
+  fila: string;
+  numero: number;
+  precioUnitario: number;
+}
+
+export interface ProductoDetalle {
+  id: number;
+  nombre: string;
+  cantidad: number;
+  precioUnitario: number;
+  subtotal: number;
+}
+
 export interface Orden {
   id: number;
   estado: string;
   total: number;
   fechaCreacion: FechaInput;
   usuarioEmail: string;
+  entradas?: EntradaDetalle[];
+  productos?: ProductoDetalle[];
 }
 
 export interface Notificacion {

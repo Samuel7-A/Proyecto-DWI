@@ -11,6 +11,7 @@
       }
     </div>
 
+    @if (aviso()) { <p class="cv-alert cv-alert-error" role="alert">{{ aviso() }}</p> }
     @if (cargando()) {
       <div class="cv-skeleton mt-4" style="height: 160px;"></div>
     } @else if (error()) {

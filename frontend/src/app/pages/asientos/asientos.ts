@@ -10,6 +10,7 @@ import {
   formatFechaCompleta,
   formatFechaHora,
   formatHora,
+  funcionVigente,
   gradientFor,
   mensajeError,
   soles
@@ -63,14 +64,14 @@ export class Asientos implements OnInit {
     if (guardado && String(guardado.peliculaId) === String(peliculaId) && guardado.funcionId) {
       this.funcionId = Number(guardado.funcionId);
     }
-    if (guardado && Array.isArray(guardado.asientos)) {
+    if (guardado && this.funcionId && Array.isArray(guardado.asientos)) {
       this.seleccion = new Set(guardado.asientos.map((a) => a.id));
     }
 
     forkJoin([this.api.obtenerPelicula(peliculaId), this.api.listarFunciones(peliculaId)]).subscribe({
       next: ([pelicula, funciones]) => {
         this.pelicula = pelicula;
-        this.funciones = (funciones || []).filter((f) => !f.cancelada);
+        this.funciones = (funciones || []).filter((f) => funcionVigente(f));
 
         if (!pelicula.estado) {
           this.cargando = false;
@@ -80,6 +81,7 @@ export class Asientos implements OnInit {
 
         if (this.funcionId && !this.funciones.some((f) => f.id === this.funcionId)) {
           this.funcionId = null;
+          this.seleccion.clear();
         }
         if (!this.funcionId && this.funciones.length) {
           this.funcionId = this.funciones[0].id;
@@ -150,12 +152,17 @@ export class Asientos implements OnInit {
   cargarAsientos(): void {
     if (!this.funcionId) return;
     this.cargandoAsientos = true;
+    this.error = '';
+    const id = this.funcionId;
+    this.disponibles = [];
+    this.ocupados = [];
 
     forkJoin([
       this.api.listarAsientosDisponibles(this.funcionId),
       this.api.listarAsientosOcupados(this.funcionId)
     ]).subscribe({
       next: ([disponibles, ocupados]) => {
+        if (this.funcionId !== id) return;
         this.disponibles = disponibles || [];
         this.ocupados = ocupados || [];
 
@@ -164,6 +171,7 @@ export class Asientos implements OnInit {
         this.cargandoAsientos = false;
       },
       error: (err) => {
+        if (this.funcionId !== id) return;
         this.cargandoAsientos = false;
         this.error = mensajeError(err, 'No se pudieron cargar los asientos.');
       }
@@ -172,7 +180,7 @@ export class Asientos implements OnInit {
 
   alternarAsiento(id: number): void {
     const ocupado = this.ocupados.some((o) => o.id === id);
-    if (ocupado) return;
+    if (ocupado || this.cargandoAsientos || !this.disponibles.some((a) => a.id === id)) return;
 
     if (this.seleccion.has(id)) {
       this.seleccion.delete(id);
@@ -203,7 +211,11 @@ export class Asientos implements OnInit {
 
   continuar(): void {
     const funcion = this.funcion;
-    if (!funcion || this.seleccion.size === 0 || !this.pelicula) return;
+    if (!funcion || this.cargandoAsientos || this.error || this.asientosSeleccionados.length === 0 || !this.pelicula) return;
+    if (!funcionVigente(funcion)) {
+      this.error = 'La función ya no está disponible. Selecciona otra.';
+      return;
+    }
 
     const estado = this.purchase.estado();
 
@@ -213,7 +225,7 @@ export class Asientos implements OnInit {
       funcionId: funcion.id,
       funcion,
       asientos: this.asientosSeleccionados,
-      productos: estado?.productos || []
+      productos: estado?.peliculaId === this.pelicula.id ? estado.productos || [] : []
     });
 
     this.router.navigate(['/bocaditos']);

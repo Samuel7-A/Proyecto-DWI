@@ -15,6 +15,14 @@ public interface EntradaRepository extends JpaRepository<Entrada, Long> {
     boolean existsByFuncionId(Long funcionId);
 
     @Query("""
+        SELECT e FROM Entrada e
+        JOIN FETCH e.funcion f JOIN FETCH f.pelicula JOIN FETCH f.sala
+        JOIN FETCH e.asiento
+        WHERE e.orden.id = :ordenId ORDER BY e.id
+        """)
+    List<Entrada> buscarDetallePorOrden(@Param("ordenId") Long ordenId);
+
+    @Query("""
         SELECT e.asiento
         FROM Entrada e
         WHERE e.funcion.id = :funcionId

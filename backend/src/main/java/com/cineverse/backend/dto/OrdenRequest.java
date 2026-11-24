@@ -3,18 +3,20 @@ package com.cineverse.backend.dto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import java.util.List;
 
 public class OrdenRequest {
 
     @NotNull(message = "El ID de la función es obligatorio")
+    @Positive
     private Long funcionId;
 
     @NotEmpty(message = "Debe seleccionar al menos un asiento")
-    private List<Long> asientoIds;
+    private List<@NotNull @Positive Long> asientoIds;
 
     @Valid
-    private List<ItemProductoRequest> productos;
+    private List<@NotNull ItemProductoRequest> productos;
 
     public OrdenRequest() {
     }

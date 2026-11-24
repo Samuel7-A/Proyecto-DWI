@@ -117,6 +117,36 @@ class OrdenServiceTest {
     }
 
     @Test
+    void detalleConservaPreciosYAsientos() {
+        var creada = ordenService.crearOrden(cliente.getEmail(), new OrdenRequest(funcion.getId(),
+                List.of(asiento1.getId()), List.of(new ItemProductoRequest(producto.getId(), 2))));
+        var detalle = ordenService.obtenerPorId(creada.getId(), cliente.getEmail(), false);
+        assertEquals(1, detalle.getEntradas().size());
+        assertEquals("Matrix", detalle.getEntradas().get(0).peliculaTitulo());
+        assertEquals("A", detalle.getEntradas().get(0).fila());
+        assertEquals(0, new BigDecimal("20.00").compareTo(detalle.getProductos().get(0).subtotal()));
+        assertEquals(1, ordenService.listarPorUsuario(cliente.getEmail()).get(0).getEntradas().size());
+    }
+
+    @Test
+    void rechazaAsientosDuplicados() {
+        assertThrows(ConflictoException.class, () -> ordenService.crearOrden(cliente.getEmail(),
+                new OrdenRequest(funcion.getId(), List.of(asiento1.getId(), asiento1.getId()), null)));
+        assertEquals(0, ordenRepository.count());
+    }
+
+    @Test
+    void rechazaCantidadExcesivaYProductosDuplicados() {
+        assertThrows(ConflictoException.class, () -> ordenService.crearOrden(cliente.getEmail(),
+                new OrdenRequest(funcion.getId(), List.of(asiento1.getId()),
+                        List.of(new ItemProductoRequest(producto.getId(), 11)))));
+        assertThrows(ConflictoException.class, () -> ordenService.crearOrden(cliente.getEmail(),
+                new OrdenRequest(funcion.getId(), List.of(asiento1.getId()),
+                        List.of(new ItemProductoRequest(producto.getId(), 1), new ItemProductoRequest(producto.getId(), 1)))));
+        assertEquals(0, ordenRepository.count());
+    }
+
+    @Test
     void deberiaRechazarAsientoYaOcupado() {
         OrdenRequest request1 = new OrdenRequest(
                 funcion.getId(),

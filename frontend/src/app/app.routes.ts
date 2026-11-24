@@ -36,7 +36,7 @@ export const routes: Routes = [
       { path: 'bocaditos', component: Bocaditos, canActivate: [compraGuard] },
       { path: 'checkout', component: Checkout, canActivate: [compraGuard] },
       { path: 'perfil', component: Perfil, canActivate: [authGuard] },
-      { path: 'mis-entradas', component: MisEntradas, canActivate: [authGuard] },
+      { path: 'mis-entradas', component: MisEntradas, canActivate: [compraGuard] },
       { path: 'notificaciones', component: Notificaciones, canActivate: [authGuard] }
     ]
   },

@@ -92,7 +92,7 @@ public class FuncionService {
     @Transactional
     public FuncionResponse actualizar(Long id, FuncionRequest request) {
         validarHorario(request);
-        Funcion funcion = buscarFuncion(id);
+        Funcion funcion = buscarFuncionBloqueada(id);
         if (entradaRepository.existsByFuncionId(id)) {
             throw new ConflictoException(
                     "No se puede modificar la función porque ya tiene entradas asociadas.");
@@ -116,7 +116,7 @@ public class FuncionService {
 
     @Transactional
     public void eliminar(Long id) {
-        Funcion funcion = buscarFuncion(id);
+        Funcion funcion = buscarFuncionBloqueada(id);
         if (entradaRepository.existsByFuncionId(id)) {
             throw new ConflictoException(
                     "No se puede eliminar la función porque ya tiene entradas asociadas.");
@@ -131,7 +131,7 @@ public class FuncionService {
      */
     @Transactional
     public void cancelar(Long id) {
-        Funcion funcion = buscarFuncion(id);
+        Funcion funcion = buscarFuncionBloqueada(id);
 
         if (Boolean.TRUE.equals(funcion.getCancelada())) {
             throw new ConflictoException("La función ya fue cancelada.");
@@ -172,6 +172,12 @@ public class FuncionService {
         return entradaRepository.buscarAsientosOcupados(funcionId).stream()
                 .map(AsientoResponse::desde)
                 .toList();
+    }
+
+    private Funcion buscarFuncionBloqueada(Long id) {
+        return funcionRepository.buscarParaActualizar(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException(
+                        "No se encontró la función con id " + id));
     }
 
     private Funcion buscarFuncion(Long id) {

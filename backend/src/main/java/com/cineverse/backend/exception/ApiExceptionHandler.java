@@ -1,6 +1,7 @@
 package com.cineverse.backend.exception;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -51,6 +52,13 @@ public class ApiExceptionHandler {
                         "status", HttpStatus.CONFLICT.value(),
                         "mensaje", exception.getMessage() != null ? exception.getMessage() : "Conflicto en la operación"
                 ));
+    }
+
+    @ExceptionHandler(PessimisticLockingFailureException.class)
+    public ResponseEntity<Map<String, Object>> handleBloqueo(PessimisticLockingFailureException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
+                "status", HttpStatus.CONFLICT.value(),
+                "mensaje", "La función está siendo actualizada. Intenta nuevamente."));
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)

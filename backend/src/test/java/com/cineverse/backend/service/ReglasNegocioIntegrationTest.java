@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -109,6 +110,49 @@ class ReglasNegocioIntegrationTest {
                 notificacionRepository.findByUsuarioIdOrderByFechaCreacionDesc(cliente.getId());
         assertEquals(1, notificaciones.size());
         assertTrue(notificaciones.get(0).getMensaje().contains("cancelada"));
+    }
+
+    @Test
+    void comprasConcurrentesSoloUnaPuedeReservar() throws Exception {
+        var pool = Executors.newFixedThreadPool(2);
+        var inicio = new CountDownLatch(1);
+        Callable<Boolean> comprar = () -> {
+            inicio.await();
+            try {
+                ordenService.crearOrden(cliente.getEmail(), new OrdenRequest(funcion.getId(), List.of(asiento.getId()), null));
+                return true;
+            } catch (ConflictoException e) { return false; }
+        };
+        try {
+            var a = pool.submit(comprar);
+            var b = pool.submit(comprar);
+            inicio.countDown();
+            assertTrue(a.get(15, TimeUnit.SECONDS) != b.get(15, TimeUnit.SECONDS));
+            assertEquals(1, entradaRepository.count());
+            assertEquals(1, ordenRepository.count());
+        } finally { pool.shutdownNow(); }
+    }
+
+    @Test
+    void compraConcurrenteConCancelacionNoDejaOrdenPagada() throws Exception {
+        var pool = Executors.newFixedThreadPool(2);
+        var inicio = new CountDownLatch(1);
+        try {
+            var compra = pool.submit(() -> {
+                inicio.await();
+                try {
+                    ordenService.crearOrden(cliente.getEmail(), new OrdenRequest(funcion.getId(), List.of(asiento.getId()), null));
+                } catch (ConflictoException e) { /* cancelación obtuvo primero el bloqueo */ }
+                return null;
+            });
+            var cancelacion = pool.submit(() -> { inicio.await(); funcionService.cancelar(funcion.getId()); return null; });
+            inicio.countDown();
+            compra.get(15, TimeUnit.SECONDS);
+            cancelacion.get(15, TimeUnit.SECONDS);
+            assertTrue(funcionRepository.findById(funcion.getId()).orElseThrow().getCancelada());
+            assertTrue(ordenRepository.findAll().stream().noneMatch(o -> o.getEstado() == Orden.Estado.PAGADA));
+            assertEquals(ordenRepository.count(), notificacionRepository.findByUsuarioIdOrderByFechaCreacionDesc(cliente.getId()).size());
+        } finally { pool.shutdownNow(); }
     }
 
     @Test
