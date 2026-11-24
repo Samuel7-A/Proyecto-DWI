@@ -43,14 +43,14 @@
 
           <div class="col-md-4">
             <label for="funcion-inicio" class="form-label">Fecha y hora de inicio *</label>
-            <input type="datetime-local" id="funcion-inicio" class="form-control" required [(ngModel)]="fechaHora" name="fechaHora" />
+            <input type="datetime-local" id="funcion-inicio" class="form-control" required [min]="fechaMinima" [(ngModel)]="fechaHora" name="fechaHora" />
             <div class="invalid-feedback">Ingresa la fecha y hora de inicio.</div>
           </div>
 
           <div class="col-md-4">
-            <label for="funcion-fin" class="form-label">Fecha y hora de fin *</label>
-            <input type="datetime-local" id="funcion-fin" class="form-control" required [(ngModel)]="fechaHoraFin" name="fechaHoraFin" />
-            <div class="invalid-feedback">Ingresa la fecha y hora de fin.</div>
+            <label for="funcion-fin" class="form-label">Fecha y hora de fin (automática)</label>
+            <input type="datetime-local" id="funcion-fin" class="form-control" [value]="fechaHoraFin" readonly />
+            <div class="invalid-feedback">Se calcula con la duración de la película.</div>
           </div>
 
           <div class="col-md-4">
@@ -123,10 +123,10 @@
                   <td>{{ horarioFin(f) }}</td>
                   <td>{{ precioLabel(f) }}</td>
                   <td>
-                    <span [class]="f.cancelada ? 'badge-inactive' : 'badge-active'">{{ f.cancelada ? 'Cancelada' : 'Activa' }}</span>
+                    <span [class]="estadoFuncion(f) === 'Programada' ? 'badge-active' : 'badge-inactive'">{{ estadoFuncion(f) }}</span>
                   </td>
                   <td class="text-center">
-                    <button type="button" class="btn-action btn-edit" title="Editar" (click)="editar(f)">
+                    <button type="button" class="btn-action btn-edit" title="Editar" [disabled]="f.cancelada" (click)="editar(f)">
                       <i class="bi bi-pencil"></i>
                     </button>
                     @if (!f.cancelada) {

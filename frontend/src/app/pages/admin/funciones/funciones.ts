@@ -4,6 +4,7 @@ import { forkJoin } from 'rxjs';
 import { ApiService } from '../../../core/api.service';
 import type { Funcion, FuncionRequest, Pelicula, Sala } from '../../../core/models';
 import {
+  calcularFinFuncion, horarioValido, funcionVigente, hoyLima,
   formatFechaHora,
   formatTotal,
   fromDatetimeLocal,
@@ -32,7 +33,15 @@ export class AdminFunciones implements OnInit {
   peliculaId: number | null = null;
   salaId: number | null = null;
   fechaHora = '';
-  fechaHoraFin = '';
+  get fechaHoraFin(): string {
+    const p = this.peliculas.find(x => x.id === this.peliculaId);
+    return p ? calcularFinFuncion(this.fechaHora, p.duracionMinutos) : '';
+  }
+
+  get fechaMinima(): string {
+    const estreno = this.peliculas.find(x => x.id === this.peliculaId)?.fechaEstreno ?? '';
+    return `${estreno > hoyLima() ? estreno : hoyLima()}T00:00`;
+  }
   precio: number | null = null;
 
   ngOnInit(): void {
@@ -73,6 +82,12 @@ export class AdminFunciones implements OnInit {
       return;
     }
 
+    const p = this.peliculas.find(x => x.id === this.peliculaId);
+    if (!p?.estado || this.fechaHora.slice(0, 10) < p.fechaEstreno || !funcionVigente({ cancelada: false, fechaHora: this.fechaHora })) {
+      this.mostrarMensaje('Selecciona una película activa y un horario futuro desde su estreno.', 'danger');
+      return;
+    }
+
     if (this.fechaHoraFin <= this.fechaHora) {
       this.mostrarMensaje('La fecha y hora de fin debe ser posterior a la de inicio.', 'danger');
       return;
@@ -108,12 +123,20 @@ export class AdminFunciones implements OnInit {
     });
   }
 
+  estadoFuncion(f: Funcion): string {
+    if (f.cancelada) return 'Cancelada';
+    const p = this.peliculas.find(x => x.id === f.peliculaId);
+    if (!p || !horarioValido(p, f)) return 'Horario inválido';
+    if (!p.estado) return 'Película retirada';
+    return funcionVigente(f) ? 'Programada' : 'Iniciada / pasada';
+  }
+
   editar(funcion: Funcion): void {
+    if (funcion.cancelada) return;
     this.editandoId = funcion.id;
     this.peliculaId = funcion.peliculaId;
     this.salaId = funcion.salaId;
     this.fechaHora = toDatetimeLocal(funcion.fechaHora);
-    this.fechaHoraFin = toDatetimeLocal(funcion.fechaHoraFin);
     this.precio = Number(funcion.precio);
     this.mensaje = '';
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -149,7 +172,6 @@ export class AdminFunciones implements OnInit {
     this.peliculaId = null;
     this.salaId = null;
     this.fechaHora = '';
-    this.fechaHoraFin = '';
     this.precio = null;
     this.mensaje = '';
   }

@@ -27,7 +27,6 @@ export class ApiService {
   private readonly http = inject(HttpClient);
 
   /** Caché en memoria para datos públicos de solo lectura (listas). */
-  private peliculasCache$: Observable<Pelicula[]> | null = null;
   private productosCache$: Observable<Producto[]> | null = null;
 
   /* ------------------------------ auth ------------------------------ */
@@ -43,16 +42,11 @@ export class ApiService {
   /* ----------------------------- películas -------------------------- */
 
   listarPeliculas(): Observable<Pelicula[]> {
-    if (!this.peliculasCache$) {
-      this.peliculasCache$ = this.http.get<Pelicula[]>(`${API_BASE_URL}/peliculas`).pipe(
-        catchError((err) => {
-          this.peliculasCache$ = null;
-          return throwError(() => err);
-        }),
-        shareReplay({ bufferSize: 1, refCount: false })
-      );
-    }
-    return this.peliculasCache$;
+    return this.http.get<Pelicula[]>(`${API_BASE_URL}/peliculas`);
+  }
+
+  listarCartelera(): Observable<Pelicula[]> {
+    return this.http.get<Pelicula[]>(`${API_BASE_URL}/peliculas/cartelera`);
   }
 
   obtenerPelicula(id: number): Observable<Pelicula> {
@@ -60,17 +54,14 @@ export class ApiService {
   }
 
   crearPelicula(pelicula: Omit<Pelicula, 'id'>): Observable<Pelicula> {
-    this.peliculasCache$ = null;
     return this.http.post<Pelicula>(`${API_BASE_URL}/peliculas`, pelicula);
   }
 
   actualizarPelicula(id: number, pelicula: Omit<Pelicula, 'id'>): Observable<Pelicula> {
-    this.peliculasCache$ = null;
     return this.http.put<Pelicula>(`${API_BASE_URL}/peliculas/${id}`, pelicula);
   }
 
   eliminarPelicula(id: number): Observable<void> {
-    this.peliculasCache$ = null;
     return this.http.delete<void>(`${API_BASE_URL}/peliculas/${id}`);
   }
 

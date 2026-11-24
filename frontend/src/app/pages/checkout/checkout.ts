@@ -4,7 +4,7 @@ import { forkJoin } from 'rxjs';
 import { ApiService } from '../../core/api.service';
 import { PurchaseService } from '../../core/purchase.service';
 import type { CompraState, Orden, Producto } from '../../core/models';
-import { centimos, formatFechaHora, funcionVigente, gradientFor, mensajeError, soles } from '../../core/utils';
+import { centimos, formatFechaHora, funcionVendible, gradientFor, mensajeError, soles } from '../../core/utils';
 import { Steps } from '../../shared/steps/steps';
 
 const CANTIDAD_MAX = 10;
@@ -59,7 +59,7 @@ export class Checkout implements OnInit {
     ]).subscribe({
       next: ([productos, funcion, disponibles, pelicula]) => {
         this.cargando = false;
-        if (!funcionVigente(funcion) || !pelicula.estado || funcion.peliculaId !== pelicula.id
+        if (!funcionVendible(pelicula, funcion) || funcion.peliculaId !== pelicula.id
             || funcion.salaId !== compra.funcion?.salaId) {
           this.error = 'La función cambió o ya no está disponible. Vuelve a elegir tus asientos.';
           return;
@@ -136,7 +136,7 @@ export class Checkout implements OnInit {
 
   confirmar(): void {
     if (this.confirmando || this.cargando || this.error || this.orden || !this.compra || !this.compra.funcion) return;
-    if (!funcionVigente(this.compra.funcion)) {
+    if (!this.compra.pelicula || !funcionVendible(this.compra.pelicula, this.compra.funcion)) {
       this.error = 'La función ya comenzó o fue cancelada.';
       return;
     }

@@ -111,14 +111,14 @@ class CompraIntegrationTest {
         pelicula.setGenero("Acción");
         pelicula.setDuracionMinutos(120);
         pelicula.setClasificacion("+14");
-        pelicula.setFechaEstreno(LocalDate.now());
+        pelicula.setFechaEstreno(com.cineverse.backend.service.ReglasCartelera.ahora().toLocalDate());
         pelicula.setEstado(true);
         pelicula = peliculaRepository.save(pelicula);
 
         SalaResponse salaResponse = salaService.crear(new SalaRequest("Sala E2E", 3, 4));
         Sala sala = salaRepository.findById(salaResponse.id()).orElseThrow();
 
-        LocalDateTime inicio = LocalDateTime.now().plusDays(2);
+        LocalDateTime inicio = com.cineverse.backend.service.ReglasCartelera.ahora().plusDays(2);
         funcion = funcionRepository.save(new Funcion(
                 pelicula, sala, inicio, inicio.plusMinutes(120), new BigDecimal("18.00")));
 

@@ -32,6 +32,9 @@ class OrdenServiceTest {
     private OrdenService ordenService;
 
     @Autowired
+    private PeliculaService peliculaService;
+
+    @Autowired
     private UsuarioRepository usuarioRepository;
 
     @Autowired
@@ -84,7 +87,7 @@ class OrdenServiceTest {
         pelicula.setGenero("Acción");
         pelicula.setDuracionMinutos(120);
         pelicula.setClasificacion("+14");
-        pelicula.setFechaEstreno(LocalDate.now());
+        pelicula.setFechaEstreno(ReglasCartelera.ahora().toLocalDate());
         pelicula.setEstado(true);
         pelicula = peliculaRepository.save(pelicula);
 
@@ -93,11 +96,41 @@ class OrdenServiceTest {
         asiento1 = asientoRepository.save(new Asiento("A", 1, sala));
         asiento2 = asientoRepository.save(new Asiento("A", 2, sala));
 
-        LocalDateTime inicio = LocalDateTime.now().plusDays(2);
+        LocalDateTime inicio = ReglasCartelera.ahora().plusDays(2);
         LocalDateTime fin = inicio.plusMinutes(120);
         funcion = funcionRepository.save(new Funcion(pelicula, sala, inicio, fin, new BigDecimal("18.00")));
 
         producto = productoRepository.save(new Producto("Canchita", Producto.Categoria.CANCHITA, new BigDecimal("10.00"), true));
+    }
+
+    @Test
+    void carteleraExcluyeFuncionesCanceladasYConservaCatalogo() {
+        assertEquals(1, peliculaService.listarCartelera().size());
+        funcion.setCancelada(true);
+        funcionRepository.saveAndFlush(funcion);
+        assertEquals(0, peliculaService.listarCartelera().size());
+        assertEquals(1, peliculaService.listarTodas().size());
+    }
+
+    @Test
+    void horarioAnomaloNoSePublicaNiSeVende() {
+        funcion.setFechaHoraFin(funcion.getFechaHora().plusDays(4));
+        funcionRepository.saveAndFlush(funcion);
+        assertEquals(0, peliculaService.listarCartelera().size());
+        assertThrows(ConflictoException.class, () -> ordenService.crearOrden(cliente.getEmail(),
+                new OrdenRequest(funcion.getId(), List.of(asiento1.getId()), null)));
+        assertEquals(0, ordenRepository.count());
+    }
+
+    @Test
+    void proximoEstrenoNoSePublicaNiSeVende() {
+        var pelicula = peliculaRepository.findAll().get(0);
+        pelicula.setFechaEstreno(ReglasCartelera.ahora().toLocalDate().plusDays(1));
+        peliculaRepository.saveAndFlush(pelicula);
+        assertEquals(0, peliculaService.listarCartelera().size());
+        assertThrows(ConflictoException.class, () -> ordenService.crearOrden(cliente.getEmail(),
+                new OrdenRequest(funcion.getId(), List.of(asiento1.getId()), null)));
+        assertEquals(0, ordenRepository.count());
     }
 
     @Test

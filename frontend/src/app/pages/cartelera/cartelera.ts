@@ -27,9 +27,9 @@ export class Cartelera implements OnInit {
     this.cargando = true;
     this.error = false;
 
-    this.api.listarPeliculas().subscribe({
+    this.api.listarCartelera().subscribe({
       next: (datos) => {
-        this.todas = datos.filter((p) => p.estado && this.esEstrenada(p));
+        this.todas = datos;
 
         const set = new Set<string>();
         this.todas.forEach((p) =>
@@ -61,11 +61,4 @@ export class Cartelera implements OnInit {
     return `${n} película${n === 1 ? '' : 's'}`;
   }
 
-  private esEstrenada(p: Pelicula): boolean {
-    if (!p.fechaEstreno) return true;
-    const hoy = new Date();
-    hoy.setHours(0, 0, 0, 0);
-    const estreno = new Date(`${p.fechaEstreno}T00:00:00`);
-    return estreno.getTime() <= hoy.getTime();
-  }
 }

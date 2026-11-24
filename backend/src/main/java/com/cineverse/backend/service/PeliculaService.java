@@ -79,7 +79,14 @@ public class PeliculaService {
 
     @Transactional(readOnly = true)
     public List<Pelicula> listarCartelera() {
-        return peliculaRepository.findPeliculasEnCartelera();
+        var ahora = ReglasCartelera.ahora();
+        return funcionRepository.candidatasCartelera(ahora.toLocalDate(), ahora).stream()
+                .filter(f -> ReglasCartelera.vendible(f.getPelicula().getEstado(),
+                        f.getPelicula().getFechaEstreno(), f.getPelicula().getDuracionMinutos(),
+                        f.getCancelada(), f.getFechaHora(), f.getFechaHoraFin(), ahora))
+                .map(f -> f.getPelicula())
+                .collect(java.util.stream.Collectors.toMap(Pelicula::getId, p -> p,
+                        (a, b) -> a, java.util.LinkedHashMap::new)).values().stream().toList();
     }
 
     @Transactional(readOnly = true)

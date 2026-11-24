@@ -60,10 +60,13 @@
               <a [routerLink]="['/admin']" [queryParams]="{ editar: p.id }" class="btn-cv-primary">
                 <i class="bi bi-pencil"></i> Editar película
               </a>
-            } @else if (p.estado) {
+            } @else if (puedeComprar()) {
               <a [routerLink]="['/asientos', p.id]" class="btn-cv-primary">
                 <i class="bi bi-ticket-perforated"></i> Comprar entradas
               </a>
+            }
+            @if (!auth.isAdmin() && p.estado && !puedeComprar()) {
+              <span class="text-muted-cv">No hay funciones disponibles para comprar en este momento.</span>
             }
             <a routerLink="/cartelera" class="btn-cv-outline">Volver a la cartelera</a>
           </div>

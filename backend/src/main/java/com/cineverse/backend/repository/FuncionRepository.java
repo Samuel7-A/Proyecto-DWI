@@ -30,6 +30,15 @@ public interface FuncionRepository extends JpaRepository<Funcion, Long> {
         """)
     List<Funcion> buscarPorPelicula(@Param("peliculaId") Long peliculaId);
 
+    @Query("""
+        SELECT f FROM Funcion f JOIN FETCH f.pelicula p
+        WHERE p.estado = true AND p.fechaEstreno <= :hoy
+          AND f.cancelada = false AND f.fechaHora > :ahora
+        ORDER BY f.fechaHora ASC
+        """)
+    List<Funcion> candidatasCartelera(@Param("hoy") java.time.LocalDate hoy,
+            @Param("ahora") LocalDateTime ahora);
+
     boolean existsBySalaId(Long salaId);
 
     boolean existsByPeliculaId(Long peliculaId);

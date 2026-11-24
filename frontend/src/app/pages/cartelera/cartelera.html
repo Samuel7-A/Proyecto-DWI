@@ -55,7 +55,7 @@
     } @else if (filtradas.length === 0) {
       <div class="cv-empty-state">
         <i class="bi bi-camera-reels mb-2 d-block" style="font-size: 1.8rem;"></i>
-        No encontramos películas que coincidan con tu búsqueda.
+        {{ todas.length === 0 ? 'No hay películas con funciones disponibles por el momento.' : 'No encontramos películas que coincidan con tu búsqueda.' }}
       </div>
     } @else {
       <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3 g-lg-4">

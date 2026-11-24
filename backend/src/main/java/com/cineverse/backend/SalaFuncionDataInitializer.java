@@ -67,12 +67,14 @@ public class SalaFuncionDataInitializer {
                     if (funcionRepository.existsByPeliculaId(pelicula.getId())) {
                         continue;
                     }
+                    if (base.isBefore(pelicula.getFechaEstreno())) base = pelicula.getFechaEstreno();
                     LocalDateTime inicio = LocalDateTime.of(
-                            base.plusDays(creadas),
+                            base,
                             LocalTime.of(16 + (creadas % 4) * 2, 0));
-                    LocalDateTime fin = inicio.plusMinutes(pelicula.getDuracionMinutos() + 30L);
+                    LocalDateTime fin = inicio.plusMinutes(pelicula.getDuracionMinutos());
                     funcionRepository.save(new Funcion(pelicula, sala, inicio, fin, PRECIO_DEMO));
                     creadas++;
+                    base = base.plusDays(1);
                 }
             }
         };

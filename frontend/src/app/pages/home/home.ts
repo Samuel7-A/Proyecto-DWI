@@ -24,9 +24,9 @@ export class Home implements OnInit {
     this.cargando.set(true);
     this.error.set(false);
 
-    this.api.listarPeliculas().subscribe({
+    this.api.listarCartelera().subscribe({
       next: (datos) => {
-        this.peliculas.set(datos.filter((p) => p.estado).slice(0, 6));
+        this.peliculas.set(datos.slice(0, 6));
         this.cargando.set(false);
       },
       error: () => {

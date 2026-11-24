@@ -78,13 +78,14 @@ public class FuncionService {
                 .orElseThrow(() -> new RecursoNoEncontradoException(
                         "No se encontró la sala con id " + request.salaId()));
 
-        validarConflicto(sala.getId(), null, request.fechaHora(), request.fechaHoraFin());
+        LocalDateTime fin = calcularFin(pelicula, request.fechaHora());
+        validarConflicto(sala.getId(), null, request.fechaHora(), fin);
 
         Funcion funcion = new Funcion(
                 pelicula,
                 sala,
                 request.fechaHora(),
-                request.fechaHoraFin(),
+                fin,
                 request.precio());
         return FuncionResponse.desde(funcionRepository.save(funcion));
     }
@@ -93,6 +94,9 @@ public class FuncionService {
     public FuncionResponse actualizar(Long id, FuncionRequest request) {
         validarHorario(request);
         Funcion funcion = buscarFuncionBloqueada(id);
+        if (Boolean.TRUE.equals(funcion.getCancelada())) {
+            throw new ConflictoException("Una función cancelada se conserva como historial; crea una nueva.");
+        }
         if (entradaRepository.existsByFuncionId(id)) {
             throw new ConflictoException(
                     "No se puede modificar la función porque ya tiene entradas asociadas.");
@@ -104,12 +108,13 @@ public class FuncionService {
                 .orElseThrow(() -> new RecursoNoEncontradoException(
                         "No se encontró la sala con id " + request.salaId()));
 
-        validarConflicto(sala.getId(), id, request.fechaHora(), request.fechaHoraFin());
+        LocalDateTime fin = calcularFin(pelicula, request.fechaHora());
+        validarConflicto(sala.getId(), id, request.fechaHora(), fin);
 
         funcion.setPelicula(pelicula);
         funcion.setSala(sala);
         funcion.setFechaHora(request.fechaHora());
-        funcion.setFechaHoraFin(request.fechaHoraFin());
+        funcion.setFechaHoraFin(fin);
         funcion.setPrecio(request.precio());
         return FuncionResponse.desde(funcionRepository.save(funcion));
     }
@@ -184,6 +189,22 @@ public class FuncionService {
         return funcionRepository.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException(
                         "No se encontró la función con id " + id));
+    }
+
+    private LocalDateTime calcularFin(Pelicula pelicula, LocalDateTime inicio) {
+        if (!Boolean.TRUE.equals(pelicula.getEstado())) {
+            throw new ConflictoException("No se puede programar una película retirada.");
+        }
+        if (inicio == null || !inicio.isAfter(ReglasCartelera.ahora())) {
+            throw new ConflictoException("La función debe comenzar en el futuro (hora de Lima).");
+        }
+        if (pelicula.getFechaEstreno() == null || inicio.toLocalDate().isBefore(pelicula.getFechaEstreno())) {
+            throw new ConflictoException("La función no puede comenzar antes de la fecha de estreno.");
+        }
+        if (pelicula.getDuracionMinutos() == null || pelicula.getDuracionMinutos() <= 0) {
+            throw new ConflictoException("La película necesita una duración válida.");
+        }
+        return inicio.plusMinutes(pelicula.getDuracionMinutos());
     }
 
     private void validarHorario(FuncionRequest request) {

@@ -1,4 +1,4 @@
-import type { FechaInput } from './models';
+import type { FechaInput, Funcion, Pelicula } from './models';
 
 /** Paleta de gradientes usada como "poster" temporal (misma que el frontend original). */
 export const CV_POSTER_GRADIENTS: string[] = [
@@ -36,6 +36,34 @@ function aFecha(value: FechaInput | null | undefined): Date | null {
 export function funcionVigente(f: { cancelada: boolean; fechaHora: FechaInput }, ahora = Date.now()): boolean {
   const fecha = aFecha(f.fechaHora);
   return !f.cancelada && fecha !== null && fecha.getTime() > ahora;
+}
+
+/** Fecha civil del cine, no del dispositivo. */
+export function hoyLima(ahora = Date.now()): string {
+  const partes = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Lima', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date(ahora));
+  const get = (tipo: string) => partes.find(p => p.type === tipo)?.value ?? '';
+  return `${get('year')}-${get('month')}-${get('day')}`;
+}
+
+export function esEstrenada(p: Pelicula, ahora = Date.now()): boolean {
+  return !!p.fechaEstreno && p.fechaEstreno <= hoyLima(ahora);
+}
+
+export function horarioValido(p: Pelicula, f: Funcion): boolean {
+  const inicio = aFecha(f.fechaHora), fin = aFecha(f.fechaHoraFin);
+  if (!inicio || !fin || !p.fechaEstreno || !Number.isFinite(p.duracionMinutos) || p.duracionMinutos <= 0) return false;
+  const minutos = (fin.getTime() - inicio.getTime()) / 60000;
+  return hoyLima(inicio.getTime()) >= p.fechaEstreno && minutos >= p.duracionMinutos && minutos <= p.duracionMinutos + 30;
+}
+
+export function funcionVendible(p: Pelicula, f: Funcion, ahora = Date.now()): boolean {
+  return p.estado && p.id === f.peliculaId && esEstrenada(p, ahora) && funcionVigente(f, ahora) && horarioValido(p, f);
+}
+
+export function calcularFinFuncion(inicio: string, duracion: number): string {
+  const fecha = aFecha(inicio);
+  if (!fecha || !Number.isFinite(duracion) || duracion <= 0) return '';
+  return toDatetimeLocal(new Date(fecha.getTime() + duracion * 60000).toISOString());
 }
 
 /** "dd/mm/aaaa · hh:mm" */

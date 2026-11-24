@@ -1,9 +1,10 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { ApiService } from '../../core/api.service';
 import { AuthService } from '../../core/auth.service';
-import type { Pelicula } from '../../core/models';
-import { formatDuracion, formatFechaEstreno, gradientFor } from '../../core/utils';
+import type { Pelicula, Funcion } from '../../core/models';
+import { formatDuracion, formatFechaEstreno, gradientFor, esEstrenada, funcionVendible } from '../../core/utils';
 
 @Component({
   selector: 'app-detalle',
@@ -16,6 +17,7 @@ export class Detalle implements OnInit {
   protected readonly auth = inject(AuthService);
 
   readonly pelicula = signal<Pelicula | null>(null);
+  readonly funciones = signal<Funcion[]>([]);
   readonly cargando = signal(true);
   readonly noEncontrada = signal(false);
 
@@ -28,8 +30,9 @@ export class Detalle implements OnInit {
       return;
     }
 
-    this.api.obtenerPelicula(id).subscribe({
-      next: (pelicula) => {
+    forkJoin([this.api.obtenerPelicula(id), this.api.listarFunciones(id)]).subscribe({
+      next: ([pelicula, funciones]) => {
+        this.funciones.set(funciones);
         this.pelicula.set(pelicula);
         this.cargando.set(false);
       },
@@ -56,14 +59,11 @@ export class Detalle implements OnInit {
     const p = this.pelicula();
     if (!p) return '';
     if (!p.estado) return 'RETIRADA';
-    return this.esEstrenada(p) ? 'EN CARTELERA' : 'PRÓXIMAMENTE';
+    return !esEstrenada(p) ? 'PRÓXIMAMENTE' : this.puedeComprar() ? 'EN CARTELERA' : 'SIN FUNCIONES DISPONIBLES';
   }
 
-  private esEstrenada(p: Pelicula): boolean {
-    if (!p.fechaEstreno) return true;
-    const hoy = new Date();
-    hoy.setHours(0, 0, 0, 0);
-    const estreno = new Date(`${p.fechaEstreno}T00:00:00`);
-    return estreno.getTime() <= hoy.getTime();
+  puedeComprar(): boolean {
+    const p = this.pelicula();
+    return !!p && this.funciones().some(f => funcionVendible(p, f));
   }
 }

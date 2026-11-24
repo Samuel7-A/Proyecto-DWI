@@ -56,10 +56,10 @@ class PostgresEtapa5IT {
         String suffix = UUID.randomUUID().toString();
         String email = suffix + "@cv5.invalid";
         jdbc.update("INSERT INTO usuarios(nombre,email,password,rol,activo) VALUES(?,?,?,'CLIENTE',true)", "QA", email, "no-login-test");
-        long p = jdbc.queryForObject("INSERT INTO peliculas(titulo,genero,duracion_minutos,clasificacion,fecha_estreno,estado) VALUES(?,'Drama',120,'APT',current_date,true) RETURNING id", Long.class, suffix);
+        long p = jdbc.queryForObject("INSERT INTO peliculas(titulo,genero,duracion_minutos,clasificacion,fecha_estreno,estado) VALUES(?,'Drama',120,'APT',?,true) RETURNING id", Long.class, suffix, ReglasCartelera.ahora().toLocalDate());
         long s = jdbc.queryForObject("INSERT INTO salas(nombre,filas,columnas) VALUES(?,1,1) RETURNING id", Long.class, suffix);
         long a = jdbc.queryForObject("INSERT INTO asientos(sala_id,fila,numero) VALUES(?,'A',1) RETURNING id", Long.class, s);
-        LocalDateTime inicio = LocalDateTime.now().plusDays(2).withNano(0);
+        LocalDateTime inicio = ReglasCartelera.ahora().plusDays(2).withNano(0);
         long f = jdbc.queryForObject("INSERT INTO funciones(pelicula_id,sala_id,fecha_hora,fecha_hora_fin,precio) VALUES(?,?,?,?,18.00) RETURNING id", Long.class, p,s,inicio,inicio.plusHours(2));
         return new Fixture(email,p,s,a,f,inicio);
     }

@@ -60,11 +60,17 @@ public class OrdenService {
         if (Boolean.TRUE.equals(funcion.getCancelada())) {
             throw new ConflictoException("La función fue cancelada y no acepta compras.");
         }
-        if (funcion.getFechaHora() == null || !funcion.getFechaHora().isAfter(LocalDateTime.now())) {
+        if (funcion.getFechaHora() == null || !funcion.getFechaHora().isAfter(ReglasCartelera.ahora())) {
             throw new ConflictoException("La función ya comenzó y no acepta compras.");
         }
         if (funcion.getPelicula().getEstado() != null && !funcion.getPelicula().getEstado()) {
             throw new ConflictoException("La película fue retirada de cartelera y no acepta compras.");
+        }
+
+        if (!ReglasCartelera.vendible(funcion.getPelicula().getEstado(),
+                funcion.getPelicula().getFechaEstreno(), funcion.getPelicula().getDuracionMinutos(),
+                funcion.getCancelada(), funcion.getFechaHora(), funcion.getFechaHoraFin(), ReglasCartelera.ahora())) {
+            throw new ConflictoException("La película aún no se estrena o la función tiene un horario inválido.");
         }
 
         // Validar asientos

@@ -73,8 +73,8 @@ class FuncionServiceTest {
         Pelicula pelicula = pelicula();
         Sala sala = new Sala("Sala 1", 5, 8);
         FuncionRequest request = request(
-                LocalDateTime.of(2026, 10, 10, 12, 0),
-                LocalDateTime.of(2026, 10, 10, 14, 0));
+                inicioFuturo(),
+                inicioFuturo().plusHours(2));
         when(peliculaRepository.findById(4L)).thenReturn(Optional.of(pelicula));
         when(salaRepository.findById(9L)).thenReturn(Optional.of(sala));
         when(funcionRepository.save(any(Funcion.class)))
@@ -85,13 +85,14 @@ class FuncionServiceTest {
         assertEquals("Película de prueba", respuesta.peliculaTitulo());
         assertEquals("Sala 1", respuesta.salaNombre());
         assertEquals(new BigDecimal("20.00"), respuesta.precio());
+        assertEquals(request.fechaHora().plusMinutes(100), respuesta.fechaHoraFin());
     }
 
     @Test
     void crearRechazaFinIgualOAnteriorAlInicio() {
         FuncionRequest request = request(
-                LocalDateTime.of(2026, 10, 10, 14, 0),
-                LocalDateTime.of(2026, 10, 10, 14, 0));
+                inicioFuturo().plusHours(2),
+                inicioFuturo().plusHours(2));
 
         ResponseStatusException error = assertThrows(
                 ResponseStatusException.class,
@@ -108,8 +109,8 @@ class FuncionServiceTest {
         assertThrows(
                 RecursoNoEncontradoException.class,
                 () -> funcionService.crear(request(
-                        LocalDateTime.of(2026, 10, 10, 12, 0),
-                        LocalDateTime.of(2026, 10, 10, 14, 0))));
+                        inicioFuturo(),
+                        inicioFuturo().plusHours(2))));
         verify(salaRepository, never()).findById(any());
     }
 
@@ -121,8 +122,8 @@ class FuncionServiceTest {
         assertThrows(
                 RecursoNoEncontradoException.class,
                 () -> funcionService.crear(request(
-                        LocalDateTime.of(2026, 10, 10, 12, 0),
-                        LocalDateTime.of(2026, 10, 10, 14, 0))));
+                        inicioFuturo(),
+                        inicioFuturo().plusHours(2))));
         verify(funcionRepository, never()).save(any());
     }
 
@@ -141,12 +142,12 @@ class FuncionServiceTest {
         FuncionResponse respuesta = funcionService.actualizar(
                 3L,
                 request(
-                        LocalDateTime.of(2026, 10, 11, 16, 0),
-                        LocalDateTime.of(2026, 10, 11, 18, 0)));
+                        inicioFuturo().plusDays(1),
+                        inicioFuturo().plusDays(1).plusHours(2)));
 
         assertEquals("Otra película", respuesta.peliculaTitulo());
         assertEquals("Sala 2", respuesta.salaNombre());
-        assertEquals(LocalDateTime.of(2026, 10, 11, 16, 0), respuesta.fechaHora());
+        assertEquals(inicioFuturo().plusDays(1), respuesta.fechaHora());
     }
 
     @Test
@@ -161,8 +162,8 @@ class FuncionServiceTest {
                 () -> funcionService.actualizar(
                         3L,
                         request(
-                                LocalDateTime.of(2026, 10, 11, 16, 0),
-                                LocalDateTime.of(2026, 10, 11, 18, 0))));
+                                inicioFuturo().plusDays(1),
+                                inicioFuturo().plusDays(1).plusHours(2))));
 
         verify(funcionRepository, never()).save(any(Funcion.class));
         verify(peliculaRepository, never()).findById(any());
@@ -217,6 +218,29 @@ class FuncionServiceTest {
         assertEquals(2, resultado.get(0).numero());
     }
 
+    private LocalDateTime inicioFuturo() {
+        return ReglasCartelera.ahora().toLocalDate().plusDays(5).atTime(12, 0);
+    }
+
+    @Test
+    void crearRechazaFuncionAntesDelEstreno() {
+        Pelicula p = pelicula();
+        p.setFechaEstreno(inicioFuturo().toLocalDate().plusDays(1));
+        when(peliculaRepository.findById(4L)).thenReturn(Optional.of(p));
+        when(salaRepository.findById(9L)).thenReturn(Optional.of(new Sala("Sala", 2, 2)));
+        assertThrows(ConflictoException.class, () -> funcionService.crear(request(inicioFuturo(), inicioFuturo().plusHours(2))));
+        verify(funcionRepository, never()).save(any());
+    }
+
+    @Test
+    void crearRechazaFuncionPasada() {
+        when(peliculaRepository.findById(4L)).thenReturn(Optional.of(pelicula()));
+        when(salaRepository.findById(9L)).thenReturn(Optional.of(new Sala("Sala", 2, 2)));
+        LocalDateTime inicio = ReglasCartelera.ahora().minusHours(3);
+        assertThrows(ConflictoException.class, () -> funcionService.crear(request(inicio, inicio.plusHours(2))));
+        verify(funcionRepository, never()).save(any());
+    }
+
     private FuncionRequest request(LocalDateTime inicio, LocalDateTime fin) {
         return new FuncionRequest(4L, 9L, inicio, fin, new BigDecimal("20.00"));
     }
@@ -225,8 +249,8 @@ class FuncionServiceTest {
         return new Funcion(
                 pelicula(),
                 new Sala("Sala 1", 5, 8),
-                LocalDateTime.of(2026, 10, 10, 12, 0),
-                LocalDateTime.of(2026, 10, 10, 14, 0),
+                inicioFuturo(),
+                inicioFuturo().plusHours(2),
                 new BigDecimal("20.00"));
     }
 

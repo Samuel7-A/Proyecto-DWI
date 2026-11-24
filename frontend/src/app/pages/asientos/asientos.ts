@@ -10,7 +10,7 @@ import {
   formatFechaCompleta,
   formatFechaHora,
   formatHora,
-  funcionVigente,
+  funcionVendible,
   gradientFor,
   mensajeError,
   soles
@@ -71,7 +71,7 @@ export class Asientos implements OnInit {
     forkJoin([this.api.obtenerPelicula(peliculaId), this.api.listarFunciones(peliculaId)]).subscribe({
       next: ([pelicula, funciones]) => {
         this.pelicula = pelicula;
-        this.funciones = (funciones || []).filter((f) => funcionVigente(f));
+        this.funciones = (funciones || []).filter((f) => funcionVendible(pelicula, f));
 
         if (!pelicula.estado) {
           this.cargando = false;
@@ -212,7 +212,7 @@ export class Asientos implements OnInit {
   continuar(): void {
     const funcion = this.funcion;
     if (!funcion || this.cargandoAsientos || this.error || this.asientosSeleccionados.length === 0 || !this.pelicula) return;
-    if (!funcionVigente(funcion)) {
+    if (!funcionVendible(this.pelicula, funcion)) {
       this.error = 'La función ya no está disponible. Selecciona otra.';
       return;
     }
