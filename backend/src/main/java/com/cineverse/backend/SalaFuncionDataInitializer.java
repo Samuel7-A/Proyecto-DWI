@@ -27,7 +27,7 @@ import com.cineverse.backend.service.SalaService;
  *
  * No borra datos existentes: solo crea lo que falta.
  */
-@Profile("!supabase")
+@Profile("!supabase & !cloud")
 @Configuration
 public class SalaFuncionDataInitializer {
 

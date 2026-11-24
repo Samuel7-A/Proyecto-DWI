@@ -18,9 +18,16 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
+import java.util.Arrays;
+import java.net.URI;
 
 @Configuration
 public class SecurityConfig {
+
+    private static final String LOCAL_ORIGINS = "http://localhost:5500,http://127.0.0.1:5500,http://localhost:8080,http://127.0.0.1:8080,http://localhost:4200,http://127.0.0.1:4200";
+
+    @Value("${cineverse.cors.allowed-origins:" + LOCAL_ORIGINS + "}")
+    private String allowedOrigins = LOCAL_ORIGINS;
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -146,14 +153,11 @@ public class SecurityConfig {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of(
-            "http://localhost:5500",
-            "http://127.0.0.1:5500",
-            "http://localhost:8080",
-            "http://127.0.0.1:8080",
-            "http://localhost:4200",
-            "http://127.0.0.1:4200"
-        ));
+        configuration.setAllowedOrigins(Arrays.stream(allowedOrigins.split(","))
+            .map(String::trim)
+            .filter(origin -> !origin.isEmpty())
+            .map(SecurityConfig::exactOrigin)
+            .distinct().toList());
 
         configuration.setAllowedMethods(List.of(
             "GET",
@@ -176,6 +180,17 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
 
         return source;
+    }
+
+    private static String exactOrigin(String origin) {
+        URI uri = URI.create(origin);
+        if (uri.getHost() == null || uri.getUserInfo() != null || uri.getRawQuery() != null
+                || uri.getRawFragment() != null || (uri.getRawPath() != null && !uri.getRawPath().isEmpty())
+                || !("https".equals(uri.getScheme()) || ("http".equals(uri.getScheme())
+                && ("localhost".equals(uri.getHost()) || "127.0.0.1".equals(uri.getHost()))))) {
+            throw new IllegalArgumentException("CORS: usar origen HTTPS exacto, sin ruta ni comodines (HTTP solo local)");
+        }
+        return origin;
     }
 
     @Bean

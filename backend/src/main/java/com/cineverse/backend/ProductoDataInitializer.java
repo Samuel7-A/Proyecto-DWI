@@ -12,7 +12,7 @@ import com.cineverse.backend.entity.Producto.Categoria;
 import com.cineverse.backend.repository.ProductoRepository;
 
 /** Carga los productos de la demo solo si la tabla está vacía. */
-@Profile("!supabase")
+@Profile("!supabase & !cloud")
 @Configuration
 public class ProductoDataInitializer {
 

@@ -20,15 +20,19 @@ function aFecha(value: FechaInput | null | undefined): Date | null {
 
   if (Array.isArray(value)) {
     const [anio, mes, dia, hora = 0, min = 0, seg = 0] = value;
-    const fecha = new Date(anio, mes - 1, dia, hora, min, seg);
+    // El horario del cine se expresa en Lima (UTC-05:00).
+    const fecha = new Date(Date.UTC(anio, mes - 1, dia, hora + 5, min, seg));
     return isNaN(fecha.getTime()) ? null : fecha;
   }
 
-  const fecha = new Date(value);
+  // Los LocalDateTime del backend no incluyen offset. Los interpretamos en Lima.
+  const texto = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(value)
+    && !/(?:Z|[+-]\d{2}:?\d{2})$/i.test(value) ? `${value}-05:00` : value;
+  const fecha = new Date(texto);
   return isNaN(fecha.getTime()) ? null : fecha;
 }
 
-/** Compara horarios locales del cine (servidor y navegador en zona Lima). */
+/** Compara horarios del cine en zona Lima, independientemente del navegador. */
 export function funcionVigente(f: { cancelada: boolean; fechaHora: FechaInput }, ahora = Date.now()): boolean {
   const fecha = aFecha(f.fechaHora);
   return !f.cancelada && fecha !== null && fecha.getTime() > ahora;
@@ -40,31 +44,31 @@ export function formatFechaHora(value: FechaInput | null | undefined): string {
   if (!fecha) return 'Sin fecha';
 
   return (
-    fecha.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit', year: 'numeric' }) +
+    fecha.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'America/Lima' }) +
     ' · ' +
-    fecha.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' })
+    fecha.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Lima' })
   );
 }
 
 export function formatHora(value: FechaInput | null | undefined): string {
   const fecha = aFecha(value);
   if (!fecha) return '';
-  return fecha.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
+  return fecha.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Lima' });
 }
 
 /** "lunes, 01 de noviembre" */
 export function formatFechaCompleta(value: FechaInput | null | undefined): string {
   const fecha = aFecha(value);
   if (!fecha) return '';
-  return fecha.toLocaleDateString('es-PE', { weekday: 'long', day: '2-digit', month: 'long' });
+  return fecha.toLocaleDateString('es-PE', { weekday: 'long', day: '2-digit', month: 'long', timeZone: 'America/Lima' });
 }
 
 /** Convierte LocalDateTime (array o ISO) a "YYYY-MM-DDTHH:mm" para <input type="datetime-local">. */
 export function toDatetimeLocal(value: FechaInput | null | undefined): string {
   const fecha = aFecha(value);
   if (!fecha) return '';
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return `${fecha.getFullYear()}-${pad(fecha.getMonth() + 1)}-${pad(fecha.getDate())}T${pad(fecha.getHours())}:${pad(fecha.getMinutes())}`;
+  const lima = new Date(fecha.getTime() - 5 * 60 * 60 * 1000);
+  return lima.toISOString().slice(0, 16);
 }
 
 /** Normaliza "YYYY-MM-DDTHH:mm" a "YYYY-MM-DDTHH:mm:ss" (LocalDateTime sin zona horaria). */
@@ -125,7 +129,7 @@ export function mensajeError(err: unknown, porDefecto: string): string {
   const e = err as { status?: number; error?: unknown } | null;
 
   if (e && e.status === 0) {
-    return 'No se pudo conectar con el servidor. Verifica que el backend esté encendido en localhost:8080.';
+    return 'No se pudo conectar con el servidor. Si está iniciando, vuelve a intentarlo en unos instantes.';
   }
 
   const data = (e && e.error) as { mensaje?: string; error?: string; message?: string } | null;
