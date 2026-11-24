@@ -17,7 +17,7 @@ import type {
   SalaRequest
 } from './models';
 
-const API_BASE_URL = 'http://localhost:8080/api';
+export const API_BASE_URL = 'http://localhost:8080/api';
 
 /** Servicio tipado que integra todos los endpoints del backend de CineVerse. */
 @Injectable({ providedIn: 'root' })

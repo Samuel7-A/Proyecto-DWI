@@ -31,10 +31,7 @@ export class Login implements OnInit {
   protected regLoading = false;
 
   ngOnInit(): void {
-    if (this.auth.isLoggedIn()) {
-      const dest = this.route.snapshot.queryParamMap.get('redirect');
-      if (dest) this.router.navigateByUrl(dest);
-    }
+    if (this.auth.validarSesion()) this.redirigir();
   }
 
   protected cambiarTab(tab: 'login' | 'register'): void {
@@ -94,7 +91,10 @@ export class Login implements OnInit {
 
   private redirigir(): void {
     const dest = this.route.snapshot.queryParamMap.get('redirect');
-    this.router.navigateByUrl(dest || '/');
+    // Solo se permite navegar a rutas internas de CineVerse.
+    const interno = dest && dest.startsWith('/') && !dest.startsWith('//')
+      && !dest.includes('\\') && !dest.startsWith('/login');
+    void this.router.navigateByUrl(interno ? dest : (this.auth.isAdmin() ? '/admin' : '/'));
   }
 
   private mostrarMensaje(panel: 'login' | 'register', texto: string, tipo: 'error' | 'success'): void {

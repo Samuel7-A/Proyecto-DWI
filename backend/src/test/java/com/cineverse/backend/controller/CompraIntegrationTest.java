@@ -51,6 +51,9 @@ import com.cineverse.backend.service.SalaService;
 @AutoConfigureMockMvc
 class CompraIntegrationTest {
 
+    @org.springframework.beans.factory.annotation.Value("${jwt.secret}")
+    private String jwtSecret;
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -185,6 +188,62 @@ class CompraIntegrationTest {
         mockMvc.perform(post("/api/ordenes")
                         .contentType(APPLICATION_JSON)
                         .content(payload))
+                .andExpect(status().isUnauthorized());
+    }
+
+    private String compraValidaJson() {
+        long asientoId = asientoRepository.buscarAsientosDisponibles(funcion.getId()).get(0).getId();
+        return """
+                {"funcionId": %d, "asientoIds": [%d], "productos": null}
+                """.formatted(funcion.getId(), asientoId);
+    }
+
+    @Test
+    void adminNoPuedeComprarInclusoConDatosValidos() throws Exception {
+        String tokenAdmin = login("admin@cineverse.com", "Admin123!");
+        mockMvc.perform(post("/api/ordenes")
+                        .header("Authorization", "Bearer " + tokenAdmin)
+                        .contentType(APPLICATION_JSON)
+                        .content(compraValidaJson()))
+                .andExpect(status().isForbidden());
+        assertEquals(0, ordenRepository.count());
+        assertEquals(0, entradaRepository.count());
+    }
+
+    @Test
+    void jwtInvalidoNoPuedeComprar() throws Exception {
+        mockMvc.perform(post("/api/ordenes")
+                        .header("Authorization", "Bearer token-invalido")
+                        .contentType(APPLICATION_JSON)
+                        .content(compraValidaJson()))
+                .andExpect(status().isUnauthorized());
+        assertEquals(0, ordenRepository.count());
+    }
+
+    @Test
+    void jwtExpiradoNoPuedeComprar() throws Exception {
+        long ahora = System.currentTimeMillis();
+        String expirado = io.jsonwebtoken.Jwts.builder()
+                .subject("cliente@cineverse.com")
+                .issuedAt(new java.util.Date(ahora - 60000))
+                .expiration(new java.util.Date(ahora - 1000))
+                .signWith(io.jsonwebtoken.security.Keys.hmacShaKeyFor(
+                        io.jsonwebtoken.io.Decoders.BASE64.decode(jwtSecret)))
+                .compact();
+        mockMvc.perform(post("/api/ordenes")
+                        .header("Authorization", "Bearer " + expirado)
+                        .contentType(APPLICATION_JSON)
+                        .content(compraValidaJson()))
+                .andExpect(status().isUnauthorized());
+        assertEquals(0, ordenRepository.count());
+    }
+
+    @Test
+    void adminPuedeConsultarOrdenesPeroNoComprar() throws Exception {
+        String tokenAdmin = login("admin@cineverse.com", "Admin123!");
+        mockMvc.perform(get("/api/ordenes").header("Authorization", "Bearer " + tokenAdmin))
+                .andExpect(status().isOk());
+        mockMvc.perform(get("/api/ordenes"))
                 .andExpect(status().isUnauthorized());
     }
 

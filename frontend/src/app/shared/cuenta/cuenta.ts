@@ -1,5 +1,5 @@
 import { Component, HostListener, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
 
 @Component({
@@ -9,6 +9,7 @@ import { AuthService } from '../../core/auth.service';
 })
 export class Cuenta {
   protected readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
   protected abierto = false;
 
   protected alternar(): void {
@@ -27,6 +28,7 @@ export class Cuenta {
   protected cerrarSesion(): void {
     this.auth.logout();
     this.abierto = false;
+    void this.router.navigate(['/']);
   }
 
   @HostListener('document:click', ['$event'])

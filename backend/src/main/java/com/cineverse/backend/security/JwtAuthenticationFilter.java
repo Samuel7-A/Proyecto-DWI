@@ -47,12 +47,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String email = jwtService.extractUsername(token);
 
-            Usuario usuario = usuarioRepository
-                    .findByEmail(email)
-                    .orElse(null);
+            Usuario usuario = email == null || email.isBlank()
+                    ? null
+                    : usuarioRepository.findByEmail(email).orElse(null);
 
             if (usuario != null
-                    && usuario.getActivo()
+                    && Boolean.TRUE.equals(usuario.getActivo())
                     && jwtService.isTokenValid(token, usuario)) {
 
                 var authorities = List.of(

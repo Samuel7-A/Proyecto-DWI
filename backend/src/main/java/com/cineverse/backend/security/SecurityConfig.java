@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -34,6 +35,8 @@ public class SecurityConfig {
     ) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .requestCache(cache -> cache.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .headers(headers ->
                 headers.frameOptions(frameOptions ->
@@ -123,10 +126,10 @@ public class SecurityConfig {
                     "/api/notificaciones",
                     "/api/notificaciones/**"
                 ).authenticated()
-                .requestMatchers(
-                    "/api/ordenes",
-                    "/api/ordenes/**"
-                ).authenticated()
+                .requestMatchers(HttpMethod.POST, "/api/ordenes").hasRole("CLIENTE")
+                .requestMatchers(HttpMethod.GET, "/api/ordenes", "/api/ordenes/**")
+                    .hasAnyRole("CLIENTE", "ADMIN")
+                .requestMatchers("/api/ordenes", "/api/ordenes/**").denyAll()
                 .anyRequest().authenticated();
                 });
 
